@@ -1,0 +1,52 @@
+====================
+Datatypes
+====================
+
+module Datatypes;
+
+data Bool = True | False;
+data List<A> = Nil | Cons(A head, List<A> tail);
+data NotInstantiable;
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    (datatype_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      constructors: (data_constructor_clause
+        (data_constructor
+          name: (type_identifier))
+        (data_constructor
+          name: (type_identifier))))
+    (datatype_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      parameters: (type_parameters
+        (type_identifier))
+      constructors: (data_constructor_clause
+        (data_constructor
+          name: (type_identifier))
+        (data_constructor
+          name: (type_identifier)
+          parameters: (data_constructor_parameters
+            (data_constructor_parameter
+              type: (type_use
+                name: (qualified_type_identifier
+                  (type_identifier)))
+              name: (identifier))
+            (data_constructor_parameter
+              type: (type_use
+                name: (qualified_type_identifier
+                  (type_identifier))
+                parameters: (type_use_parameters
+                  (type_use
+                    name: (qualified_type_identifier
+                      (type_identifier)))))
+              name: (identifier))))))
+    (datatype_declaration
+      name: (qualified_type_identifier
+        (type_identifier)))))
