@@ -50,3 +50,166 @@ data NotInstantiable;
     (datatype_declaration
       name: (qualified_type_identifier
         (type_identifier)))))
+
+
+====================
+Interfaces
+====================
+
+module Interfaces;
+
+interface Client {
+  File request(Server id, Filename string);
+}
+
+interface Server {
+  Unit send(Client id, File file);
+}
+
+interface Peer extends Client, Server {
+
+}
+
+---
+
+(source_file
+  (module_declaration 
+    name: (qualified_type_identifier
+      (type_identifier))
+    (interface_declaration 
+      name: (qualified_type_identifier
+        (type_identifier))
+      body: (interface_body
+        (method_signature
+          return_type: (type_use 
+            name: (qualified_type_identifier 
+              (type_identifier)))
+          name: (identifier)
+          parameters: (parameters
+            (parameter
+              type: (type_expression
+                name: (qualified_type_identifier 
+                  (type_identifier)))
+              name: (identifier))
+            (parameter
+              type: (type_expression
+                name: (qualified_type_identifier 
+                  (type_identifier)))
+              name: (identifier))))))
+    (interface_declaration 
+      name: (qualified_type_identifier
+        (type_identifier))
+      body: (interface_body
+        (method_signature
+          return_type: (type_use 
+            name: (qualified_type_identifier 
+              (type_identifier)))
+          name: (identifier)
+          parameters: (parameters
+            (parameter
+              type: (type_expression
+                name: (qualified_type_identifier 
+                  (type_identifier)))
+              name: (identifier))
+            (parameter
+              type: (type_expression
+                name: (qualified_type_identifier 
+                  (type_identifier)))
+              name: (identifier))))))
+    (interface_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      extends: (extends_clause
+        (qualified_type_identifier 
+          (type_identifier))
+        (qualified_type_identifier
+          (type_identifier)))
+      body: (interface_body))))
+
+====================
+Interface with empty extends
+:error
+====================
+
+module Interfaces;
+
+interface Error extends {
+
+}
+
+---
+
+====================
+Type synonyms
+====================
+
+module Types;
+
+type Filename = String;
+type Filenames = Set<Filename>;
+type Servername = String;
+type Packet = String;
+type File = List<Packet>;
+type Catalog = List<Pair<Servername,Filenames>>;
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))
+        parameters: (type_use_parameters
+          (type_use
+            name: (qualified_type_identifier
+              (type_identifier))))))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))
+        parameters: (type_use_parameters
+          (type_use
+            name: (qualified_type_identifier
+              (type_identifier))))))
+    (type_synonym_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      type: (type_use
+        name: (qualified_type_identifier
+          (type_identifier))
+        parameters: (type_use_parameters
+          (type_use
+            name: (qualified_type_identifier
+              (type_identifier))
+            parameters: (type_use_parameters
+              (type_use 
+                name: (qualified_type_identifier
+                  (type_identifier)))
+              (type_use 
+                name: (qualified_type_identifier
+                  (type_identifier))))))))))

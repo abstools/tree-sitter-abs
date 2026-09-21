@@ -26,10 +26,15 @@ module.exports = grammar({
 
     declaration: $ => choice(
       $.datatype_declaration,
+      $.function_declaration,
+      $.partial_function_declaration,
+      $.type_synonym_declaration,
+      $.exception_declaration,
+      $.interface_declaration,
     ),
 
     datatype_declaration: $ => seq(
-      optional($.annotations),
+      optional(field("annotations", $.annotations)),
       "data",
       field("name", $.qualified_type_identifier),
       optional(field("parameters", $.type_parameters)),
@@ -37,23 +42,23 @@ module.exports = grammar({
       ";",
     ),
 
-    type_parameters: $ => seq(
+    type_parameters: $ => seq(
       "<",
       commaSep1($.type_identifier),
       ">"
     ),
 
-    data_constructor_clause: $ => seq(
+    data_constructor_clause: $ => seq(
       "=",
       barSep1($.data_constructor),
     ),
 
-    data_constructor: $ => seq(
+    data_constructor: $ => seq(
       field("name", $.type_identifier),
       optional(field("parameters", $.data_constructor_parameters)),
     ),
 
-    data_constructor_parameters: $ => seq(
+    data_constructor_parameters: $ => seq(
       "(",
       commaSep1($.data_constructor_parameter),
       ")",
@@ -64,6 +69,91 @@ module.exports = grammar({
       optional(field("name", $.identifier)),
     ),
 
+    function_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "def",
+      field("return_type", $.type_use),
+      field("name", $.qualified_identifier),
+      optional(field("type_parameters", $.type_parameters)),
+      field("parameters", $.parameters),
+      "=",
+      field("expression", choice(
+        $.builtin_expression,
+        $.pure_expression,
+      )),
+      ";"
+    ),
+
+    // Question about annotations vs annotation* in ANTLR grammar
+    // FIXME: Improve parsing of annotation*
+    partial_function_declaration: $ => seq(
+      repeat($.annotation),
+      "def",
+      field("return_type", $.type_use),
+      field("name", $.qualified_identifier),
+      optional(field("type_parameters", $.type_parameters)),
+      field("functions", $.function_name_list),
+      field("parameters", $.parameters),
+      "=",
+      field("expression", $.pure_expression),
+      ";",
+    ),
+
+    type_synonym_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "type",
+      field("name", $.qualified_type_identifier),
+      "=",
+      field("type", $.type_use),
+      ";",
+    ),
+
+    exception_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "exception",
+      field("name", $.qualified_type_identifier),
+      optional(field("parameters", $.data_constructor_parameters)),
+      ";",
+    ),
+
+    interface_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "interface",
+      field("name", $.qualified_type_identifier),
+      optional(field("extends", $.extends_clause)),
+      field("body", $.interface_body),
+    ),
+
+    extends_clause: $ => seq(
+      "extends",
+      commaSep1($._interface_name),
+    ),
+
+    interface_body: $ => seq(
+      "{",
+      repeat($.method_signature),
+      "}",
+    ),
+
+    method_signature: $ => seq(
+      field("return_type", $.type_use),
+      field("name", $.identifier),
+      field("parameters", $.parameters),
+      ";"
+    ),
+
+    parameters: $ => seq(
+      "(",
+      commaSep($.parameter),
+      ")",
+    ),
+
+    parameter: $ => seq(
+      optional(field("annotations", $.annotations)),
+      field("type", $.type_expression),
+      field("name", $.identifier),
+    ),
+
     module_declaration: $ => seq(
       "module",
       field("name", $.qualified_type_identifier),
@@ -72,7 +162,9 @@ module.exports = grammar({
       repeat($.declaration)
     ),
 
-    identifier: _ => seq(
+    word: $ => $.identifier,
+
+    identifier: _ => seq(
       /[a-z][A-Za-z0-9_]*/
     ),
 
@@ -80,27 +172,55 @@ module.exports = grammar({
       /[A-Z][A-Za-z0-9_]*/
     ),
 
+    qualified_identifier: $ => seq(
+      dotSep($.type_identifier),
+      $.identifier,
+    ),
+
     qualified_type_identifier: $ => dotSep1($.type_identifier),
 
     // Name inherited from ANTLR grammar
-    // type_use is a ... with annotations
-    type_use: $ => seq(
+    // type_use is a type_expressions with possible annotations
+    type_use: $ => seq(
       optional($.annotations),
       field("name", $.qualified_type_identifier),
       optional(field("parameters", $.type_use_parameters)),
     ),
 
-    type_use_parameters: $ => seq(
+    type_expression: $ => seq(
+      field("name", $.qualified_type_identifier),
+      optional(field("parameters", $.type_use_parameters)),
+    ),
+
+    type_use_parameters: $ => seq(
       "<",
       commaSep1($.type_use),
       ">",
     ),
 
+    function_name_list: $ => seq(
+      "(",
+      commaSep($._function_name_decl),
+      ")",
+    ),
+
+
     expression: $ => choice(
       $.pure_expression,
     ),
 
-    pure_expression: $ => seq("TODO"),
+    pure_expression: $ => seq("TODO"),
+
+    builtin_expression: $ => seq(
+      "builtin",
+      "(",
+      commaSep($.pure_expression),
+      ")",
+    ),
+
+    // Overrides
+    _function_name_decl: $ => $.identifier,
+    _interface_name: $ => $.qualified_type_identifier,
 
     annotations: $ => repeat1(seq(
       "[",
@@ -108,9 +228,11 @@ module.exports = grammar({
       "]",
     )),
 
+    // FIXME: Add fields
     annotation: $ => seq(
-      $.type_identifier,
-      ":",
+      optional(seq(
+        $.type_identifier,
+        ":")),
       $.pure_expression,
     ),
 
