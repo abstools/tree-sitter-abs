@@ -213,3 +213,56 @@ type Catalog = List<Pair<Servername,Filenames>>;
               (type_use 
                 name: (qualified_type_identifier
                   (type_identifier))))))))))
+
+====================
+Traits
+====================
+
+module Traits;
+
+trait T1 = Unit x() { skip; }
+trait T2 = T1
+trait T3 = { Unit y() { skip; } } adds T1
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    (trait_declaration
+      name: (qualified_type_identifier
+        (type_identifier))
+      value: (trait_expression
+        content: (basic_trait_expression
+          method: (method_declaration
+            return_type: (type_use 
+              name: (qualified_type_identifier
+                (type_identifier)))
+            name: (identifier)
+            parameters: (parameters)
+            body: (method_body
+              statement: (skip_statement))))))
+    (trait_declaration
+      name: (qualified_type_identifier 
+        (type_identifier))
+      value: (trait_expression 
+        content: (basic_trait_expression
+          trait: (type_identifier))))
+    (trait_declaration
+      name: (qualified_type_identifier 
+        (type_identifier))
+      value: (trait_expression
+        content: (basic_trait_expression
+          methods: (method_declaration_block
+            method: (method_declaration
+              return_type: (type_use 
+                name: (qualified_type_identifier
+                  (type_identifier)))
+              name: (identifier)
+              parameters: (parameters)
+              body: (method_body
+                statement: (skip_statement)))))
+        operation: (trait_member_addition
+          addition: (basic_trait_expression
+            trait: (type_identifier)))))))

@@ -7,6 +7,14 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+const DIGIT = /[0-9]/;
+const NONZERO_DIGIT = /[1-9]/;
+
+const DECIMAL_INTEGER = choice(
+  "0",
+  seq(NONZERO_DIGIT, repeat(DIGIT)),
+);
+
 module.exports = grammar({
   name: "abs",
 
@@ -16,13 +24,25 @@ module.exports = grammar({
   ],
 
   supertypes: ($) => [
-    $.declaration
+    $.declaration,
+    $.statement,
+    $.expression,
+    $.pure_expression,
+    $.trait_operation,
   ],
 
+  word: $ => $.identifier,
 
   rules: {
     // TODO: add the actual grammar rules
     source_file: $ => repeat($.module_declaration),
+
+    main_block: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "{",
+      repeat(field("statement", $.statement)),
+      "}",
+    ),
 
     declaration: $ => choice(
       $.datatype_declaration,
@@ -31,6 +51,8 @@ module.exports = grammar({
       $.type_synonym_declaration,
       $.exception_declaration,
       $.interface_declaration,
+      $.class_declaration,
+      $.trait_declaration,
     ),
 
     datatype_declaration: $ => seq(
@@ -86,7 +108,7 @@ module.exports = grammar({
 
     // Question about annotations vs annotation* in ANTLR grammar
     // FIXME: Improve parsing of annotation*
-    partial_function_declaration: $ => seq(
+    partial_function_declaration: $ => seq(
       repeat($.annotation),
       "def",
       field("return_type", $.type_use),
@@ -99,7 +121,7 @@ module.exports = grammar({
       ";",
     ),
 
-    type_synonym_declaration: $ => seq(
+    type_synonym_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "type",
       field("name", $.qualified_type_identifier),
@@ -108,7 +130,7 @@ module.exports = grammar({
       ";",
     ),
 
-    exception_declaration: $ => seq(
+    exception_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "exception",
       field("name", $.qualified_type_identifier),
@@ -124,18 +146,144 @@ module.exports = grammar({
       field("body", $.interface_body),
     ),
 
-    extends_clause: $ => seq(
+    class_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "class",
+      field("name", $.qualified_type_identifier),
+      optional(field("parameters", $.parameters)),
+      optional(field("implements", $.implements_clause)),
+      field("body", $.class_body),
+    ),
+
+    
+    trait_declaration: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "trait",
+      field("name", $.qualified_type_identifier),
+      "=",
+      field("value", $.trait_expression),
+    ),
+
+    // Traits
+    
+    trait_expression: $ => seq(
+      field("content", $.basic_trait_expression),
+      repeat(field("operation", $.trait_operation)),
+    ),
+
+    basic_trait_expression: $ => choice(
+      field("methods", $.method_declaration_block),
+      field("method", $.method_declaration),
+      field("trait", $.type_identifier),
+    ),
+
+    trait_operation: $ => choice(
+      $.trait_member_removal,
+      $.trait_member_modification,
+      $.trait_member_addition,
+    ),
+
+    trait_member_removal: $ => seq(
+      "removes",
+      choice(
+        field("method", $.method_signature),
+        field("methods", $.trait_member_removal_block),
+      ),
+    ),
+
+    trait_member_removal_block: $ => seq(
+      "{",
+      repeat(field("method", $.method_signature)),
+      "}",
+    ),
+
+    method_declaration_block: $ => seq(
+      "{",
+      repeat(field("method", $.method_declaration)),
+      "}",
+    ),
+
+    trait_member_modification: $ => seq(
+      "modifies",
+      field("change", $.basic_trait_expression),
+    ),
+
+    trait_member_addition: $ => seq(
+      "adds",
+      field("addition", $.basic_trait_expression),
+    ),
+
+    trait_use: $ => seq(
+      "uses",
+      field("trait", $.trait_expression),
+      ";"
+    ),
+
+    implements_clause: $ => seq(
+      "implements",
+      commaSep1($._interface_name),
+    ),
+
+    class_body: $ => seq(
+      "{",
+      repeat(field("field", $.field_declaration)),
+      optional(field("init", $.init_block)),
+      optional(field("recover", $.recover_block)),
+      repeat(field("trait", $.trait_use)),
+      repeat(field("method", $.method_declaration)),
+      "}",
+    ),
+
+    field_declaration: $ => seq(
+      field("type", $.type_use),
+      field("name", $.identifier),
+      optional(seq(
+        "=",
+        field("value", $.pure_expression),
+      )),
+      ";",
+    ),
+
+    init_block: $ => seq(
+      "{",
+      repeat($.statement),
+      "}",
+    ),
+
+    recover_block: $ => seq(
+      "recover",
+      "{",
+      // FIXME: Implement case_statement_branch
+      // repeat($.case_statement_branch),
+      "}"
+    ),
+
+    method_declaration: $ => seq(
+      field("return_type", $.type_use),
+      field("name", $.identifier),
+      field("parameters", $.parameters),
+      field("body", $.method_body),
+    ),
+
+    method_body: $ => seq(
+      "{",
+      repeat(field("statement", $.statement)),
+      "}",
+    ),
+
+
+    extends_clause: $ => seq(
       "extends",
       commaSep1($._interface_name),
     ),
 
-    interface_body: $ => seq(
+    interface_body: $ => seq(
       "{",
       repeat($.method_signature),
       "}",
     ),
 
-    method_signature: $ => seq(
+    method_signature: $ => seq(
       field("return_type", $.type_use),
       field("name", $.identifier),
       field("parameters", $.parameters),
@@ -148,7 +296,7 @@ module.exports = grammar({
       ")",
     ),
 
-    parameter: $ => seq(
+    parameter: $ => seq(
       optional(field("annotations", $.annotations)),
       field("type", $.type_expression),
       field("name", $.identifier),
@@ -159,20 +307,14 @@ module.exports = grammar({
       field("name", $.qualified_type_identifier),
       ";",
       // TODO: Add exports and imports
-      repeat($.declaration)
+      repeat($.declaration),
+      optional(field("main", $.main_block)),
     ),
 
-    word: $ => $.identifier,
+    identifier: _ => /[a-z][A-Za-z0-9_]*/,
+    type_identifier: _ => /[A-Z][A-Za-z0-9_]*/,
 
-    identifier: _ => seq(
-      /[a-z][A-Za-z0-9_]*/
-    ),
-
-    type_identifier: _ => seq(
-      /[A-Z][A-Za-z0-9_]*/
-    ),
-
-    qualified_identifier: $ => seq(
+    qualified_identifier: $ => seq(
       dotSep($.type_identifier),
       $.identifier,
     ),
@@ -180,14 +322,14 @@ module.exports = grammar({
     qualified_type_identifier: $ => dotSep1($.type_identifier),
 
     // Name inherited from ANTLR grammar
-    // type_use is a type_expressions with possible annotations
+    // type_use is a type_expression with possible annotations
     type_use: $ => seq(
       optional($.annotations),
       field("name", $.qualified_type_identifier),
       optional(field("parameters", $.type_use_parameters)),
     ),
 
-    type_expression: $ => seq(
+    type_expression: $ => seq(
       field("name", $.qualified_type_identifier),
       optional(field("parameters", $.type_use_parameters)),
     ),
@@ -198,20 +340,137 @@ module.exports = grammar({
       ">",
     ),
 
-    function_name_list: $ => seq(
+    function_name_list: $ => seq(
       "(",
       commaSep($._function_name_decl),
       ")",
     ),
 
+    // Statements
+    // Statements are syntactically distinct from declarations
+    // declarations (under declaration rule) are top-level declarations
+    // while statements are only valid inside methods and the main block
 
-    expression: $ => choice(
-      $.pure_expression,
+    statement: $ => choice(
+      $.variable_declaration_statement,
+      $.assignment_statement,
+      $.skip_statement,
+      $.return_statement,
+      $.assert_statement,
+      $.block_statement,
+      $.if_statement,
     ),
 
-    pure_expression: $ => seq("TODO"),
+    variable_declaration_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      field("type", $.type_expression),
+      field("name", $.identifier),
+      optional(seq(
+        "=",
+        field("value", $.expression),
+      )),
+      ";",
+    ),
 
-    builtin_expression: $ => seq(
+    assignment_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      // FIXME: Implement variable_or_field_reference
+      // field("target", $.variable_or_field_reference),
+      "=",
+      field("value", $.expression),
+      ";",
+    ),
+
+    skip_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "skip",
+      ";",
+    ),
+
+    return_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "return", 
+      field("value", $.expression),
+      ";",
+    ),
+
+    assert_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "assert",
+      field("value", $.expression),
+      ";",
+    ),
+
+    block_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "{",
+      repeat(field("statement", $.statement)),
+      "}",
+    ),
+
+    if_statement: $ => prec.right(seq(
+      optional(field("annotations", $.annotations)),
+      "if",
+      "(",
+      field("condition", $.pure_expression),
+      ")",
+      field("consequence", $.statement),
+      optional(field("alternative", $.else_clause)),
+    )),
+
+    else_clause: $ => seq("else", $.statement),
+
+
+    // Expressions
+    //
+    // Expressions in ABS are divided into two categories:
+    // - pure expressions
+    // - effectful expressions
+    //
+    // Functions (under top-level function declaration) only allow pure expressions
+    // While expressions used in statements can be both pure and effectful
+    //
+    // We want supertypes for both expression and pure_expression
+    // Unfortunately, tree-sitter does not support nested supertypes
+    // Thus all pure_expressions are duplicated in `expression` and `pure_expression` rules
+    // For now, though I am unsure of what is the best of way of doing this,
+    // in respect to the ergonomics of using the tree-sitter parser with queries
+    
+    expression: $ => choice(
+      $.string_literal,
+      $.integer_literal,
+      $.float_literal,
+    ),
+
+    pure_expression: $ => choice(
+      $.string_literal,
+      $.integer_literal,
+      $.float_literal,
+    ),
+
+    integer_literal: $ => token(DECIMAL_INTEGER),
+
+    float_literal: $ => {
+      const EXPONENT = seq(
+        choice("e", "E", "e+", "E+", "e-", "E-"),
+        /[0-9]+/,
+      )
+
+      return token(seq(
+        optional(DECIMAL_INTEGER),
+        ".",
+        /[0-9]+/,
+        optional(EXPONENT),
+      ))
+    },
+
+    // FIXME: implement and add tests for string literals
+    string_literal: $ => seq(
+      '"',
+      '"',
+    ),
+
+    builtin_expression: $ => seq(
       "builtin",
       "(",
       commaSep($.pure_expression),
@@ -219,8 +478,8 @@ module.exports = grammar({
     ),
 
     // Overrides
-    _function_name_decl: $ => $.identifier,
-    _interface_name: $ => $.qualified_type_identifier,
+    _function_name_decl: $ => $.identifier,
+    _interface_name: $ => $.qualified_type_identifier,
 
     annotations: $ => repeat1(seq(
       "[",
@@ -248,7 +507,6 @@ module.exports = grammar({
     ))
   }
 });
-
 
 function dotSep1(rule) {
   return seq(rule, repeat(seq('.', rule)));

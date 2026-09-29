@@ -4,6 +4,10 @@
     "named": true,
     "subtypes": [
       {
+        "type": "class_declaration",
+        "named": true
+      },
+      {
         "type": "datatype_declaration",
         "named": true
       },
@@ -24,7 +28,99 @@
         "named": true
       },
       {
+        "type": "trait_declaration",
+        "named": true
+      },
+      {
         "type": "type_synonym_declaration",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "expression",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "float_literal",
+        "named": true
+      },
+      {
+        "type": "integer_literal",
+        "named": true
+      },
+      {
+        "type": "string_literal",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "pure_expression",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "float_literal",
+        "named": true
+      },
+      {
+        "type": "integer_literal",
+        "named": true
+      },
+      {
+        "type": "string_literal",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "statement",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "assert_statement",
+        "named": true
+      },
+      {
+        "type": "assignment_statement",
+        "named": true
+      },
+      {
+        "type": "block_statement",
+        "named": true
+      },
+      {
+        "type": "if_statement",
+        "named": true
+      },
+      {
+        "type": "return_statement",
+        "named": true
+      },
+      {
+        "type": "skip_statement",
+        "named": true
+      },
+      {
+        "type": "variable_declaration_statement",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "trait_operation",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "trait_member_addition",
+        "named": true
+      },
+      {
+        "type": "trait_member_modification",
+        "named": true
+      },
+      {
+        "type": "trait_member_removal",
         "named": true
       }
     ]
@@ -64,6 +160,120 @@
     }
   },
   {
+    "type": "assert_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "assignment_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "basic_trait_expression",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "method_declaration",
+            "named": true
+          }
+        ]
+      },
+      "methods": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "method_declaration_block",
+            "named": true
+          }
+        ]
+      },
+      "trait": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "block_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "statement": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "builtin_expression",
     "named": true,
     "fields": {},
@@ -76,6 +286,118 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "class_body",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "field_declaration",
+            "named": true
+          }
+        ]
+      },
+      "init": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "init_block",
+            "named": true
+          }
+        ]
+      },
+      "method": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "method_declaration",
+            "named": true
+          }
+        ]
+      },
+      "recover": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "recover_block",
+            "named": true
+          }
+        ]
+      },
+      "trait": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "trait_use",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "class_declaration",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "class_body",
+            "named": true
+          }
+        ]
+      },
+      "implements": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "implements_clause",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "qualified_type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "parameters",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -207,6 +529,21 @@
     }
   },
   {
+    "type": "else_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "exception_declaration",
     "named": true,
     "fields": {
@@ -255,6 +592,42 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "field_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_use",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -343,9 +716,80 @@
     }
   },
   {
-    "type": "identifier",
+    "type": "if_statement",
     "named": true,
-    "fields": {}
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "else_clause",
+            "named": true
+          }
+        ]
+      },
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "implements_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "qualified_type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "init_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "interface_body",
@@ -409,6 +853,110 @@
     }
   },
   {
+    "type": "main_block",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "statement": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "method_body",
+    "named": true,
+    "fields": {
+      "statement": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "method_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "method_body",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameters",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_use",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "method_declaration_block",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "method_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "method_signature",
     "named": true,
     "fields": {
@@ -448,6 +996,16 @@
     "type": "module_declaration",
     "named": true,
     "fields": {
+      "main": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "main_block",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -598,11 +1156,6 @@
     }
   },
   {
-    "type": "pure_expression",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "qualified_identifier",
     "named": true,
     "fields": {},
@@ -637,6 +1190,53 @@
     }
   },
   {
+    "type": "recover_block",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "return_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "skip_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -650,6 +1250,163 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "string_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "trait_declaration",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "qualified_type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "trait_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_expression",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "basic_trait_expression",
+            "named": true
+          }
+        ]
+      },
+      "operation": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "trait_operation",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_member_addition",
+    "named": true,
+    "fields": {
+      "addition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "basic_trait_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_member_modification",
+    "named": true,
+    "fields": {
+      "change": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "basic_trait_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_member_removal",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "method_signature",
+            "named": true
+          }
+        ]
+      },
+      "methods": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "trait_member_removal_block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_member_removal_block",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "method_signature",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "trait_use",
+    "named": true,
+    "fields": {
+      "trait": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "trait_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -786,6 +1543,56 @@
     }
   },
   {
+    "type": "variable_declaration_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_expression",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -822,10 +1629,6 @@
     "named": false
   },
   {
-    "type": "TODO",
-    "named": false
-  },
-  {
     "type": "[",
     "named": false
   },
@@ -834,7 +1637,19 @@
     "named": false
   },
   {
+    "type": "adds",
+    "named": false
+  },
+  {
+    "type": "assert",
+    "named": false
+  },
+  {
     "type": "builtin",
+    "named": false
+  },
+  {
+    "type": "class",
     "named": false
   },
   {
@@ -851,6 +1666,10 @@
     "named": false
   },
   {
+    "type": "else",
+    "named": false
+  },
+  {
     "type": "exception",
     "named": false
   },
@@ -859,7 +1678,31 @@
     "named": false
   },
   {
+    "type": "float_literal",
+    "named": true
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "if",
+    "named": false
+  },
+  {
+    "type": "implements",
+    "named": false
+  },
+  {
+    "type": "integer_literal",
+    "named": true
+  },
+  {
     "type": "interface",
+    "named": false
+  },
+  {
+    "type": "modifies",
     "named": false
   },
   {
@@ -867,7 +1710,31 @@
     "named": false
   },
   {
+    "type": "recover",
+    "named": false
+  },
+  {
+    "type": "removes",
+    "named": false
+  },
+  {
+    "type": "return",
+    "named": false
+  },
+  {
+    "type": "skip",
+    "named": false
+  },
+  {
+    "type": "trait",
+    "named": false
+  },
+  {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "uses",
     "named": false
   },
   {
