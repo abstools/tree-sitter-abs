@@ -351,6 +351,7 @@ module.exports = grammar({
     // while statements are only valid inside methods and the main block
 
     statement: $ => choice(
+      $.expression_statement,
       $.variable_declaration_statement,
       $.assignment_statement,
       $.skip_statement,
@@ -359,6 +360,12 @@ module.exports = grammar({
       $.block_statement,
       $.if_statement,
       $.switch_statement,
+    ),
+
+    expression_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      $.expression,
+      ";",
     ),
 
     variable_declaration_statement: $ => seq(
