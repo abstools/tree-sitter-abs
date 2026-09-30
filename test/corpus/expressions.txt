@@ -1,0 +1,50 @@
+==============================
+Strings
+==============================
+
+module ABS;
+
+{
+  "allo    allo";
+  "\"";
+  "\r";
+  "\n";
+  "\t";
+  "\\";
+  "\r\n\t\\\"";
+  "";
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (string_literal))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal)))))

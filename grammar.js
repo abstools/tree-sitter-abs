@@ -521,11 +521,30 @@ module.exports = grammar({
       ))
     },
 
-    // FIXME: implement and add tests for string literals
+    // TODO: Decide how to validate escape sequences
+    // (tree-sitter vs external semantic analysis)
+    // Currently, each character/escape sequence is its own token
+    // Decide whether each string literal should be one token,
+    // with validation happening later
     string_literal: $ => seq(
       '"',
+      repeat(choice(
+        $.escape_sequence,
+        /[^\\\"\r\n]/,
+      )),
       '"',
     ),
+
+    escape_sequence: _ => token.immediate(seq(
+      "\\",
+      choice(
+        "\\",
+        '"',
+        "t",
+        "n",
+        "r",
+      ),
+    )),
 
     builtin_expression: $ => seq(
       "builtin",
