@@ -29,12 +29,12 @@ module.exports = grammar({
     $.expression,
     $.pure_expression,
     $.trait_operation,
+    $.pattern,
   ],
 
   word: $ => $.identifier,
 
   rules: {
-    // TODO: add the actual grammar rules
     source_file: $ => repeat($.module_declaration),
 
     main_block: $ => seq(
@@ -253,8 +253,7 @@ module.exports = grammar({
     recover_block: $ => seq(
       "recover",
       "{",
-      // FIXME: Implement case_statement_branch
-      // repeat($.case_statement_branch),
+      repeat($.case_statement_branch),
       "}"
     ),
 
@@ -359,6 +358,7 @@ module.exports = grammar({
       $.assert_statement,
       $.block_statement,
       $.if_statement,
+      $.switch_statement,
     ),
 
     variable_declaration_statement: $ => seq(
@@ -401,6 +401,7 @@ module.exports = grammar({
       ";",
     ),
 
+    // { statement* } 
     block_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "{",
@@ -411,15 +412,56 @@ module.exports = grammar({
     if_statement: $ => prec.right(seq(
       optional(field("annotations", $.annotations)),
       "if",
-      "(",
-      field("condition", $.pure_expression),
-      ")",
+      field("condition", $.parenthesized_expression),
       field("consequence", $.statement),
       optional(field("alternative", $.else_clause)),
     )),
 
     else_clause: $ => seq("else", $.statement),
 
+    // Should switch statements be a sequence of "{", cases  ,"}"
+    switch_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "switch",
+      field("condition", $.parenthesized_expression),
+      field("body", $.switch_body),
+    ),
+
+    switch_body: $ => seq(
+      "{",
+      repeat($.case_statement_branch),
+      "}"
+    ),
+
+    case_statement_branch: $ => seq(
+      field("pattern", $.pattern),
+      "=>",
+      field("statement", $.statement),
+    ),
+
+
+    // Patterns
+
+    pattern: $ => choice(
+      $.underscore_pattern,
+      $.integer_literal,
+      $.string_literal,
+      $.identifier,
+      $.constructor_pattern,
+    ),
+
+    underscore_pattern: _ => "_",
+
+    constructor_pattern: $ => seq(
+      field("name", $.qualified_type_identifier),
+      optional(field("parameters", $.pattern_list)),
+    ),
+
+    pattern_list: $ => seq(
+      "(",
+      commaSep($.pattern),
+      ")",
+    ),
 
     // Expressions
     //
@@ -440,12 +482,20 @@ module.exports = grammar({
       $.string_literal,
       $.integer_literal,
       $.float_literal,
+      $.parenthesized_expression,
     ),
 
     pure_expression: $ => choice(
       $.string_literal,
       $.integer_literal,
       $.float_literal,
+      $.parenthesized_expression,
+    ),
+
+    parenthesized_expression: $ => seq(
+      "(",
+      $.pure_expression,
+      ")",
     ),
 
     integer_literal: $ => token(DECIMAL_INTEGER),

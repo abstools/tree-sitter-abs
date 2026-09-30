@@ -1,0 +1,234 @@
+==============================
+Variable declaration statement
+==============================
+
+module ABS;
+
+{
+  Int a = 10;
+}
+
+---
+
+(source_file 
+  (module_declaration 
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block 
+      statement: (variable_declaration_statement
+        type: (type_expression
+          name: (qualified_type_identifier
+            (type_identifier)))
+        name: (identifier)
+        value: (integer_literal)))))
+      
+==============================
+Assignment statement
+==============================
+
+module ABS;
+
+{
+  a = 10;
+}
+
+---
+
+(source_file 
+  (module_declaration 
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block 
+      statement: (assignment_statement
+        target: (..)
+        value: (integer_literal)))))
+
+
+==============================
+skip statement
+==============================
+
+module ABS;
+
+{
+  skip;
+}
+
+---
+
+(source_file 
+  (module_declaration 
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block 
+      statement: (skip_statement))))
+
+
+==============================
+Return statement
+==============================
+
+module ABS;
+
+{
+  return 10;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (return_statement
+        value: (integer_literal)))))
+
+
+==============================
+Assert statement
+==============================
+
+module ABS;
+
+{
+  assert 10;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (assert_statement
+        value: (integer_literal)))))
+
+==============================
+Block statement
+==============================
+
+module ABS;
+
+{
+  {
+    return 10;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (block_statement
+        statement: (return_statement
+          value: (integer_literal))))))
+
+==============================
+If statement
+==============================
+
+module ABS;
+
+{
+  if (10) return 5; else return 10;
+
+  if (10) {
+    return 5;
+  } else {
+    return 10;
+  }
+
+  if (10) {
+    assert 10;
+  }
+}
+
+---
+
+(source_file 
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (if_statement
+        condition: (parenthesized_expression
+          (integer_literal))
+        consequence: (return_statement
+          value: (integer_literal))
+        alternative: (else_clause
+          (return_statement
+            value: (integer_literal))))
+      statement: (if_statement
+        condition: (parenthesized_expression
+          (integer_literal))
+        consequence: (block_statement
+          statement: (return_statement
+            value: (integer_literal)))
+        alternative: (else_clause
+          (block_statement
+            statement: (return_statement
+              value: (integer_literal)))))
+      statement: (if_statement
+        condition: (parenthesized_expression
+          (integer_literal))
+        consequence: (block_statement
+          statement: (assert_statement
+            value: (integer_literal)))))))
+
+==============================
+Switch statement
+==============================
+
+module ABS;
+
+{
+  switch (10) {
+    0 => return 1;
+    "abc" => return 2;
+    x => return 3;
+    _ => return 4;
+    List(x, xs) => return 5;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (switch_statement
+        condition: (parenthesized_expression
+          (integer_literal))
+        body: (switch_body
+          (case_statement_branch
+            pattern: (integer_literal)
+            statement: (return_statement
+              value: (integer_literal)))
+          (case_statement_branch
+            pattern: (string_literal)
+            statement: (return_statement
+              value: (integer_literal)))
+          (case_statement_branch
+            pattern: (identifier)
+            statement: (return_statement
+              value: (integer_literal)))
+          (case_statement_branch
+            pattern: (underscore_pattern)
+            statement: (return_statement
+              value: (integer_literal)))
+          (case_statement_branch
+            pattern: (constructor_pattern
+              name: (qualified_type_identifier
+                (type_identifier))
+              parameters: (pattern_list
+                (identifier)
+                (identifier)))
+            statement: (return_statement
+              value: (integer_literal))))))))
