@@ -381,8 +381,7 @@ module.exports = grammar({
 
     assignment_statement: $ => seq(
       optional(field("annotations", $.annotations)),
-      // FIXME: Implement variable_or_field_reference
-      // field("target", $.variable_or_field_reference),
+      field("target", $.variable_or_field_reference),
       "=",
       field("value", $.expression),
       ";",
@@ -490,6 +489,7 @@ module.exports = grammar({
       $.integer_literal,
       $.float_literal,
       $.parenthesized_expression,
+      $.this_expression,
     ),
 
     pure_expression: $ => choice(
@@ -497,6 +497,7 @@ module.exports = grammar({
       $.integer_literal,
       $.float_literal,
       $.parenthesized_expression,
+      $.this_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -504,6 +505,8 @@ module.exports = grammar({
       $.pure_expression,
       ")",
     ),
+
+    this_expression: _ => "this",
 
     integer_literal: $ => token(DECIMAL_INTEGER),
 
@@ -570,6 +573,14 @@ module.exports = grammar({
         $.type_identifier,
         ":")),
       $.pure_expression,
+    ),
+
+    variable_or_field_reference: $ => seq(
+      optional(seq(
+        $.this_expression,
+        ".", 
+      )),
+      $.identifier,
     ),
 
     // Difference from ABS grammar (ANTLR)

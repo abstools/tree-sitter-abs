@@ -56,6 +56,10 @@
       {
         "type": "string_literal",
         "named": true
+      },
+      {
+        "type": "this_expression",
+        "named": true
       }
     ]
   },
@@ -103,6 +107,10 @@
       },
       {
         "type": "string_literal",
+        "named": true
+      },
+      {
+        "type": "this_expression",
         "named": true
       }
     ]
@@ -237,6 +245,16 @@
         "types": [
           {
             "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "variable_or_field_reference",
             "named": true
           }
         ]
@@ -1809,6 +1827,25 @@
     }
   },
   {
+    "type": "variable_or_field_reference",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "this_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -1960,6 +1997,10 @@
   {
     "type": "switch",
     "named": false
+  },
+  {
+    "type": "this_expression",
+    "named": true
   },
   {
     "type": "trait",

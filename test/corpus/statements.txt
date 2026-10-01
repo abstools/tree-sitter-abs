@@ -30,6 +30,7 @@ module ABS;
 
 {
   a = 10;
+  this.field = 10;
 }
 
 ---
@@ -40,7 +41,13 @@ module ABS;
       (type_identifier))
     main: (main_block 
       statement: (assignment_statement
-        target: (..)
+        target: (variable_or_field_reference
+          (identifier))
+        value: (integer_literal))
+      statement: (assignment_statement
+        target: (variable_or_field_reference
+          (this_expression)
+          (identifier))
         value: (integer_literal)))))
 
 
