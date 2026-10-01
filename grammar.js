@@ -521,15 +521,14 @@ module.exports = grammar({
       ))
     },
 
-    // TODO: Decide how to validate escape sequences
-    // (tree-sitter vs external semantic analysis)
-    // Currently, each character/escape sequence is its own token
-    // Decide whether each string literal should be one token,
-    // with validation happening later
+    // Lex string literals
+    // as a sequence of string_content and escape_sequence,
+    // where string_content contains everything between each escape_sequence
+    // as a single token
     string_literal: $ => seq(
       '"',
       repeat(choice(
-        /[^\\\"\r\n]+/,
+        $.string_content,
         $.escape_sequence,
       )),
       '"',
@@ -545,6 +544,8 @@ module.exports = grammar({
         "r",
       ),
     )),
+
+    string_content: _ => /[^\\\"\r\n]+/,
 
     builtin_expression: $ => seq(
       "builtin",

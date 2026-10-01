@@ -2460,11 +2460,11 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "escape_sequence"
+                "name": "string_content"
               },
               {
-                "type": "PATTERN",
-                "value": "[^\\\\\\\"\\r\\n]"
+                "type": "SYMBOL",
+                "name": "escape_sequence"
               }
             ]
           }
@@ -2511,6 +2511,10 @@
           }
         ]
       }
+    },
+    "string_content": {
+      "type": "PATTERN",
+      "value": "[^\\\\\\\"\\r\\n]+"
     },
     "builtin_expression": {
       "type": "SEQ",

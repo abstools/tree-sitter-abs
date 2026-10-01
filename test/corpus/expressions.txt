@@ -13,6 +13,7 @@ module ABS;
   "\\";
   "\r\n\t\\\"";
   "";
+  "string \n with \n escape_sequence";
 }
 
 ---
@@ -23,28 +24,36 @@ module ABS;
       (type_identifier))
     main: (main_block
       statement: (expression_statement
+        (string_literal
+          (string_content)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)))
+      statement: (expression_statement
+        (string_literal
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)
+          (escape_sequence)))
+      statement: (expression_statement
         (string_literal))
       statement: (expression_statement
         (string_literal
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal
+          (string_content)
           (escape_sequence)
+          (string_content)
           (escape_sequence)
-          (escape_sequence)
-          (escape_sequence)
-          (escape_sequence)))
-      statement: (expression_statement
-        (string_literal)))))
+          (string_content))))))

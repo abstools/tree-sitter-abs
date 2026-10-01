@@ -212,7 +212,8 @@ module ABS;
             statement: (return_statement
               value: (integer_literal)))
           (case_statement_branch
-            pattern: (string_literal)
+            pattern: (string_literal
+              (string_content))
             statement: (return_statement
               value: (integer_literal)))
           (case_statement_branch
