@@ -216,20 +216,20 @@ module ABS;
         body: (switch_body
           (case_statement_branch
             pattern: (integer_literal)
-            statement: (return_statement
+            body: (return_statement
               value: (integer_literal)))
           (case_statement_branch
             pattern: (string_literal
               (string_content))
-            statement: (return_statement
+            body: (return_statement
               value: (integer_literal)))
           (case_statement_branch
             pattern: (identifier)
-            statement: (return_statement
+            body: (return_statement
               value: (integer_literal)))
           (case_statement_branch
             pattern: (underscore_pattern)
-            statement: (return_statement
+            body: (return_statement
               value: (integer_literal)))
           (case_statement_branch
             pattern: (constructor_pattern
@@ -238,5 +238,5 @@ module ABS;
               parameters: (pattern_list
                 (identifier)
                 (identifier)))
-            statement: (return_statement
+            body: (return_statement
               value: (integer_literal))))))))

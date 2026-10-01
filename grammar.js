@@ -442,7 +442,7 @@ module.exports = grammar({
     case_statement_branch: $ => seq(
       field("pattern", $.pattern),
       "=>",
-      field("statement", $.statement),
+      field("body", $.statement),
     ),
 
 
