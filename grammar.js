@@ -529,8 +529,8 @@ module.exports = grammar({
     string_literal: $ => seq(
       '"',
       repeat(choice(
+        /[^\\\"\r\n]+/,
         $.escape_sequence,
-        /[^\\\"\r\n]/,
       )),
       '"',
     ),
