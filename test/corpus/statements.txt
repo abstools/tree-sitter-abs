@@ -240,3 +240,29 @@ module ABS;
                 (identifier)))
             body: (return_statement
               value: (integer_literal))))))))
+
+==============================
+While statement
+==============================
+
+module ABS;
+
+{
+  while (10) {
+    return 10;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (while_statement
+        condition: (parenthesized_expression
+          (integer_literal))
+        body: (block_statement
+          statement: (return_statement
+            value: (integer_literal)))))))

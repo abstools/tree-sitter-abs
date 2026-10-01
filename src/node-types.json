@@ -154,6 +154,10 @@
       {
         "type": "variable_declaration_statement",
         "named": true
+      },
+      {
+        "type": "while_statement",
+        "named": true
       }
     ]
   },
@@ -352,22 +356,22 @@
     "type": "case_statement_branch",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      },
       "pattern": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "pattern",
-            "named": true
-          }
-        ]
-      },
-      "statement": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "statement",
             "named": true
           }
         ]
@@ -1846,6 +1850,32 @@
     }
   },
   {
+    "type": "while_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -2020,6 +2050,10 @@
   },
   {
     "type": "uses",
+    "named": false
+  },
+  {
+    "type": "while",
     "named": false
   },
   {

@@ -1722,6 +1722,10 @@
         {
           "type": "SYMBOL",
           "name": "switch_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "while_statement"
         }
       ]
     },
@@ -2160,7 +2164,32 @@
         },
         {
           "type": "FIELD",
-          "name": "statement",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "statement"
+          }
+        }
+      ]
+    },
+    "while_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "while"
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "parenthesized_expression"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
           "content": {
             "type": "SYMBOL",
             "name": "statement"

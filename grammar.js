@@ -360,6 +360,7 @@ module.exports = grammar({
       $.block_statement,
       $.if_statement,
       $.switch_statement,
+      $.while_statement,
     ),
 
     expression_statement: $ => seq(
@@ -442,6 +443,12 @@ module.exports = grammar({
     case_statement_branch: $ => seq(
       field("pattern", $.pattern),
       "=>",
+      field("body", $.statement),
+    ),
+
+    while_statement: $ => seq(
+      "while",
+      field("condition", $.parenthesized_expression),
       field("body", $.statement),
     ),
 
