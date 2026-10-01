@@ -531,10 +531,10 @@ module.exports = grammar({
         $.string_content,
         $.escape_sequence,
       )),
-      '"',
+      token.immediate('"'),
     ),
 
-    escape_sequence: _ => token.immediate(seq(
+    escape_sequence: _ => token.immediate(prec(1, seq(
       "\\",
       choice(
         "\\",
@@ -543,9 +543,9 @@ module.exports = grammar({
         "n",
         "r",
       ),
-    )),
+    ))),
 
-    string_content: _ => /[^\\\"\r\n]+/,
+    string_content: _ => token.immediate(prec(1,/[^\\\"\r\n]+/)),
 
     builtin_expression: $ => seq(
       "builtin",

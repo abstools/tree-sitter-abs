@@ -14,6 +14,7 @@ module ABS;
   "\r\n\t\\\"";
   "";
   "string \n with \n escape_sequence";
+  "// String with comment";
 }
 
 ---
@@ -56,4 +57,7 @@ module ABS;
           (escape_sequence)
           (string_content)
           (escape_sequence)
+          (string_content)))
+      statement: (expression_statement
+        (string_literal
           (string_content))))))

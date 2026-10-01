@@ -2470,51 +2470,65 @@
           }
         },
         {
-          "type": "STRING",
-          "value": "\""
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "\""
+          }
         }
       ]
     },
     "escape_sequence": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "\\"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "\\"
-              },
-              {
-                "type": "STRING",
-                "value": "\""
-              },
-              {
-                "type": "STRING",
-                "value": "t"
-              },
-              {
-                "type": "STRING",
-                "value": "n"
-              },
-              {
-                "type": "STRING",
-                "value": "r"
-              }
-            ]
-          }
-        ]
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\\"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "\\"
+                },
+                {
+                  "type": "STRING",
+                  "value": "\""
+                },
+                {
+                  "type": "STRING",
+                  "value": "t"
+                },
+                {
+                  "type": "STRING",
+                  "value": "n"
+                },
+                {
+                  "type": "STRING",
+                  "value": "r"
+                }
+              ]
+            }
+          ]
+        }
       }
     },
     "string_content": {
-      "type": "PATTERN",
-      "value": "[^\\\\\\\"\\r\\n]+"
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^\\\\\\\"\\r\\n]+"
+        }
+      }
     },
     "builtin_expression": {
       "type": "SEQ",
