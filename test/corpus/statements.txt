@@ -266,3 +266,40 @@ module ABS;
         body: (block_statement
           statement: (return_statement
             value: (integer_literal)))))))
+
+==============================
+Foreach statement
+==============================
+
+module ABS;
+
+{
+  foreach (v, i in [1,2,3]) {
+    v;
+  }
+
+  foreach (v in [1,2,3]) {
+    v;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block 
+      (foreach_statement
+        variable: (identifier)
+        index: (identifier)
+        expression: (...)
+        body: (block_statement
+          statement: (expression_statement
+            (identifier))))
+      (foreach_statement
+        variable: (identifier)
+        expression: (...)
+        body: (block_statement
+          statement: (expression_statement
+            (identifier)))))))

@@ -128,7 +128,19 @@
         "named": true
       },
       {
+        "type": "await_statement",
+        "named": true
+      },
+      {
         "type": "block_statement",
+        "named": true
+      },
+      {
+        "type": "die_statement",
+        "named": true
+      },
+      {
+        "type": "duration_statement",
         "named": true
       },
       {
@@ -136,7 +148,15 @@
         "named": true
       },
       {
+        "type": "foreach_statement",
+        "named": true
+      },
+      {
         "type": "if_statement",
+        "named": true
+      },
+      {
+        "type": "movecogto_statement",
         "named": true
       },
       {
@@ -148,7 +168,19 @@
         "named": true
       },
       {
+        "type": "suspend_statement",
+        "named": true
+      },
+      {
         "type": "switch_statement",
+        "named": true
+      },
+      {
+        "type": "throw_statement",
+        "named": true
+      },
+      {
+        "type": "try_catch_statement",
         "named": true
       },
       {
@@ -178,6 +210,32 @@
         "named": true
       }
     ]
+  },
+  {
+    "type": "and_guard",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "guard",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "guard",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "annotation",
@@ -269,6 +327,32 @@
         "types": [
           {
             "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "await_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "guard": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "guard",
             "named": true
           }
         ]
@@ -376,6 +460,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "claim_guard",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "variable_or_field_reference",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -645,6 +744,94 @@
     }
   },
   {
+    "type": "die_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "duration_guard",
+    "named": true,
+    "fields": {
+      "maximum": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "minimum": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "duration_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "maximum": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "minimum": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "else_clause",
     "named": true,
     "fields": {},
@@ -693,6 +880,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "expression_guard",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "pure_expression",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -766,6 +968,62 @@
         "types": [
           {
             "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "foreach_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
+            "named": true
+          }
+        ]
+      },
+      "expression": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "index": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
             "named": true
           }
         ]
@@ -852,6 +1110,33 @@
       "types": [
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "guard",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "and_guard",
+          "named": true
+        },
+        {
+          "type": "claim_guard",
+          "named": true
+        },
+        {
+          "type": "duration_guard",
+          "named": true
+        },
+        {
+          "type": "expression_guard",
           "named": true
         }
       ]
@@ -1171,6 +1456,32 @@
     }
   },
   {
+    "type": "movecogto_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "parameter",
     "named": true,
     "fields": {
@@ -1454,6 +1765,22 @@
     }
   },
   {
+    "type": "suspend_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "switch_body",
     "named": true,
     "fields": {},
@@ -1498,6 +1825,32 @@
         "types": [
           {
             "type": "parenthesized_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "throw_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
             "named": true
           }
         ]
@@ -1650,6 +2003,32 @@
         "types": [
           {
             "type": "trait_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "try_catch_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "statement",
             "named": true
           }
         ]
@@ -1853,6 +2232,16 @@
     "type": "while_statement",
     "named": true,
     "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": true,
@@ -1877,6 +2266,10 @@
   },
   {
     "type": "\"",
+    "named": false
+  },
+  {
+    "type": "&",
     "named": false
   },
   {
@@ -1920,6 +2313,10 @@
     "named": false
   },
   {
+    "type": "?",
+    "named": false
+  },
+  {
     "type": "[",
     "named": false
   },
@@ -1936,7 +2333,15 @@
     "named": false
   },
   {
+    "type": "await",
+    "named": false
+  },
+  {
     "type": "builtin",
+    "named": false
+  },
+  {
+    "type": "catch",
     "named": false
   },
   {
@@ -1954,6 +2359,14 @@
   },
   {
     "type": "def",
+    "named": false
+  },
+  {
+    "type": "die",
+    "named": false
+  },
+  {
+    "type": "duration",
     "named": false
   },
   {
@@ -1977,6 +2390,10 @@
     "named": true
   },
   {
+    "type": "foreach",
+    "named": false
+  },
+  {
     "type": "identifier",
     "named": true
   },
@@ -1986,6 +2403,10 @@
   },
   {
     "type": "implements",
+    "named": false
+  },
+  {
+    "type": "in",
     "named": false
   },
   {
@@ -2002,6 +2423,10 @@
   },
   {
     "type": "module",
+    "named": false
+  },
+  {
+    "type": "movecogto",
     "named": false
   },
   {
@@ -2025,6 +2450,10 @@
     "named": true
   },
   {
+    "type": "suspend",
+    "named": false
+  },
+  {
     "type": "switch",
     "named": false
   },
@@ -2033,7 +2462,15 @@
     "named": true
   },
   {
+    "type": "throw",
+    "named": false
+  },
+  {
     "type": "trait",
+    "named": false
+  },
+  {
+    "type": "try",
     "named": false
   },
   {

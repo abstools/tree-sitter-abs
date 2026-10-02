@@ -30,6 +30,7 @@ module.exports = grammar({
     $.pure_expression,
     $.trait_operation,
     $.pattern,
+    $.guard,
   ],
 
   word: $ => $.identifier,
@@ -361,6 +362,14 @@ module.exports = grammar({
       $.if_statement,
       $.switch_statement,
       $.while_statement,
+      $.foreach_statement,
+      $.try_catch_statement,
+      $.await_statement,
+      $.suspend_statement,
+      $.duration_statement,
+      $.throw_statement,
+      $.die_statement,
+      $.movecogto_statement,
     ),
 
     expression_statement: $ => seq(
@@ -447,9 +456,81 @@ module.exports = grammar({
     ),
 
     while_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
       "while",
       field("condition", $.parenthesized_expression),
       field("body", $.statement),
+    ),
+
+    // TODO: Add tests
+    foreach_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "foreach",
+      "(",
+      field("variable", $.identifier),
+      optional(seq(
+        ",",
+        field("index", $.identifier),
+      )),
+      "in",
+      field("expression", $.pure_expression),
+      ")",
+      field("body", $.statement),
+    ),
+
+    // TODO: Parse rest of try catch finally
+    try_catch_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "try",
+      field("body", $.statement),
+      "catch",
+    ),
+
+    await_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "await",
+      field("guard", $.guard),
+      ";",
+    ),
+
+    suspend_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "suspend",
+      ";",
+    ),
+
+    duration_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "duration",
+      "(",
+      field("minimum", $.pure_expression),
+      optional(seq(
+        ",",
+        field("maximum", $.pure_expression),
+      )),
+      ")",
+      ";",
+    ),
+
+    throw_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "throw",
+      field("value", $.pure_expression),
+      ";",
+    ),
+
+    die_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "die",
+      field("value", $.pure_expression),
+      ";",
+    ),
+
+    movecogto_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "movecogto", 
+      field("value", $.pure_expression),
+      ";",
     ),
 
 
@@ -475,6 +556,41 @@ module.exports = grammar({
       commaSep($.pattern),
       ")",
     ),
+
+    // Guards
+  
+    guard: $ => choice(
+      $.claim_guard,
+      $.duration_guard,
+      $.expression_guard,
+      $.and_guard,
+    ),
+
+    claim_guard: $ => seq(
+      $.variable_or_field_reference,
+      "?",
+    ),
+
+    duration_guard: $ => seq(
+      "duration",
+      "(",
+      field("minimum", $.pure_expression),
+      optional(seq(
+        ",",
+        field("maximum", $.pure_expression),
+      )),
+      ")",
+    ),
+
+    expression_guard: $ => seq(
+      $.pure_expression,
+    ),
+
+    and_guard: $ => prec.left(seq(
+      field("left", $.guard),
+      "&",
+      field("right", $.guard),
+    )),
 
     // Expressions
     //
