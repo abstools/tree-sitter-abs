@@ -15,6 +15,18 @@ const DECIMAL_INTEGER = choice(
   seq(NONZERO_DIGIT, repeat(DIGIT)),
 );
 
+const PREC = {
+  STANDARD: 0,
+  LOGICAL_OR: 1,
+  LOGICAL_AND: 2,
+  EQUAL: 3,
+  RELATIONAL: 4,
+  ADD: 5,
+  MULTIPLY: 6,
+  UNARY: 7,
+  CALL: 8,
+};
+
 module.exports = grammar({
   name: "abs",
 
@@ -31,6 +43,11 @@ module.exports = grammar({
     $.trait_operation,
     $.pattern,
     $.guard,
+  ],
+
+  conflicts: $ => [
+    [$.qualified_identifier, $.qualified_type_identifier],
+    [$.basic_trait_expression, $.qualified_type_identifier],
   ],
 
   word: $ => $.identifier,
@@ -391,7 +408,7 @@ module.exports = grammar({
 
     assignment_statement: $ => seq(
       optional(field("annotations", $.annotations)),
-      field("target", $.variable_or_field_reference),
+      field("target", $._variable_or_field_reference),
       "=",
       field("value", $.expression),
       ";",
@@ -462,7 +479,6 @@ module.exports = grammar({
       field("body", $.statement),
     ),
 
-    // TODO: Add tests
     foreach_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "foreach",
@@ -567,7 +583,7 @@ module.exports = grammar({
     ),
 
     claim_guard: $ => seq(
-      $.variable_or_field_reference,
+      $._variable_or_field_reference,
       "?",
     ),
 
@@ -613,6 +629,13 @@ module.exports = grammar({
       $.float_literal,
       $.parenthesized_expression,
       $.this_expression,
+      $.destiny_expression,
+      $.null_expression,
+      $._variable_or_field_reference,
+      // $.function_call_expression,
+      $.variadic_function_call_expression,
+      $.unary_expression,
+      $.binary_expression,
     ),
 
     pure_expression: $ => choice(
@@ -621,6 +644,13 @@ module.exports = grammar({
       $.float_literal,
       $.parenthesized_expression,
       $.this_expression,
+      $.destiny_expression,
+      $.null_expression,
+      $._variable_or_field_reference,
+      // $.function_call_expression,
+      $.variadic_function_call_expression,
+      $.unary_expression,
+      $.binary_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -630,10 +660,105 @@ module.exports = grammar({
     ),
 
     this_expression: _ => "this",
+    destiny_expression: _ => "destiny",
+    null_expression: _ => "null",
 
-    integer_literal: $ => token(DECIMAL_INTEGER),
+    function_call_expression: $ => prec(PREC.CALL, seq(
+      field("name", $.qualified_identifier),
+      field("arguments", $.argument_list),
+    )),
 
-    float_literal: $ => {
+    argument_list: $ => seq(
+      "(",
+      commaSep($.pure_expression),
+      ")",
+    ),
+
+    variadic_argument_list: $ => seq(
+      "[",
+      commaSep($.pure_expression),
+      "]",
+    ),
+
+    function_list: $ => seq(
+      "(",
+      commaSep1($.function_parameter),
+      ")",
+    ),
+
+    function_parameter: $ => choice(
+      $.identifier,
+      $.anonymous_function_declaration,
+    ),
+
+    anonymous_function_declaration: $ => seq(
+      field("parameters", $.parameters),
+      "=>",
+      field("body", $.pure_expression),
+    ),
+
+    partial_function_call_expression: $ => seq(
+      field("name", $.qualified_identifier),
+      field("functions", $.function_list),
+      field("arguments", $.argument_list),
+    ),
+
+    variadic_function_call_expression: $ => seq(
+      field("function", $.qualified_identifier),
+      field("arguments", $.variadic_argument_list),
+    ),
+
+    constructor_expression: $ => seq(
+      field("name", $.qualified_type_identifier),
+      optional(field("arguments", $.argument_list)),
+    ),
+
+    unary_expression: $ => prec(PREC.UNARY, seq(
+      field("operator", choice("-", "!")),
+      field("argument", $.pure_expression),
+    )),
+
+    binary_expression: $ => {
+      const table = [
+        ["||", PREC.LOGICAL_OR],
+        ["&&", PREC.LOGICAL_AND],
+        ["==", PREC.EQUAL],
+        ["!=", PREC.EQUAL],
+        ["<", PREC.RELATIONAL],
+        ["<=", PREC.RELATIONAL],
+        [">", PREC.RELATIONAL],
+        [">=", PREC.RELATIONAL],
+        ["+", PREC.ADD],
+        ["-", PREC.ADD],
+        ["*", PREC.MULTIPLY],
+        ["/", PREC.MULTIPLY],
+        ["%", PREC.MULTIPLY],
+      ];
+
+      return choice(...table.map(([operator, precedence]) => {
+        return prec.left(precedence, seq(
+          field("left", $.pure_expression),
+          // @ts-ignore
+          field("operator", operator),
+          field("right", $.pure_expression),
+        ))
+      }))
+    },
+
+    _variable_or_field_reference: $ => choice(
+      $.field_access,
+      $.identifier,
+    ),
+
+    field_access: $ => seq(
+      $.this_expression,
+      ".",
+      field("field", $.identifier),
+    ),
+
+    integer_literal: _ => token(DECIMAL_INTEGER),
+
+    float_literal: _ => {
       const EXPONENT = seq(
         choice("e", "E", "e+", "E+", "e-", "E-"),
         /[0-9]+/,
@@ -698,13 +823,6 @@ module.exports = grammar({
       $.pure_expression,
     ),
 
-    variable_or_field_reference: $ => seq(
-      optional(seq(
-        $.this_expression,
-        ".", 
-      )),
-      $.identifier,
-    ),
 
     // Difference from ABS grammar (ANTLR)
     // https://github.com/abstools/abstools/blob/master/frontend/src/main/antlr/org/abs_models/frontend/antlr/parser/ABS.g4
