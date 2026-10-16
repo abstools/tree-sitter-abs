@@ -42,59 +42,11 @@
     "named": true,
     "subtypes": [
       {
-        "type": "binary_expression",
-        "named": true
-      },
-      {
-        "type": "destiny_expression",
-        "named": true
-      },
-      {
         "type": "effectful_expression",
         "named": true
       },
       {
-        "type": "field_access",
-        "named": true
-      },
-      {
-        "type": "float_literal",
-        "named": true
-      },
-      {
-        "type": "function_call_expression",
-        "named": true
-      },
-      {
-        "type": "identifier",
-        "named": true
-      },
-      {
-        "type": "integer_literal",
-        "named": true
-      },
-      {
-        "type": "null_expression",
-        "named": true
-      },
-      {
-        "type": "parenthesized_expression",
-        "named": true
-      },
-      {
-        "type": "string_literal",
-        "named": true
-      },
-      {
-        "type": "this_expression",
-        "named": true
-      },
-      {
-        "type": "unary_expression",
-        "named": true
-      },
-      {
-        "type": "variadic_function_call_expression",
+        "type": "pure_expression",
         "named": true
       }
     ]

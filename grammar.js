@@ -619,27 +619,10 @@ module.exports = grammar({
     //
     // Functions (under top-level function declaration) only allow pure expressions
     // While expressions used in statements can be both pure and effectful
-    //
-    // We want supertypes for both expression and pure_expression
-    // Unfortunately, tree-sitter does not support nested supertypes
-    // Thus all pure_expressions are duplicated in `expression` and `pure_expression` rules
-    // For now, though I am unsure of what is the best of way of doing this,
-    // in respect to the ergonomics of using the tree-sitter parser with queries
     
     expression: $ => choice(
-      $.string_literal,
-      $.integer_literal,
-      $.float_literal,
-      $.parenthesized_expression,
-      $.this_expression,
-      $.destiny_expression,
-      $.null_expression,
-      $._variable_or_field_reference,
-      $.function_call_expression,
-      $.variadic_function_call_expression,
-      $.unary_expression,
-      $.binary_expression,
       $.effectful_expression,
+      $.pure_expression,
     ),
 
     effectful_expression: $ => choice(
