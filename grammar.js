@@ -48,6 +48,9 @@ module.exports = grammar({
   conflicts: $ => [
     [$.qualified_identifier, $.qualified_type_identifier],
     [$.basic_trait_expression, $.qualified_type_identifier],
+    [$.qualified_identifier, $._variable_or_field_reference],
+    [$.pure_expression, $.field_access],
+    [$.await, $.await_statement],
   ],
 
   word: $ => $.identifier,
@@ -632,11 +635,55 @@ module.exports = grammar({
       $.destiny_expression,
       $.null_expression,
       $._variable_or_field_reference,
-      // $.function_call_expression,
+      $.function_call_expression,
       $.variadic_function_call_expression,
       $.unary_expression,
       $.binary_expression,
+      $.effectful_expression,
     ),
+
+    effectful_expression: $ => choice(
+      $.get_expression,
+      $.new_expression,
+      $.async_call_expression,
+      $.sync_call_expression,
+      $.original_call_expression,
+    ),
+
+    get_expression: $ => seq(
+      field("future", $.pure_expression),
+      ".",
+      "get",
+    ),
+
+    new_expression: $ => seq(
+      "new",
+      optional(field("local", $.local)),
+      field("constructor", $.qualified_type_identifier),
+      field("arguments", $.argument_list),
+    ),
+
+    async_call_expression: $ => seq(
+      optional(field("await", $.await)),
+      field("object", $.pure_expression),
+      "!",
+      field("method", $.identifier),
+      field("arguments", $.argument_list),
+    ),
+
+    sync_call_expression: $ => seq(
+      field("object", $.pure_expression),
+      ".",
+      field("method", $.identifier),
+      field("arguments", $.argument_list),
+    ),
+
+    original_call_expression: $ => seq(
+      // TODO: Add delta-id or core. reference ABS antlr grammar
+      "original",
+      field("arguments", $.argument_list),
+    ),
+
 
     pure_expression: $ => choice(
       $.string_literal,
@@ -647,7 +694,7 @@ module.exports = grammar({
       $.destiny_expression,
       $.null_expression,
       $._variable_or_field_reference,
-      // $.function_call_expression,
+      $.function_call_expression,
       $.variadic_function_call_expression,
       $.unary_expression,
       $.binary_expression,
@@ -822,6 +869,12 @@ module.exports = grammar({
         ":")),
       $.pure_expression,
     ),
+
+
+    // Certain keywords
+    
+    local: _ => "local",
+    await: _ => "await",
 
 
     // Difference from ABS grammar (ANTLR)
