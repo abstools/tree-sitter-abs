@@ -90,3 +90,28 @@ module ABS;
           interface: (qualified_type_identifier
             (type_identifier)
             (type_identifier)))))))
+
+==============================
+When expression
+==============================
+
+module ABS;
+
+{
+  when 5 == 4 then 10 else 50;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (when_expression
+          condition: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal))
+          consequence: (integer_literal)
+          alternative: (integer_literal))))))

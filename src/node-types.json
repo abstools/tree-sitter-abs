@@ -172,6 +172,10 @@
       {
         "type": "variadic_function_call_expression",
         "named": true
+      },
+      {
+        "type": "when_expression",
+        "named": true
       }
     ]
   },
@@ -2685,6 +2689,42 @@
     }
   },
   {
+    "type": "when_expression",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "while_statement",
     "named": true,
     "fields": {
@@ -2986,6 +3026,10 @@
     "named": false
   },
   {
+    "type": "then",
+    "named": false
+  },
+  {
     "type": "this_expression",
     "named": true
   },
@@ -3015,6 +3059,10 @@
   },
   {
     "type": "uses",
+    "named": false
+  },
+  {
+    "type": "when",
     "named": false
   },
   {

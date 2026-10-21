@@ -3094,6 +3094,10 @@
         {
           "type": "SYMBOL",
           "name": "as_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "when_expression"
         }
       ]
     },
@@ -3867,11 +3871,44 @@
       ]
     },
     "as_expression": {
+      "type": "PREC",
+      "value": 9,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "expression",
+            "content": {
+              "type": "SYMBOL",
+              "name": "pure_expression"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "as"
+          },
+          {
+            "type": "FIELD",
+            "name": "interface",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_interface_name"
+            }
+          }
+        ]
+      }
+    },
+    "when_expression": {
       "type": "SEQ",
       "members": [
         {
+          "type": "STRING",
+          "value": "when"
+        },
+        {
           "type": "FIELD",
-          "name": "expression",
+          "name": "condition",
           "content": {
             "type": "SYMBOL",
             "name": "pure_expression"
@@ -3879,14 +3916,26 @@
         },
         {
           "type": "STRING",
-          "value": "as"
+          "value": "then"
         },
         {
           "type": "FIELD",
-          "name": "interface",
+          "name": "consequence",
           "content": {
             "type": "SYMBOL",
-            "name": "_interface_name"
+            "name": "pure_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "else"
+        },
+        {
+          "type": "FIELD",
+          "name": "alternative",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pure_expression"
           }
         }
       ]
