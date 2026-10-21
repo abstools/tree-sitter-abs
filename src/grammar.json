@@ -3098,6 +3098,10 @@
         {
           "type": "SYMBOL",
           "name": "when_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "implements_expression"
         }
       ]
     },
@@ -3939,6 +3943,35 @@
           }
         }
       ]
+    },
+    "implements_expression": {
+      "type": "PREC",
+      "value": 2,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "expression",
+            "content": {
+              "type": "SYMBOL",
+              "name": "pure_expression"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": "implements"
+          },
+          {
+            "type": "FIELD",
+            "name": "interface",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_interface_name"
+            }
+          }
+        ]
+      }
     },
     "_variable_or_field_reference": {
       "type": "CHOICE",
