@@ -300,3 +300,232 @@ module ABS;
               (type_identifier)))
           consequence: (integer_literal)
           alternative: (integer_literal))))))
+
+==============================
+Case expression branch separators
+==============================
+
+module ABS;
+
+{
+  case x {
+    1 => a; 
+    2 => b;
+  };
+  case x { 
+    1 => a;
+    2 => b
+  };
+  case x { 
+    1 => a 
+    | 2 => b
+  };
+  case x { 
+    | 1 => a 
+    | 2 => b
+  };
+  case x {
+    1 => a;
+    | 2 => b;
+  };
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier)))))
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier)))))
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier)))))
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier)))))
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))
+            (case_branch
+              pattern: (integer_literal)
+              body: (identifier))))))))
+
+==============================
+Case expression patterns
+==============================
+
+module ABS;
+
+{
+  case x {
+    _ => 0;
+    1 => 1;
+    "s" => 2;
+    y => y;
+    Nil => 3;
+    Cons(h, _) => h;
+    M.Pair(Just(a), b) => a;
+  };
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (underscore_pattern)
+              body: (integer_literal))
+            (case_branch
+              pattern: (integer_literal)
+              body: (integer_literal))
+            (case_branch
+              pattern: (string_literal
+                (string_content))
+              body: (integer_literal))
+            (case_branch
+              pattern: (identifier)
+              body: (identifier))
+            (case_branch
+              pattern: (constructor_pattern
+                name: (qualified_type_identifier
+                  (type_identifier)))
+              body: (integer_literal))
+            (case_branch
+              pattern: (constructor_pattern
+                name: (qualified_type_identifier
+                  (type_identifier))
+                parameters: (pattern_list
+                  (identifier)
+                  (underscore_pattern)))
+              body: (identifier))
+            (case_branch
+              pattern: (constructor_pattern
+                name: (qualified_type_identifier
+                  (type_identifier)
+                  (type_identifier))
+                parameters: (pattern_list
+                  (constructor_pattern
+                    name: (qualified_type_identifier
+                      (type_identifier))
+                    parameters: (pattern_list
+                      (identifier)))
+                  (identifier)))
+              body: (identifier))))))))
+
+==============================
+Nested case expressions
+==============================
+
+module ABS;
+
+{
+  case x + 1 { 
+    _ => case y {
+      _ => 2 
+    } 
+  };
+  case x { 
+    1 => case y {
+      _ => 2
+    };
+    3 => 4; 
+  };
+  when b 
+    then 
+      case x { 
+        _ => 1 
+      }
+    else 2;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (case_expression
+          condition: (binary_expression
+            left: (identifier)
+            right: (integer_literal))
+          body: (case_block
+            (case_branch
+              pattern: (underscore_pattern)
+              body: (case_expression
+                condition: (identifier)
+                body: (case_block
+                  (case_branch
+                    pattern: (underscore_pattern)
+                    body: (integer_literal))))))))
+      statement: (expression_statement
+        (case_expression
+          condition: (identifier)
+          body: (case_block
+            (case_branch
+              pattern: (integer_literal)
+              body: (case_expression
+                condition: (identifier)
+                body: (case_block
+                  (case_branch
+                    pattern: (underscore_pattern)
+                    body: (integer_literal)))))
+            (case_branch
+              pattern: (integer_literal)
+              body: (integer_literal)))))
+      statement: (expression_statement
+        (when_expression
+          condition: (identifier)
+          consequence: (case_expression
+            condition: (identifier)
+            body: (case_block
+              (case_branch
+                pattern: (underscore_pattern)
+                body: (integer_literal))))
+          alternative: (integer_literal))))))
