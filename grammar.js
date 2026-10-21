@@ -17,15 +17,16 @@ const DECIMAL_INTEGER = choice(
 
 const PREC = {
   STANDARD: 0,
-  LOGICAL_OR: 1,
-  LOGICAL_AND: 2,
-  EQUAL: 3,
-  RELATIONAL: 4,
-  ADD: 5,
-  MULTIPLY: 6,
-  UNARY: 7,
-  CALL: 8,
-  CAST: 9,
+  CAST: 1,
+  IMPLEMENTS: 2,
+  LOGICAL_OR: 3,
+  LOGICAL_AND: 4,
+  EQUAL: 5,
+  RELATIONAL: 6,
+  ADD: 7,
+  MULTIPLY: 8,
+  UNARY: 9,
+  CALL: 10,
 };
 
 module.exports = grammar({

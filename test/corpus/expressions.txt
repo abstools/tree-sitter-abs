@@ -70,6 +70,8 @@ module ABS;
 {
   o as J;
   o as Foo.J;
+  a + b as J;
+  -a as J;
 }
 
 ---
@@ -89,6 +91,19 @@ module ABS;
           expression: (identifier)
           interface: (qualified_type_identifier
             (type_identifier)
+            (type_identifier))))
+      statement: (expression_statement
+        (as_expression
+          expression: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (as_expression
+          expression: (unary_expression
+            argument: (identifier))
+          interface: (qualified_type_identifier
             (type_identifier)))))))
 
 ==============================
@@ -99,6 +114,7 @@ module ABS;
 
 {
   when 5 == 4 then 10 else 50;
+  when 5 == 10 then 5 else 5 + 3;
 }
 
 ---
@@ -114,4 +130,93 @@ module ABS;
             left: (integer_literal)
             right: (integer_literal))
           consequence: (integer_literal)
-          alternative: (integer_literal))))))
+          alternative: (integer_literal)))
+      statement: (expression_statement
+        (when_expression
+          condition: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal))
+          consequence: (integer_literal)
+          alternative: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal)))))))
+
+==============================
+Binary expressions
+==============================
+
+module ABS;
+
+{
+  a || b && c;
+  a && b == c;
+  a == b < c;
+  a < b + c;
+  a + b * c;
+  a * b + c;
+  a - b - c;
+  -a + b;
+  (a + b) * c;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (binary_expression
+          left: (identifier)
+          right: (binary_expression
+            left: (identifier)
+            right: (identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (identifier)
+          right: (binary_expression
+            left: (identifier)
+            right: (identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (identifier)
+          right: (binary_expression
+            left: (identifier)
+            right: (identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (identifier)
+          right: (binary_expression
+            left: (identifier)
+            right: (identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (identifier)
+          right: (binary_expression
+            left: (identifier)
+            right: (identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          right: (identifier)))
+      statement: (expression_statement
+        (binary_expression
+          left: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          right: (identifier)))
+      statement: (expression_statement
+        (binary_expression
+          left: (unary_expression
+            argument: (identifier))
+          right: (identifier)))
+      statement: (expression_statement
+        (binary_expression
+          left: (parenthesized_expression
+            (binary_expression
+              left: (identifier)
+              right: (identifier)))
+          right: (identifier))))))
