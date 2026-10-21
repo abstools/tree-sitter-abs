@@ -6,6 +6,7 @@ module ABS;
 
 {
   Int a = 10;
+  Foo.Int b;
 }
 
 ---
@@ -20,7 +21,13 @@ module ABS;
           name: (qualified_type_identifier
             (type_identifier)))
         name: (identifier)
-        value: (integer_literal)))))
+        value: (integer_literal))
+      statement: (variable_declaration_statement
+        type: (type_expression
+          name: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier)))
+        name: (identifier)))))
       
 ==============================
 Assignment statement
@@ -293,8 +300,7 @@ module ABS;
         variable: (identifier)
         index: (identifier)
         expression: (variadic_function_call_expression
-          function: (qualified_identifier
-            (identifier))
+          function: (identifier)
           arguments: (variadic_argument_list
             (integer_literal)
             (integer_literal)
@@ -305,8 +311,7 @@ module ABS;
       statement: (foreach_statement
         variable: (identifier)
         expression: (variadic_function_call_expression
-          function: (qualified_identifier
-            (identifier))
+          function: (identifier)
           arguments: (variadic_argument_list
             (integer_literal)
             (integer_literal)

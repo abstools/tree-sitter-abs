@@ -43,12 +43,13 @@ module.exports = grammar({
     $.trait_operation,
     $.pattern,
     $.guard,
+    $.name,
   ],
 
-  conflicts: $ => [
+  conflicts: $ => [
     [$.qualified_identifier, $.qualified_type_identifier],
     [$.basic_trait_expression, $.qualified_type_identifier],
-    [$.qualified_identifier, $._variable_or_field_reference],
+    [$.name, $._variable_or_field_reference],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
   ],
@@ -58,7 +59,7 @@ module.exports = grammar({
   rules: {
     source_file: $ => repeat($.module_declaration),
 
-    main_block: $ => seq(
+    main_block: $ => seq(
       optional(field("annotations", $.annotations)),
       "{",
       repeat(field("statement", $.statement)),
@@ -116,7 +117,7 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "def",
       field("return_type", $.type_use),
-      field("name", $.qualified_identifier),
+      field("name", $.name),
       optional(field("type_parameters", $.type_parameters)),
       field("parameters", $.parameters),
       "=",
@@ -127,13 +128,16 @@ module.exports = grammar({
       ";"
     ),
 
-    // Question about annotations vs annotation* in ANTLR grammar
+    // ANTLR's par_function_decl uses bare `annotation*` (no brackets), unlike
+    // every other declaration. This makes `f (x) def ...` ambiguous between one
+    // annotation `f(x)` and two annotations `f`, `(x)`; resolved via the
+    // [name, _variable_or_field_reference] conflict.
     // FIXME: Improve parsing of annotation*
     partial_function_declaration: $ => seq(
       repeat($.annotation),
       "def",
       field("return_type", $.type_use),
-      field("name", $.qualified_identifier),
+      field("name", $.name),
       optional(field("type_parameters", $.type_parameters)),
       field("functions", $.function_name_list),
       field("parameters", $.parameters),
@@ -176,7 +180,7 @@ module.exports = grammar({
       field("body", $.class_body),
     ),
 
-    
+
     trait_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "trait",
@@ -186,7 +190,7 @@ module.exports = grammar({
     ),
 
     // Traits
-    
+
     trait_expression: $ => seq(
       field("content", $.basic_trait_expression),
       repeat(field("operation", $.trait_operation)),
@@ -229,7 +233,7 @@ module.exports = grammar({
       field("change", $.basic_trait_expression),
     ),
 
-    trait_member_addition: $ => seq(
+    trait_member_addition: $ => seq(
       "adds",
       field("addition", $.basic_trait_expression),
     ),
@@ -285,7 +289,7 @@ module.exports = grammar({
       field("body", $.method_body),
     ),
 
-    method_body: $ => seq(
+    method_body: $ => seq(
       "{",
       repeat(field("statement", $.statement)),
       "}",
@@ -335,11 +339,16 @@ module.exports = grammar({
     type_identifier: _ => /[A-Z][A-Za-z0-9_]*/,
 
     qualified_identifier: $ => seq(
-      dotSep($.type_identifier),
+      repeat1(seq($.type_identifier, ".")),
       $.identifier,
     ),
 
     qualified_type_identifier: $ => prec.right(dotSep1($.type_identifier)),
+
+    name: $ => choice(
+      $.identifier,
+      $.qualified_identifier,
+    ),
 
     // Name inherited from ANTLR grammar
     // type_use is a type_expression with possible annotations
@@ -392,7 +401,7 @@ module.exports = grammar({
       $.movecogto_statement,
     ),
 
-    expression_statement: $ => seq(
+    expression_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       $.expression,
       ";",
@@ -409,7 +418,7 @@ module.exports = grammar({
       ";",
     ),
 
-    assignment_statement: $ => seq(
+    assignment_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       field("target", $._variable_or_field_reference),
       "=",
@@ -417,15 +426,15 @@ module.exports = grammar({
       ";",
     ),
 
-    skip_statement: $ => seq(
+    skip_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "skip",
       ";",
     ),
 
-    return_statement: $ => seq(
+    return_statement: $ => seq(
       optional(field("annotations", $.annotations)),
-      "return", 
+      "return",
       field("value", $.expression),
       ";",
     ),
@@ -438,14 +447,14 @@ module.exports = grammar({
     ),
 
     // { statement* } 
-    block_statement: $ => seq(
+    block_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "{",
       repeat(field("statement", $.statement)),
       "}",
     ),
 
-    if_statement: $ => prec.right(seq(
+    if_statement: $ => prec.right(seq(
       optional(field("annotations", $.annotations)),
       "if",
       field("condition", $.parenthesized_expression),
@@ -453,36 +462,36 @@ module.exports = grammar({
       optional(field("alternative", $.else_clause)),
     )),
 
-    else_clause: $ => seq("else", $.statement),
+    else_clause: $ => seq("else", $.statement),
 
     // Should switch statements be a sequence of "{", cases  ,"}"
-    switch_statement: $ => seq(
+    switch_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "switch",
       field("condition", $.parenthesized_expression),
       field("body", $.switch_body),
     ),
 
-    switch_body: $ => seq(
+    switch_body: $ => seq(
       "{",
       repeat($.case_statement_branch),
       "}"
     ),
 
-    case_statement_branch: $ => seq(
+    case_statement_branch: $ => seq(
       field("pattern", $.pattern),
       "=>",
       field("body", $.statement),
     ),
 
-    while_statement: $ => seq(
+    while_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "while",
       field("condition", $.parenthesized_expression),
       field("body", $.statement),
     ),
 
-    foreach_statement: $ => seq(
+    foreach_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "foreach",
       "(",
@@ -498,27 +507,27 @@ module.exports = grammar({
     ),
 
     // TODO: Parse rest of try catch finally
-    try_catch_statement: $ => seq(
+    try_catch_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "try",
       field("body", $.statement),
       "catch",
     ),
 
-    await_statement: $ => seq(
+    await_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "await",
       field("guard", $.guard),
       ";",
     ),
 
-    suspend_statement: $ => seq(
+    suspend_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "suspend",
       ";",
     ),
 
-    duration_statement: $ => seq(
+    duration_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "duration",
       "(",
@@ -531,23 +540,23 @@ module.exports = grammar({
       ";",
     ),
 
-    throw_statement: $ => seq(
+    throw_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "throw",
       field("value", $.pure_expression),
       ";",
     ),
 
-    die_statement: $ => seq(
+    die_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "die",
       field("value", $.pure_expression),
       ";",
     ),
 
-    movecogto_statement: $ => seq(
+    movecogto_statement: $ => seq(
       optional(field("annotations", $.annotations)),
-      "movecogto", 
+      "movecogto",
       field("value", $.pure_expression),
       ";",
     ),
@@ -555,7 +564,7 @@ module.exports = grammar({
 
     // Patterns
 
-    pattern: $ => choice(
+    pattern: $ => choice(
       $.underscore_pattern,
       $.integer_literal,
       $.string_literal,
@@ -563,22 +572,22 @@ module.exports = grammar({
       $.constructor_pattern,
     ),
 
-    underscore_pattern: _ => "_",
+    underscore_pattern: _ => "_",
 
-    constructor_pattern: $ => seq(
+    constructor_pattern: $ => seq(
       field("name", $.qualified_type_identifier),
       optional(field("parameters", $.pattern_list)),
     ),
 
-    pattern_list: $ => seq(
+    pattern_list: $ => seq(
       "(",
       commaSep($.pattern),
       ")",
     ),
 
     // Guards
-  
-    guard: $ => choice(
+
+    guard: $ => choice(
       $.claim_guard,
       $.duration_guard,
       $.expression_guard,
@@ -590,7 +599,7 @@ module.exports = grammar({
       "?",
     ),
 
-    duration_guard: $ => seq(
+    duration_guard: $ => seq(
       "duration",
       "(",
       field("minimum", $.pure_expression),
@@ -605,7 +614,7 @@ module.exports = grammar({
       $.pure_expression,
     ),
 
-    and_guard: $ => prec.left(seq(
+    and_guard: $ => prec.left(seq(
       field("left", $.guard),
       "&",
       field("right", $.guard),
@@ -619,13 +628,13 @@ module.exports = grammar({
     //
     // Functions (under top-level function declaration) only allow pure expressions
     // While expressions used in statements can be both pure and effectful
-    
+
     expression: $ => choice(
       $.effectful_expression,
       $.pure_expression,
     ),
 
-    effectful_expression: $ => choice(
+    effectful_expression: $ => choice(
       $.get_expression,
       $.new_expression,
       $.async_call_expression,
@@ -633,20 +642,20 @@ module.exports = grammar({
       $.original_call_expression,
     ),
 
-    get_expression: $ => seq(
+    get_expression: $ => seq(
       field("future", $.pure_expression),
       ".",
       "get",
     ),
 
-    new_expression: $ => seq(
+    new_expression: $ => seq(
       "new",
       optional(field("local", $.local)),
       field("constructor", $.qualified_type_identifier),
       field("arguments", $.argument_list),
     ),
 
-    async_call_expression: $ => seq(
+    async_call_expression: $ => seq(
       optional(field("await", $.await)),
       field("object", $.pure_expression),
       "!",
@@ -654,14 +663,14 @@ module.exports = grammar({
       field("arguments", $.argument_list),
     ),
 
-    sync_call_expression: $ => seq(
+    sync_call_expression: $ => seq(
       field("object", $.pure_expression),
       ".",
       field("method", $.identifier),
       field("arguments", $.argument_list),
     ),
 
-    original_call_expression: $ => seq(
+    original_call_expression: $ => seq(
       // TODO: Add delta-id or core. reference ABS antlr grammar
       "original",
       field("arguments", $.argument_list),
@@ -684,7 +693,7 @@ module.exports = grammar({
       $.as_expression,
     ),
 
-    parenthesized_expression: $ => seq(
+    parenthesized_expression: $ => seq(
       "(",
       $.pure_expression,
       ")",
@@ -694,62 +703,62 @@ module.exports = grammar({
     destiny_expression: _ => "destiny",
     null_expression: _ => "null",
 
-    function_call_expression: $ => prec(PREC.CALL, seq(
-      field("name", $.qualified_identifier),
+    function_call_expression: $ => prec(PREC.CALL, seq(
+      field("name", $.name),
       field("arguments", $.argument_list),
     )),
 
-    argument_list: $ => seq(
+    argument_list: $ => seq(
       "(",
       commaSep($.pure_expression),
       ")",
     ),
 
-    variadic_argument_list: $ => seq(
+    variadic_argument_list: $ => seq(
       "[",
       commaSep($.pure_expression),
       "]",
     ),
 
-    function_list: $ => seq(
+    function_list: $ => seq(
       "(",
       commaSep1($.function_parameter),
       ")",
     ),
 
-    function_parameter: $ => choice(
+    function_parameter: $ => choice(
       $.identifier,
       $.anonymous_function_declaration,
     ),
 
-    anonymous_function_declaration: $ => seq(
+    anonymous_function_declaration: $ => seq(
       field("parameters", $.parameters),
       "=>",
       field("body", $.pure_expression),
     ),
 
-    partial_function_call_expression: $ => seq(
-      field("name", $.qualified_identifier),
+    partial_function_call_expression: $ => seq(
+      field("name", $.name),
       field("functions", $.function_list),
       field("arguments", $.argument_list),
     ),
 
-    variadic_function_call_expression: $ => seq(
-      field("function", $.qualified_identifier),
+    variadic_function_call_expression: $ => seq(
+      field("function", $.name),
       field("arguments", $.variadic_argument_list),
     ),
 
-    constructor_expression: $ => seq(
+    constructor_expression: $ => seq(
       field("name", $.qualified_type_identifier),
       optional(field("arguments", $.argument_list)),
     ),
 
-    unary_expression: $ => prec(PREC.UNARY, seq(
+    unary_expression: $ => prec(PREC.UNARY, seq(
       field("operator", choice("-", "!")),
       field("argument", $.pure_expression),
     )),
 
-    binary_expression: $ => {
+    binary_expression: $ => {
       const table = [
         ["||", PREC.LOGICAL_OR],
         ["&&", PREC.LOGICAL_AND],
@@ -776,18 +785,18 @@ module.exports = grammar({
       }))
     },
 
-    as_expression: $ => seq(
+    as_expression: $ => seq(
       field("expression", $.pure_expression),
       "as",
       field("interface", $._interface_name),
     ),
 
-    _variable_or_field_reference: $ => choice(
+    _variable_or_field_reference: $ => choice(
       $.field_access,
       $.identifier,
     ),
 
-    field_access: $ => seq(
+    field_access: $ => seq(
       $.this_expression,
       ".",
       field("field", $.identifier),
@@ -833,7 +842,7 @@ module.exports = grammar({
       ),
     ))),
 
-    string_content: _ => token.immediate(prec(1,/[^\\\"\r\n]+/)),
+    string_content: _ => token.immediate(prec(1, /[^\\\"\r\n]+/)),
 
     builtin_expression: $ => seq(
       "builtin",
@@ -862,8 +871,8 @@ module.exports = grammar({
 
 
     // Certain keywords
-    
-    local: _ => "local",
+
+    local: _ => "local",
     await: _ => "await",
 
 
