@@ -41,13 +41,12 @@ module ABS;
       (type_identifier))
     main: (main_block 
       statement: (assignment_statement
-        target: (variable_or_field_reference
-          (identifier))
+        target: (identifier)
         value: (integer_literal))
       statement: (assignment_statement
-        target: (variable_or_field_reference
+        target: (field_access
           (this_expression)
-          (identifier))
+          field: (identifier))
         value: (integer_literal)))))
 
 
@@ -274,11 +273,11 @@ Foreach statement
 module ABS;
 
 {
-  foreach (v, i in [1,2,3]) {
+  foreach (v, i in list[1,2,3]) {
     v;
   }
 
-  foreach (v in [1,2,3]) {
+  foreach (v in list[1,2,3]) {
     v;
   }
 }
@@ -290,16 +289,28 @@ module ABS;
     name: (qualified_type_identifier
       (type_identifier))
     main: (main_block 
-      (foreach_statement
+      statement: (foreach_statement
         variable: (identifier)
         index: (identifier)
-        expression: (...)
+        expression: (variadic_function_call_expression
+          function: (qualified_identifier
+            (identifier))
+          arguments: (variadic_argument_list
+            (integer_literal)
+            (integer_literal)
+            (integer_literal)))
         body: (block_statement
           statement: (expression_statement
             (identifier))))
-      (foreach_statement
+      statement: (foreach_statement
         variable: (identifier)
-        expression: (...)
+        expression: (variadic_function_call_expression
+          function: (qualified_identifier
+            (identifier))
+          arguments: (variadic_argument_list
+            (integer_literal)
+            (integer_literal)
+            (integer_literal)))
         body: (block_statement
           statement: (expression_statement
             (identifier)))))))
