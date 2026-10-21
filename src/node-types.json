@@ -146,6 +146,10 @@
         "named": true
       },
       {
+        "type": "implements_expression",
+        "named": true
+      },
+      {
         "type": "integer_literal",
         "named": true
       },
@@ -1521,6 +1525,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "implements_expression",
+    "named": true,
+    "fields": {
+      "expression": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "interface": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "qualified_type_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

@@ -220,3 +220,83 @@ module ABS;
               left: (identifier)
               right: (identifier)))
           right: (identifier))))))
+
+==============================
+Implements expression
+==============================
+
+module ABS;
+
+{
+  o implements I;
+  o implements M.I;
+  a && o implements I;
+  o as I implements J;
+  !o implements I;
+  (o implements I) == b;
+  this.f implements I;
+  when o implements I then 1 else 2;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (implements_expression
+          expression: (identifier)
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (implements_expression
+          expression: (identifier)
+          interface: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier))))
+      statement: (expression_statement
+        (implements_expression
+          expression: (binary_expression
+            left: (identifier)
+            right: (identifier))
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (implements_expression
+          expression: (as_expression
+            expression: (identifier)
+            interface: (qualified_type_identifier
+              (type_identifier)))
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (implements_expression
+          expression: (unary_expression
+            argument: (identifier))
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (binary_expression
+          left: (parenthesized_expression
+            (implements_expression
+              expression: (identifier)
+              interface: (qualified_type_identifier
+                (type_identifier))))
+          right: (identifier)))
+      statement: (expression_statement
+        (implements_expression
+          expression: (field_access
+            (this_expression)
+            field: (identifier))
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (when_expression
+          condition: (implements_expression
+            expression: (identifier)
+            interface: (qualified_type_identifier
+              (type_identifier)))
+          consequence: (integer_literal)
+          alternative: (integer_literal))))))

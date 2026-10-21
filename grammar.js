@@ -694,6 +694,7 @@ module.exports = grammar({
       $.binary_expression,
       $.as_expression,
       $.when_expression,
+      $.implements_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -802,6 +803,12 @@ module.exports = grammar({
       "else",
       field("alternative", $.pure_expression),
     ),
+
+    implements_expression: $ => prec(PREC.IMPLEMENTS, seq(
+      field("expression", $.pure_expression),
+      "implements",
+      field("interface", $._interface_name),
+    )),
 
     _variable_or_field_reference: $ => choice(
       $.field_access,
