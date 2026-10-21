@@ -25,6 +25,7 @@ const PREC = {
   MULTIPLY: 6,
   UNARY: 7,
   CALL: 8,
+  CAST: 9,
 };
 
 module.exports = grammar({
@@ -691,6 +692,7 @@ module.exports = grammar({
       $.unary_expression,
       $.binary_expression,
       $.as_expression,
+      $.when_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -785,10 +787,19 @@ module.exports = grammar({
       }))
     },
 
-    as_expression: $ => seq(
+    as_expression: $ => prec(PREC.CAST, seq(
       field("expression", $.pure_expression),
       "as",
       field("interface", $._interface_name),
+    )),
+    
+    when_expression: $ => seq(
+      "when",
+      field("condition", $.pure_expression),
+      "then",
+      field("consequence", $.pure_expression),
+      "else",
+      field("alternative", $.pure_expression),
     ),
 
     _variable_or_field_reference: $ => choice(
