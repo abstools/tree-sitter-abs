@@ -61,3 +61,32 @@ module ABS;
       statement: (expression_statement
         (string_literal
           (string_content))))))
+
+==============================
+As expression
+==============================
+module ABS;
+
+{
+  o as J;
+  o as Foo.J;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (qualified_type_identifier
+      (type_identifier))
+    main: (main_block
+      statement: (expression_statement
+        (as_expression
+          expression: (identifier)
+          interface: (qualified_type_identifier
+            (type_identifier))))
+      statement: (expression_statement
+        (as_expression
+          expression: (identifier)
+          interface: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier)))))))
