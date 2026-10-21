@@ -126,6 +126,10 @@
         "named": true
       },
       {
+        "type": "case_expression",
+        "named": true
+      },
+      {
         "type": "destiny_expression",
         "named": true
       },
@@ -682,6 +686,73 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "case_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "case_branch",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_branch",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "pattern": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pattern",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "case_expression",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "case_block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2912,6 +2983,10 @@
   },
   {
     "type": "builtin",
+    "named": false
+  },
+  {
+    "type": "case",
     "named": false
   },
   {

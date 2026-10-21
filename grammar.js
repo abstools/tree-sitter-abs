@@ -695,6 +695,7 @@ module.exports = grammar({
       $.as_expression,
       $.when_expression,
       $.implements_expression,
+      $.case_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -809,6 +810,26 @@ module.exports = grammar({
       "implements",
       field("interface", $._interface_name),
     )),
+
+    case_expression: $ => seq(
+      "case",
+      field("condition", $.pure_expression),
+      field("body", $.case_block),
+    ),
+
+    case_block: $ => seq(
+      "{",
+      repeat1($.case_branch),
+      "}",
+    ),
+
+    case_branch: $ => seq(
+      optional("|"),
+      field("pattern", $.pattern),
+      "=>",
+      field("body", $.pure_expression),
+      optional(";"),
+    ),
 
     _variable_or_field_reference: $ => choice(
       $.field_access,
