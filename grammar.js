@@ -339,7 +339,7 @@ module.exports = grammar({
       $.identifier,
     ),
 
-    qualified_type_identifier: $ => dotSep1($.type_identifier),
+    qualified_type_identifier: $ => prec.right(dotSep1($.type_identifier)),
 
     // Name inherited from ANTLR grammar
     // type_use is a type_expression with possible annotations
@@ -681,6 +681,7 @@ module.exports = grammar({
       $.variadic_function_call_expression,
       $.unary_expression,
       $.binary_expression,
+      $.as_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -774,6 +775,12 @@ module.exports = grammar({
         ))
       }))
     },
+
+    as_expression: $ => seq(
+      field("expression", $.pure_expression),
+      "as",
+      field("interface", $._interface_name),
+    ),
 
     _variable_or_field_reference: $ => choice(
       $.field_access,
