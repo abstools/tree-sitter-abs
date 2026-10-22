@@ -284,6 +284,20 @@
     ]
   },
   {
+    "type": "type_name",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "qualified_type_identifier",
+        "named": true
+      },
+      {
+        "type": "type_identifier",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "and_guard",
     "named": true,
     "fields": {
@@ -377,7 +391,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -895,7 +909,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -921,7 +935,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1049,7 +1063,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1219,7 +1233,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1286,7 +1300,7 @@
       "required": true,
       "types": [
         {
-          "type": "qualified_type_identifier",
+          "type": "type_name",
           "named": true
         }
       ]
@@ -1592,7 +1606,7 @@
       "required": true,
       "types": [
         {
-          "type": "qualified_type_identifier",
+          "type": "type_name",
           "named": true
         }
       ]
@@ -1617,7 +1631,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1693,7 +1707,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1859,7 +1873,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -1921,7 +1935,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -2385,7 +2399,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -2553,7 +2567,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -2604,7 +2618,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]
@@ -2630,7 +2644,7 @@
         "required": true,
         "types": [
           {
-            "type": "qualified_type_identifier",
+            "type": "type_name",
             "named": true
           }
         ]

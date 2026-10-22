@@ -12,19 +12,16 @@ data NotInstantiable;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     (datatype_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       constructors: (data_constructor_clause
         (data_constructor
           name: (type_identifier))
         (data_constructor
           name: (type_identifier))))
     (datatype_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       parameters: (type_parameters
         (type_identifier))
       constructors: (data_constructor_clause
@@ -35,21 +32,17 @@ data NotInstantiable;
           parameters: (data_constructor_parameters
             (data_constructor_parameter
               type: (type_use
-                name: (qualified_type_identifier
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier))
             (data_constructor_parameter
               type: (type_use
-                name: (qualified_type_identifier
-                  (type_identifier))
+                name: (type_identifier)
                 parameters: (type_use_parameters
                   (type_use
-                    name: (qualified_type_identifier
-                      (type_identifier)))))
+                    name: (type_identifier))))
               name: (identifier))))))
     (datatype_declaration
-      name: (qualified_type_identifier
-        (type_identifier)))))
+      name: (type_identifier))))
 
 
 ====================
@@ -74,56 +67,44 @@ interface Peer extends Client, Server {
 
 (source_file
   (module_declaration 
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     (interface_declaration 
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       body: (interface_body
         (method_signature
           return_type: (type_use 
-            name: (qualified_type_identifier 
-              (type_identifier)))
+            name: (type_identifier))
           name: (identifier)
           parameters: (parameters
             (parameter
               type: (type_expression
-                name: (qualified_type_identifier 
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier))
             (parameter
               type: (type_expression
-                name: (qualified_type_identifier 
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier))))))
     (interface_declaration 
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       body: (interface_body
         (method_signature
           return_type: (type_use 
-            name: (qualified_type_identifier 
-              (type_identifier)))
+            name: (type_identifier))
           name: (identifier)
           parameters: (parameters
             (parameter
               type: (type_expression
-                name: (qualified_type_identifier 
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier))
             (parameter
               type: (type_expression
-                name: (qualified_type_identifier 
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier))))))
     (interface_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       extends: (extends_clause
-        (qualified_type_identifier 
-          (type_identifier))
-        (qualified_type_identifier
-          (type_identifier)))
+        (type_identifier)
+        (type_identifier))
       body: (interface_body))))
 
 ====================
@@ -156,63 +137,45 @@ type Catalog = List<Pair<Servername,Filenames>>;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))))
+        name: (type_identifier)))
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))
+        name: (type_identifier)
         parameters: (type_use_parameters
           (type_use
-            name: (qualified_type_identifier
-              (type_identifier))))))
+            name: (type_identifier)))))
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))))
+        name: (type_identifier)))
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))))
+        name: (type_identifier)))
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))
+        name: (type_identifier)
         parameters: (type_use_parameters
           (type_use
-            name: (qualified_type_identifier
-              (type_identifier))))))
+            name: (type_identifier)))))
     (type_synonym_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       type: (type_use
-        name: (qualified_type_identifier
-          (type_identifier))
+        name: (type_identifier)
         parameters: (type_use_parameters
           (type_use
-            name: (qualified_type_identifier
-              (type_identifier))
+            name: (type_identifier)
             parameters: (type_use_parameters
               (type_use 
-                name: (qualified_type_identifier
-                  (type_identifier)))
+                name: (type_identifier))
               (type_use 
-                name: (qualified_type_identifier
-                  (type_identifier))))))))))
+                name: (type_identifier)))))))))
 
 ====================
 Traits
@@ -228,37 +191,31 @@ trait T3 = { Unit y() { skip; } } adds T1
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     (trait_declaration
-      name: (qualified_type_identifier
-        (type_identifier))
+      name: (type_identifier)
       value: (trait_expression
         content: (basic_trait_expression
           method: (method_declaration
             return_type: (type_use 
-              name: (qualified_type_identifier
-                (type_identifier)))
+              name: (type_identifier))
             name: (identifier)
             parameters: (parameters)
             body: (method_body
               statement: (skip_statement))))))
     (trait_declaration
-      name: (qualified_type_identifier 
-        (type_identifier))
+      name: (type_identifier)
       value: (trait_expression 
         content: (basic_trait_expression
           trait: (type_identifier))))
     (trait_declaration
-      name: (qualified_type_identifier 
-        (type_identifier))
+      name: (type_identifier)
       value: (trait_expression
         content: (basic_trait_expression
           methods: (method_declaration_block
             method: (method_declaration
               return_type: (type_use 
-                name: (qualified_type_identifier
-                  (type_identifier)))
+                name: (type_identifier))
               name: (identifier)
               parameters: (parameters)
               body: (method_body

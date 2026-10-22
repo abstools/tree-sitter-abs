@@ -46,14 +46,16 @@ module.exports = grammar({
     $.pattern,
     $.guard,
     $.name,
+    $.type_name,
   ],
 
   conflicts: $ => [
-    [$.qualified_identifier, $.qualified_type_identifier],
-    [$.basic_trait_expression, $.qualified_type_identifier],
+    [$.qualified_type_identifier, $.type_name],
+    [$.basic_trait_expression, $.type_name],
     [$.name, $._variable_or_field_reference],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
+    [$.qualified_type_identifier],
   ],
 
   word: $ => $.identifier,
@@ -82,7 +84,7 @@ module.exports = grammar({
     datatype_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "data",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.type_parameters)),
       optional(field("constructors", $.data_constructor_clause)),
       ";",
@@ -151,7 +153,7 @@ module.exports = grammar({
     type_synonym_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "type",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       "=",
       field("type", $.type_use),
       ";",
@@ -160,7 +162,7 @@ module.exports = grammar({
     exception_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "exception",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.data_constructor_parameters)),
       ";",
     ),
@@ -168,7 +170,7 @@ module.exports = grammar({
     interface_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "interface",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("extends", $.extends_clause)),
       field("body", $.interface_body),
     ),
@@ -176,7 +178,7 @@ module.exports = grammar({
     class_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "class",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.parameters)),
       optional(field("implements", $.implements_clause)),
       field("body", $.class_body),
@@ -186,7 +188,7 @@ module.exports = grammar({
     trait_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "trait",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       "=",
       field("value", $.trait_expression),
     ),
@@ -330,7 +332,7 @@ module.exports = grammar({
 
     module_declaration: $ => seq(
       "module",
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       ";",
       // TODO: Add exports and imports
       repeat($.declaration),
@@ -340,12 +342,33 @@ module.exports = grammar({
     identifier: _ => /[a-z][A-Za-z0-9_]*/,
     type_identifier: _ => /[A-Z][A-Za-z0-9_]*/,
 
+    // Both qualified_identifier and qualified_type_identifier share a common prefix (dot separated type_identifier).
+    // If each rule parses the prefix itself, the parser must choose between them before reaching the last part,
+    // which leads to a conflict.
+    // We share the prefix in one rule, so the choice is delayed until the last part (identifier or type_identifier).
+    _qualifier: $ => repeat1(seq($.type_identifier, ".")),
+
     qualified_identifier: $ => seq(
-      repeat1(seq($.type_identifier, ".")),
+      $._qualifier,
       $.identifier,
     ),
 
-    qualified_type_identifier: $ => prec.right(dotSep1($.type_identifier)),
+    qualified_type_identifier: $ => seq(
+      $._qualifier,
+      $.type_identifier,
+    ),
+
+    // The ANTLR parser used by the ABS compiler
+    // parses qualified versions of identifiers and type identifiers even if the name is not qualified.
+    // We only want qualified versions when the name is qualified.
+    // We therefore use type_name and name in place of qualified_type_identifier and qualified_identifier
+    // from the ANTLR grammar.
+    // These are supertypes, so they do not show up in the syntax tree.
+
+    type_name: $ => choice(
+      $.type_identifier,
+      $.qualified_type_identifier,
+    ),
 
     name: $ => choice(
       $.identifier,
@@ -356,12 +379,12 @@ module.exports = grammar({
     // type_use is a type_expression with possible annotations
     type_use: $ => seq(
       optional($.annotations),
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.type_use_parameters)),
     ),
 
     type_expression: $ => seq(
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.type_use_parameters)),
     ),
 
@@ -577,7 +600,7 @@ module.exports = grammar({
     underscore_pattern: _ => "_",
 
     constructor_pattern: $ => seq(
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("parameters", $.pattern_list)),
     ),
 
@@ -653,7 +676,7 @@ module.exports = grammar({
     new_expression: $ => seq(
       "new",
       optional(field("local", $.local)),
-      field("constructor", $.qualified_type_identifier),
+      field("constructor", $.type_name),
       field("arguments", $.argument_list),
     ),
 
@@ -754,7 +777,7 @@ module.exports = grammar({
     ),
 
     constructor_expression: $ => seq(
-      field("name", $.qualified_type_identifier),
+      field("name", $.type_name),
       optional(field("arguments", $.argument_list)),
     ),
 
@@ -893,7 +916,7 @@ module.exports = grammar({
 
     // Overrides
     _function_name_decl: $ => $.identifier,
-    _interface_name: $ => $.qualified_type_identifier,
+    _interface_name: $ => $.type_name,
 
     annotations: $ => repeat1(seq(
       "[",
