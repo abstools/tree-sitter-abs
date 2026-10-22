@@ -47,6 +47,7 @@ module.exports = grammar({
     $.guard,
     $.name,
     $.type_name,
+    $.any_name,
   ],
 
   conflicts: $ => [
@@ -334,9 +335,58 @@ module.exports = grammar({
       "module",
       field("name", $.type_name),
       ";",
-      // TODO: Add exports and imports
+      repeat($._module_directive),
       repeat($.declaration),
       optional(field("main", $.main_block)),
+    ),
+
+    _module_directive: $ => choice(
+      $.import_declaration,
+      $.export_declaration,
+    ),
+
+    import_declaration: $ => seq(
+      "import",
+      choice(
+        $.wildcard_import,
+        $.from_import,
+        $.qualified_import,
+      ),
+      ";",
+    ),
+
+    wildcard_import: $ => seq(
+      $.wildcard,
+      "from",
+      field("module", $.module_name),
+    ),
+
+    from_import: $ => seq(
+      commaSep1(field("symbol", $.any_name)),
+      "from",
+      field("module", $.module_name),
+    ),
+
+    qualified_import: $ => seq(
+      commaSep1(field("symbol", $.any_name)),
+    ),
+
+    export_declaration: $ => seq(
+      "export",
+      choice(
+        $.wildcard,
+        commaSep1(field("symbol", $.any_name)),
+      ),
+      optional(seq(
+        "from",
+        field("module", $.module_name),
+      )),
+      ";",
+    ),
+
+    module_name: $ => seq(
+      repeat(seq(alias($.type_identifier, $.module_identifier), ".")),
+      alias($.type_identifier, $.module_identifier),
     ),
 
     identifier: _ => /[a-z][A-Za-z0-9_]*/,
@@ -346,7 +396,7 @@ module.exports = grammar({
     // If each rule parses the prefix itself, the parser must choose between them before reaching the last part,
     // which leads to a conflict.
     // We share the prefix in one rule, so the choice is delayed until the last part (identifier or type_identifier).
-    _qualifier: $ => repeat1(seq($.type_identifier, ".")),
+    _qualifier: $ => repeat1(seq($.type_identifier, ".")),
 
     qualified_identifier: $ => seq(
       $._qualifier,
@@ -365,7 +415,7 @@ module.exports = grammar({
     // from the ANTLR grammar.
     // These are supertypes, so they do not show up in the syntax tree.
 
-    type_name: $ => choice(
+    type_name: $ => choice(
       $.type_identifier,
       $.qualified_type_identifier,
     ),
@@ -373,6 +423,11 @@ module.exports = grammar({
     name: $ => choice(
       $.identifier,
       $.qualified_identifier,
+    ),
+
+    any_name: $ => choice(
+      $.name,
+      $.type_name,
     ),
 
     // Name inherited from ANTLR grammar
@@ -818,8 +873,8 @@ module.exports = grammar({
       "as",
       field("interface", $._interface_name),
     )),
-    
-    when_expression: $ => seq(
+
+    when_expression: $ => seq(
       "when",
       field("condition", $.pure_expression),
       "then",
@@ -828,25 +883,25 @@ module.exports = grammar({
       field("alternative", $.pure_expression),
     ),
 
-    implements_expression: $ => prec(PREC.IMPLEMENTS, seq(
+    implements_expression: $ => prec(PREC.IMPLEMENTS, seq(
       field("expression", $.pure_expression),
       "implements",
       field("interface", $._interface_name),
     )),
 
-    case_expression: $ => seq(
+    case_expression: $ => seq(
       "case",
       field("condition", $.pure_expression),
       field("body", $.case_block),
     ),
 
-    case_block: $ => seq(
+    case_block: $ => seq(
       "{",
       repeat1($.case_branch),
       "}",
     ),
 
-    case_branch: $ => seq(
+    case_branch: $ => seq(
       optional("|"),
       field("pattern", $.pattern),
       "=>",
@@ -937,6 +992,7 @@ module.exports = grammar({
 
     local: _ => "local",
     await: _ => "await",
+    wildcard: _ => "*",
 
 
     // Difference from ABS grammar (ANTLR)
