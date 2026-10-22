@@ -13,13 +13,11 @@ module ABS;
 
 (source_file 
   (module_declaration 
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block 
       statement: (variable_declaration_statement
         type: (type_expression
-          name: (qualified_type_identifier
-            (type_identifier)))
+          name: (type_identifier))
         name: (identifier)
         value: (integer_literal))
       statement: (variable_declaration_statement
@@ -44,8 +42,7 @@ module ABS;
 
 (source_file 
   (module_declaration 
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block 
       statement: (assignment_statement
         target: (identifier)
@@ -71,8 +68,7 @@ module ABS;
 
 (source_file 
   (module_declaration 
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block 
       statement: (skip_statement))))
 
@@ -91,8 +87,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (return_statement
         value: (integer_literal)))))
@@ -112,8 +107,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (assert_statement
         value: (integer_literal)))))
@@ -134,8 +128,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (block_statement
         statement: (return_statement
@@ -165,8 +158,7 @@ module ABS;
 
 (source_file 
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (if_statement
         condition: (parenthesized_expression
@@ -213,8 +205,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (switch_statement
         condition: (parenthesized_expression
@@ -239,8 +230,7 @@ module ABS;
               value: (integer_literal)))
           (case_statement_branch
             pattern: (constructor_pattern
-              name: (qualified_type_identifier
-                (type_identifier))
+              name: (type_identifier)
               parameters: (pattern_list
                 (identifier)
                 (identifier)))
@@ -263,8 +253,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (while_statement
         condition: (parenthesized_expression
@@ -293,8 +282,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block 
       statement: (foreach_statement
         variable: (identifier)

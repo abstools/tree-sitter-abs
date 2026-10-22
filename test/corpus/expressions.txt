@@ -21,8 +21,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (string_literal
@@ -78,14 +77,12 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (as_expression
           expression: (identifier)
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (as_expression
           expression: (identifier)
@@ -97,14 +94,12 @@ module ABS;
           expression: (binary_expression
             left: (identifier)
             right: (identifier))
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (as_expression
           expression: (unary_expression
             argument: (identifier))
-          interface: (qualified_type_identifier
-            (type_identifier)))))))
+          interface: (type_identifier))))))
 
 ==============================
 When expression
@@ -121,8 +116,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (when_expression
@@ -163,8 +157,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (binary_expression
@@ -242,14 +235,12 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (implements_expression
           expression: (identifier)
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (implements_expression
           expression: (identifier)
@@ -261,45 +252,70 @@ module ABS;
           expression: (binary_expression
             left: (identifier)
             right: (identifier))
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (implements_expression
           expression: (as_expression
             expression: (identifier)
-            interface: (qualified_type_identifier
-              (type_identifier)))
-          interface: (qualified_type_identifier
-            (type_identifier))))
+            interface: (type_identifier))
+          interface: (type_identifier)))
       statement: (expression_statement
         (implements_expression
           expression: (unary_expression
             argument: (identifier))
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (binary_expression
           left: (parenthesized_expression
             (implements_expression
               expression: (identifier)
-              interface: (qualified_type_identifier
-                (type_identifier))))
+              interface: (type_identifier)))
           right: (identifier)))
       statement: (expression_statement
         (implements_expression
           expression: (field_access
             (this_expression)
             field: (identifier))
-          interface: (qualified_type_identifier
-            (type_identifier))))
+          interface: (type_identifier)))
       statement: (expression_statement
         (when_expression
           condition: (implements_expression
             expression: (identifier)
-            interface: (qualified_type_identifier
-              (type_identifier)))
+            interface: (type_identifier))
           consequence: (integer_literal)
           alternative: (integer_literal))))))
+
+==============================
+Implements expression followed by get
+==============================
+
+module ABS;
+
+{
+  x implements I.get;
+  x implements M.I.get;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (effectful_expression
+          (get_expression
+            future: (implements_expression
+              expression: (identifier)
+              interface: (type_identifier)))))
+      statement: (expression_statement
+        (effectful_expression
+          (get_expression
+            future: (implements_expression
+              expression: (identifier)
+              interface: (qualified_type_identifier
+                (type_identifier)
+                (type_identifier)))))))))
 
 ==============================
 Case expression branch separators
@@ -334,8 +350,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (case_expression
@@ -410,8 +425,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (case_expression
@@ -432,13 +446,11 @@ module ABS;
               body: (identifier))
             (case_branch
               pattern: (constructor_pattern
-                name: (qualified_type_identifier
-                  (type_identifier)))
+                name: (type_identifier))
               body: (integer_literal))
             (case_branch
               pattern: (constructor_pattern
-                name: (qualified_type_identifier
-                  (type_identifier))
+                name: (type_identifier)
                 parameters: (pattern_list
                   (identifier)
                   (underscore_pattern)))
@@ -450,8 +462,7 @@ module ABS;
                   (type_identifier))
                 parameters: (pattern_list
                   (constructor_pattern
-                    name: (qualified_type_identifier
-                      (type_identifier))
+                    name: (type_identifier)
                     parameters: (pattern_list
                       (identifier)))
                   (identifier)))
@@ -487,8 +498,7 @@ module ABS;
 
 (source_file
   (module_declaration
-    name: (qualified_type_identifier
-      (type_identifier))
+    name: (type_identifier)
     main: (main_block
       statement: (expression_statement
         (case_expression
