@@ -1,0 +1,149 @@
+====================
+Imports
+====================
+
+module Imports;
+
+import A from Foo;
+import A, b, C from Foo.Bar;
+import * from Foo.Bar.Baz;
+import Foo.A;
+import Foo.a, Foo.Bar.B;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (import_declaration
+      (from_import
+        symbol: (type_identifier)
+        module: (module_name
+          (module_identifier))))
+    (import_declaration
+      (from_import
+        symbol: (type_identifier)
+        symbol: (identifier)
+        symbol: (type_identifier)
+        module: (module_name
+          (module_identifier)
+          (module_identifier))))
+    (import_declaration
+      (wildcard_import
+        (wildcard)
+        module: (module_name
+          (module_identifier)
+          (module_identifier)
+          (module_identifier))))
+    (import_declaration
+      (qualified_import
+        symbol: (qualified_type_identifier
+          (type_identifier)
+          (type_identifier))))
+    (import_declaration
+      (qualified_import
+        symbol: (qualified_identifier
+          (type_identifier)
+          (identifier))
+        symbol: (qualified_type_identifier
+          (type_identifier)
+          (type_identifier)
+          (type_identifier))))))
+
+
+====================
+Exports
+====================
+
+module Exports;
+
+export *;
+export A;
+export A, b, C;
+export * from Foo.Bar;
+export A, b from Foo;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (export_declaration
+      (wildcard))
+    (export_declaration
+      symbol: (type_identifier))
+    (export_declaration
+      symbol: (type_identifier)
+      symbol: (identifier)
+      symbol: (type_identifier))
+    (export_declaration
+      (wildcard)
+      module: (module_name
+        (module_identifier)
+        (module_identifier)))
+    (export_declaration
+      symbol: (type_identifier)
+      symbol: (identifier)
+      module: (module_name
+        (module_identifier)))))
+
+
+====================
+Imports and exports before declarations and main block
+====================
+
+module Mixed;
+
+export *;
+import A from Foo;
+export B;
+
+def Unit sayHello() = println("hello");
+
+{
+  sayHello();
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (export_declaration
+      (wildcard))
+    (import_declaration
+      (from_import
+        symbol: (type_identifier)
+        module: (module_name
+          (module_identifier))))
+    (export_declaration
+      symbol: (type_identifier))
+    (function_declaration
+      return_type: (type_use
+        name: (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (function_call_expression
+        name: (identifier)
+        arguments: (argument_list
+          (string_literal
+            (string_content)))))
+    main: (main_block
+      statement: (expression_statement
+        (function_call_expression
+          name: (identifier)
+          arguments: (argument_list))))))
+
+
+====================
+Import after declaration
+:error
+====================
+
+module M;
+
+def Unit f() = println("x");
+
+import A from Foo;
+
+---
