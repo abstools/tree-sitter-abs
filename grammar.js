@@ -52,8 +52,6 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.qualified_type_identifier, $.type_name],
-    [$.basic_trait_expression, $.type_name],
-    [$.name, $._variable_or_field_reference],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
@@ -133,13 +131,8 @@ module.exports = grammar({
       ";"
     ),
 
-    // ANTLR's par_function_decl uses bare `annotation*` (no brackets), unlike
-    // every other declaration. This makes `f (x) def ...` ambiguous between one
-    // annotation `f(x)` and two annotations `f`, `(x)`; resolved via the
-    // [name, _variable_or_field_reference] conflict.
-    // FIXME: Improve parsing of annotation*
     partial_function_declaration: $ => seq(
-      repeat($.annotation),
+      optional(field("annotations", $.annotations)),
       "def",
       field("return_type", $.type_use),
       field("name", $.name),
