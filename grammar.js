@@ -752,6 +752,7 @@ module.exports = grammar({
 
     pure_expression: $ => choice(
       $.string_literal,
+      $.template_string_literal,
       $.integer_literal,
       $.float_literal,
       $.parenthesized_expression,
@@ -954,6 +955,40 @@ module.exports = grammar({
     ))),
 
     string_content: _ => token.immediate(prec(1, /[^\\\"\r\n]+/)),
+
+    // Template strings
+    // Template strings support string interpolation between '$' i.e. `$name$`
+    // Only '`' and '$' can be escaped with a backslash
+    // Unlike in normal string literals, backslash (the character literal) is not escaped
+    // `\ ` will therefore evaluate to a string containing a backslash and a space
+    
+    template_string_literal: $ => seq(
+      "`",
+      repeat(choice(
+        $.template_string_escape_sequence,
+        $.template_string_content,
+        $.template_string_substitution,
+      )),
+      token.immediate("`"),
+    ),
+
+    template_string_escape_sequence: _ => token.immediate(prec(1, seq(
+      "\\",
+      choice(
+        "`",
+        "$",
+      ),
+    ))),
+
+    // Only '`' and '$' can be escaped inside template strings
+    // '\' followed by anything else is there part of string content
+    template_string_content: _ => token.immediate(prec(1, /([^`$\\]|\\[^`$])+/)),
+
+    template_string_substitution: $ => seq(
+      "$",
+      $.pure_expression,
+      "$",
+    ),
 
     builtin_expression: $ => seq(
       "builtin",

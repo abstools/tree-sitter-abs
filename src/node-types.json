@@ -184,6 +184,10 @@
         "named": true
       },
       {
+        "type": "template_string_literal",
+        "named": true
+      },
+      {
         "type": "this_expression",
         "named": true
       },
@@ -2493,6 +2497,44 @@
     }
   },
   {
+    "type": "template_string_literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "template_string_content",
+          "named": true
+        },
+        {
+          "type": "template_string_escape_sequence",
+          "named": true
+        },
+        {
+          "type": "template_string_substitution",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "template_string_substitution",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "pure_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "throw_statement",
     "named": true,
     "fields": {
@@ -3057,6 +3099,10 @@
     "named": false
   },
   {
+    "type": "$",
+    "named": false
+  },
+  {
     "type": "%",
     "named": false
   },
@@ -3146,6 +3192,10 @@
   },
   {
     "type": "]",
+    "named": false
+  },
+  {
+    "type": "`",
     "named": false
   },
   {
@@ -3328,6 +3378,14 @@
   {
     "type": "switch",
     "named": false
+  },
+  {
+    "type": "template_string_content",
+    "named": true
+  },
+  {
+    "type": "template_string_escape_sequence",
+    "named": true
   },
   {
     "type": "then",
