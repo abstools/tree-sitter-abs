@@ -2160,6 +2160,16 @@
     "type": "partial_function_declaration",
     "named": true,
     "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
       "expression": {
         "multiple": false,
         "required": true,
@@ -2220,16 +2230,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "annotation",
-          "named": true
-        }
-      ]
     }
   },
   {
