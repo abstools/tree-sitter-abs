@@ -176,6 +176,10 @@
         "named": true
       },
       {
+        "type": "old_if_expression",
+        "named": true
+      },
+      {
         "type": "parenthesized_expression",
         "named": true
       },
@@ -2072,6 +2076,42 @@
         "types": [
           {
             "type": "local",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "old_if_expression",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
             "named": true
           }
         ]
