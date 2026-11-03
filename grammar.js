@@ -768,6 +768,7 @@ module.exports = grammar({
       $.when_expression,
       $.implements_expression,
       $.case_expression,
+      $.let_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -901,6 +902,38 @@ module.exports = grammar({
       "=>",
       field("body", $.pure_expression),
       optional(";"),
+    ),
+
+    // FIXME:
+    // The ABS compiler has both parenthesis optional
+    // which means that uneven parenthesis "let (Int x"
+    // is accepted by the ABS compiler
+    let_expression: $ => seq(
+      "let",
+      commaSep1($.let_binding),
+      "in",
+      field("body", $.pure_expression),
+    ),
+
+    let_binding: $ => seq(
+      choice(
+        $.parenthesized_variable_declaration,
+        $.variable_declaration,
+      ),
+      "=",
+      field("value", $.pure_expression),
+    ),
+
+    parenthesized_variable_declaration: $ => seq(
+      "(",
+      field("type", $.type_use), 
+      field("name", $.identifier),
+      ")",
+    ),
+
+    variable_declaration: $ => seq(
+      field("type", $.type_use), 
+      field("name", $.identifier),
     ),
 
     _variable_or_field_reference: $ => choice(
