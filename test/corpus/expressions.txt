@@ -600,3 +600,37 @@ module ABS;
                 pattern: (underscore_pattern)
                 body: (integer_literal))))
           alternative: (integer_literal))))))
+
+==============================
+Old-style if expression
+==============================
+
+module ABS;
+
+{
+  if 5 == 4 then 10 else 50;
+  if 5 == 10 then 5 else 5 + 3;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (old_if_expression
+          condition: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal))
+          consequence: (integer_literal)
+          alternative: (integer_literal)))
+      statement: (expression_statement
+        (old_if_expression
+          condition: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal))
+          consequence: (integer_literal)
+          alternative: (binary_expression
+            left: (integer_literal)
+            right: (integer_literal)))))))

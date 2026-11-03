@@ -55,6 +55,7 @@ module.exports = grammar({
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
+    [$.if_statement, $.pure_expression],
   ],
 
   word: $ => $.identifier,
@@ -766,6 +767,7 @@ module.exports = grammar({
       $.binary_expression,
       $.as_expression,
       $.when_expression,
+      $.old_if_expression,
       $.implements_expression,
       $.case_expression,
     ),
@@ -901,6 +903,15 @@ module.exports = grammar({
       "=>",
       field("body", $.pure_expression),
       optional(";"),
+    ),
+
+    old_if_expression: $ => seq(
+      "if",
+      field("condition", $.pure_expression),
+      "then",
+      field("consequence", $.pure_expression),
+      "else",
+      field("alternative", $.pure_expression),
     ),
 
     _variable_or_field_reference: $ => choice(

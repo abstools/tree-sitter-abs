@@ -3402,6 +3402,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "old_if_expression"
+        },
+        {
+          "type": "SYMBOL",
           "name": "implements_expression"
         },
         {
@@ -4372,6 +4376,47 @@
         }
       ]
     },
+    "old_if_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "if"
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pure_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "then"
+        },
+        {
+          "type": "FIELD",
+          "name": "consequence",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pure_expression"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "else"
+        },
+        {
+          "type": "FIELD",
+          "name": "alternative",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pure_expression"
+          }
+        }
+      ]
+    },
     "_variable_or_field_reference": {
       "type": "CHOICE",
       "members": [
@@ -4911,6 +4956,10 @@
     ],
     [
       "qualified_type_identifier"
+    ],
+    [
+      "if_statement",
+      "pure_expression"
     ]
   ],
   "precedences": [],
