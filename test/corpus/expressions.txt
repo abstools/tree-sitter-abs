@@ -62,6 +62,67 @@ module ABS;
           (string_content))))))
 
 ==============================
+Template strings
+==============================
+
+module ABS;
+
+{
+  `This is a template string`;
+  `With 
+  newline`;
+  `\$not substituted\$`;
+  `Hello $name$`;
+  ``;
+  `\``;
+  `\ `;
+  `$/* Comment inside substitution */name$`;
+  `$// Line comment inside substitution name$`;
+      name$`;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_content)))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_content)))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_escape_sequence)
+          (template_string_content)
+          (template_string_escape_sequence)))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_content)
+          (template_string_substitution
+            (identifier))))
+      statement: (expression_statement
+        (template_string_literal))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_escape_sequence)))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_content)))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_substitution
+            (comment)
+            (identifier))))
+      statement: (expression_statement
+        (template_string_literal
+          (template_string_substitution
+            (comment)
+            (identifier)))))))
+
+==============================
 As expression
 ==============================
 module ABS;

@@ -3346,6 +3346,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "template_string_literal"
+        },
+        {
+          "type": "SYMBOL",
           "name": "integer_literal"
         },
         {
@@ -4608,6 +4612,99 @@
           "value": "[^\\\\\\\"\\r\\n]+"
         }
       }
+    },
+    "template_string_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "`"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "template_string_escape_sequence"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "template_string_content"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "template_string_substitution"
+              }
+            ]
+          }
+        },
+        {
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "`"
+          }
+        }
+      ]
+    },
+    "template_string_escape_sequence": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "\\"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "`"
+                },
+                {
+                  "type": "STRING",
+                  "value": "$"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "template_string_content": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "([^`$\\\\]|\\\\[^`$])+"
+        }
+      }
+    },
+    "template_string_substitution": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "$"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "pure_expression"
+        },
+        {
+          "type": "STRING",
+          "value": "$"
+        }
+      ]
     },
     "builtin_expression": {
       "type": "SEQ",
