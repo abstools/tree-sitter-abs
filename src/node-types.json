@@ -278,7 +278,7 @@
         "named": true
       },
       {
-        "type": "try_catch_statement",
+        "type": "try_statement",
         "named": true
       },
       {
@@ -2808,7 +2808,7 @@
     }
   },
   {
-    "type": "try_catch_statement",
+    "type": "try_statement",
     "named": true,
     "fields": {
       "annotations": {

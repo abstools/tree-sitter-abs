@@ -467,7 +467,7 @@ module.exports = grammar({
       $.switch_statement,
       $.while_statement,
       $.foreach_statement,
-      $.try_catch_statement,
+      $.try_statement,
       $.await_statement,
       $.suspend_statement,
       $.duration_statement,
@@ -583,7 +583,7 @@ module.exports = grammar({
     ),
 
     // TODO: Parse rest of try catch finally
-    try_catch_statement: $ => seq(
+    try_statement: $ => seq(
       optional(field("annotations", $.annotations)),
       "try",
       field("body", $.statement),

@@ -2030,7 +2030,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "try_catch_statement"
+          "name": "try_statement"
         },
         {
           "type": "SYMBOL",
@@ -2632,7 +2632,7 @@
         }
       ]
     },
-    "try_catch_statement": {
+    "try_statement": {
       "type": "SEQ",
       "members": [
         {
