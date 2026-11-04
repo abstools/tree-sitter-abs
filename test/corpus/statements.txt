@@ -307,3 +307,75 @@ module ABS;
         body: (block_statement
           statement: (expression_statement
             (identifier)))))))
+
+==============================
+Old style case statement
+==============================
+
+module ABS;
+
+{
+  case x {
+    _ => 0;
+    1 => 1;
+    "s" => 2;
+    y => y;
+    Nil => 3;
+    Cons(h, _) => h;
+    M.Pair(Just(a), b) => a;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (old_case_statement
+        condition: (identifier)
+        body: (old_case_statement_block
+          (case_statement_branch
+            pattern: (underscore_pattern)
+            body: (expression_statement
+              (integer_literal)))
+          (case_statement_branch
+            pattern: (integer_literal)
+            body: (expression_statement
+              (integer_literal)))
+          (case_statement_branch
+            pattern: (string_literal
+              (string_content))
+            body: (expression_statement
+              (integer_literal)))
+          (case_statement_branch
+            pattern: (identifier)
+            body: (expression_statement
+              (identifier)))
+          (case_statement_branch
+            pattern: (constructor_pattern
+              name: (type_identifier))
+            body: (expression_statement
+              (integer_literal)))
+          (case_statement_branch
+            pattern: (constructor_pattern
+              name: (type_identifier)
+              parameters: (pattern_list
+                (identifier)
+                (underscore_pattern)))
+            body: (expression_statement
+              (identifier)))
+          (case_statement_branch
+            pattern: (constructor_pattern
+              name: (qualified_type_identifier
+                (type_identifier)
+                (type_identifier))
+              parameters: (pattern_list
+                (constructor_pattern
+                  name: (type_identifier)
+                  parameters: (pattern_list
+                    (identifier)))
+                (identifier)))
+            body: (expression_statement
+              (identifier))))))))
+

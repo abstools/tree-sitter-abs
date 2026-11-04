@@ -254,6 +254,10 @@
         "named": true
       },
       {
+        "type": "old_case_statement",
+        "named": true
+      },
+      {
         "type": "return_statement",
         "named": true
       },
@@ -2080,6 +2084,57 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "old_case_statement",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "old_case_statement_block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "old_case_statement_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "case_statement_branch",
+          "named": true
+        }
+      ]
     }
   },
   {

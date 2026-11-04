@@ -56,6 +56,7 @@ module.exports = grammar({
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
     [$.if_statement, $.pure_expression],
+    [$.expression, $.case_branch],
   ],
 
   word: $ => $.identifier,
@@ -473,6 +474,7 @@ module.exports = grammar({
       $.throw_statement,
       $.die_statement,
       $.movecogto_statement,
+      $.old_case_statement,
     ),
 
     expression_statement: $ => seq(
@@ -633,6 +635,25 @@ module.exports = grammar({
       "movecogto",
       field("value", $.pure_expression),
       ";",
+    ),
+
+    // Case statements (with "case" keyword) are identical to switch statements
+    // Switch statements are preferred (idiomatically)
+    // thus case statements are referred to as "old-style"
+    //
+    // All case statements are valid case expressions (if the final semicolon is removed)
+    // As empty statements are not allowed, this is not ambiguous
+    old_case_statement: $ => seq(
+      optional(field("annotations", $.annotations)),
+      "case",
+      field("condition", $.pure_expression),
+      field("body", $.old_case_statement_block),
+    ),
+
+    old_case_statement_block: $ => seq(
+      "{",
+      repeat($.case_statement_branch),
+      "}",
     ),
 
 

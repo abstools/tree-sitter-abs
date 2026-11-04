@@ -2055,6 +2055,10 @@
         {
           "type": "SYMBOL",
           "name": "movecogto_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "old_case_statement"
         }
       ]
     },
@@ -2909,6 +2913,67 @@
         {
           "type": "STRING",
           "value": ";"
+        }
+      ]
+    },
+    "old_case_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "annotations",
+              "content": {
+                "type": "SYMBOL",
+                "name": "annotations"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "case"
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "pure_expression"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "old_case_statement_block"
+          }
+        }
+      ]
+    },
+    "old_case_statement_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "case_statement_branch"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
         }
       ]
     },
@@ -4960,6 +5025,10 @@
     [
       "if_statement",
       "pure_expression"
+    ],
+    [
+      "expression",
+      "case_branch"
     ]
   ],
   "precedences": [],
