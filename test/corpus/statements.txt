@@ -210,25 +210,25 @@ module ABS;
       statement: (switch_statement
         condition: (parenthesized_expression
           (integer_literal))
-        body: (switch_body
-          (case_statement_branch
+        body: (branch_block
+          (statement_branch
             pattern: (integer_literal)
             body: (return_statement
               value: (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (string_literal
               (string_content))
             body: (return_statement
               value: (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (identifier)
             body: (return_statement
               value: (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (underscore_pattern)
             body: (return_statement
               value: (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (constructor_pattern
               name: (type_identifier)
               parameters: (pattern_list
@@ -334,30 +334,30 @@ module ABS;
     main: (main_block
       statement: (old_case_statement
         condition: (identifier)
-        body: (old_case_statement_block
-          (case_statement_branch
+        body: (branch_block
+          (statement_branch
             pattern: (underscore_pattern)
             body: (expression_statement
               (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (integer_literal)
             body: (expression_statement
               (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (string_literal
               (string_content))
             body: (expression_statement
               (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (identifier)
             body: (expression_statement
               (identifier)))
-          (case_statement_branch
+          (statement_branch
             pattern: (constructor_pattern
               name: (type_identifier))
             body: (expression_statement
               (integer_literal)))
-          (case_statement_branch
+          (statement_branch
             pattern: (constructor_pattern
               name: (type_identifier)
               parameters: (pattern_list
@@ -365,7 +365,7 @@ module ABS;
                 (underscore_pattern)))
             body: (expression_statement
               (identifier)))
-          (case_statement_branch
+          (statement_branch
             pattern: (constructor_pattern
               name: (qualified_type_identifier
                 (type_identifier)
@@ -378,4 +378,73 @@ module ABS;
                 (identifier)))
             body: (expression_statement
               (identifier))))))))
+
+==============================
+Try statement
+==============================
+
+module ABS;
+
+{
+  try {
+    10;
+  } catch _ => 5;
+  finally 25;
+
+  try 10;
+  catch {
+    _ => 5;
+  } finally {
+    25;
+  }
+
+  try {
+    10;
+  } catch {
+    _ => 5;
+  }
+
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (try_statement
+        body: (block_statement
+          statement: (expression_statement
+            (integer_literal)))
+        handler: (catch_clause 
+          (statement_branch
+            pattern: (underscore_pattern)
+            body: (expression_statement
+              (integer_literal))))
+        finalizer: (finally_clause 
+          (expression_statement
+            (integer_literal))))
+      statement: (try_statement
+        body: (expression_statement
+          (integer_literal))
+        handler: (catch_clause
+          (branch_block 
+            (statement_branch
+              pattern: (underscore_pattern)
+              body: (expression_statement
+                (integer_literal)))))
+        finalizer: (finally_clause
+          (block_statement
+            statement: (expression_statement
+              (integer_literal)))))
+      statement: (try_statement
+        body: (block_statement
+          statement: (expression_statement
+            (integer_literal)))
+        handler: (catch_clause
+          (branch_block
+            (statement_branch
+              pattern: (underscore_pattern)
+              body: (expression_statement
+                (integer_literal)))))))))
 

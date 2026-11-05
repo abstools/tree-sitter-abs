@@ -277,9 +277,7 @@ module.exports = grammar({
 
     recover_block: $ => seq(
       "recover",
-      "{",
-      repeat($.case_statement_branch),
-      "}"
+      field("body", $.branch_block),
     ),
 
     method_declaration: $ => seq(
@@ -545,16 +543,16 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "switch",
       field("condition", $.parenthesized_expression),
-      field("body", $.switch_body),
+      field("body", $.branch_block),
     ),
 
-    switch_body: $ => seq(
+    branch_block: $ => seq(
       "{",
-      repeat($.case_statement_branch),
+      repeat($.statement_branch),
       "}"
     ),
 
-    case_statement_branch: $ => seq(
+    statement_branch: $ => seq(
       field("pattern", $.pattern),
       "=>",
       field("body", $.statement),
@@ -582,12 +580,25 @@ module.exports = grammar({
       field("body", $.statement),
     ),
 
-    // TODO: Parse rest of try catch finally
-    try_statement: $ => seq(
+    try_statement: $ => prec.right(seq(
       optional(field("annotations", $.annotations)),
       "try",
       field("body", $.statement),
+      field("handler", $.catch_clause),
+      optional(field("finalizer", $.finally_clause)),
+    )),
+
+    catch_clause: $ => seq(
       "catch",
+      choice(
+        $.statement_branch,
+        $.branch_block,
+      ),
+    ),
+
+    finally_clause: $ => seq(
+      "finally",
+      $.statement,
     ),
 
     await_statement: $ => seq(
@@ -647,15 +658,8 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "case",
       field("condition", $.pure_expression),
-      field("body", $.old_case_statement_block),
+      field("body", $.branch_block),
     ),
-
-    old_case_statement_block: $ => seq(
-      "{",
-      repeat($.case_statement_branch),
-      "}",
-    ),
-
 
     // Patterns
 

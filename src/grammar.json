@@ -1173,19 +1173,12 @@
           "value": "recover"
         },
         {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "REPEAT",
+          "type": "FIELD",
+          "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "case_statement_branch"
+            "name": "branch_block"
           }
-        },
-        {
-          "type": "STRING",
-          "value": "}"
         }
       ]
     },
@@ -2455,12 +2448,12 @@
           "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "switch_body"
+            "name": "branch_block"
           }
         }
       ]
     },
-    "switch_body": {
+    "branch_block": {
       "type": "SEQ",
       "members": [
         {
@@ -2471,7 +2464,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "case_statement_branch"
+            "name": "statement_branch"
           }
         },
         {
@@ -2480,7 +2473,7 @@
         }
       ]
     },
-    "case_statement_branch": {
+    "statement_branch": {
       "type": "SEQ",
       "members": [
         {
@@ -2633,39 +2626,98 @@
       ]
     },
     "try_statement": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "annotations",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "annotations"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": "try"
+          },
+          {
+            "type": "FIELD",
+            "name": "body",
+            "content": {
+              "type": "SYMBOL",
+              "name": "statement"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "handler",
+            "content": {
+              "type": "SYMBOL",
+              "name": "catch_clause"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "finalizer",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "finally_clause"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "catch_clause": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "STRING",
+          "value": "catch"
+        },
         {
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "annotations",
-              "content": {
-                "type": "SYMBOL",
-                "name": "annotations"
-              }
+              "type": "SYMBOL",
+              "name": "statement_branch"
             },
             {
-              "type": "BLANK"
+              "type": "SYMBOL",
+              "name": "branch_block"
             }
           ]
-        },
+        }
+      ]
+    },
+    "finally_clause": {
+      "type": "SEQ",
+      "members": [
         {
           "type": "STRING",
-          "value": "try"
+          "value": "finally"
         },
         {
-          "type": "FIELD",
-          "name": "body",
-          "content": {
-            "type": "SYMBOL",
-            "name": "statement"
-          }
-        },
-        {
-          "type": "STRING",
-          "value": "catch"
+          "type": "SYMBOL",
+          "name": "statement"
         }
       ]
     },
@@ -2952,28 +3004,8 @@
           "name": "body",
           "content": {
             "type": "SYMBOL",
-            "name": "old_case_statement_block"
+            "name": "branch_block"
           }
-        }
-      ]
-    },
-    "old_case_statement_block": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "case_statement_branch"
-          }
-        },
-        {
-          "type": "STRING",
-          "value": "}"
         }
       ]
     },
