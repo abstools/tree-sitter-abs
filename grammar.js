@@ -38,6 +38,7 @@ module.exports = grammar({
   ],
 
   supertypes: ($) => [
+    // Core ABS
     $.declaration,
     $.statement,
     $.expression,
@@ -50,6 +51,16 @@ module.exports = grammar({
     $.type_name,
     $.any_name,
     $.type,
+
+    // Delta modules
+    $.delta_parameter,
+    $.has_condition,
+    $.module_modifier,
+    $.functional_modifier,
+    $.object_oriented_modifier,
+    $.namespace_modifier,
+    $.class_modifier_fragment,
+    $.interface_modifier_fragment,
   ],
 
   conflicts: $ => [
@@ -67,7 +78,10 @@ module.exports = grammar({
   word: $ => $.identifier,
 
   rules: {
-    source_file: $ => repeat($.module_declaration),
+    source_file: $ => seq(
+      repeat($.module_declaration),
+      repeat($.delta_declaration),
+    ),
 
     main_block: $ => seq(
       optional(field("annotations", $.annotations)),
@@ -1092,6 +1106,217 @@ module.exports = grammar({
     builtin_expression: $ => seq(
       "builtin",
       optional(field("arguments", $.argument_list)),
+    ),
+
+    // Delta modules
+    // https://abs-models.org/manual/feature-modeling.html
+
+    delta_declaration: $ => seq(
+      "delta",
+      field("name", $.type_identifier),
+      optional(field("parameters", $.delta_parameter_list)),
+      ";",
+      optional(field("uses", $.delta_uses_module)),
+      repeat(field("modifier", $.module_modifier)),
+    ),
+
+    delta_parameter_list: $ => seq(
+      "(",
+      commaSep1($.delta_parameter),
+      ")",
+    ),
+
+    delta_parameter: $ => choice(
+      alias($.parameter, $.delta_field_parameter),
+      $.delta_class_parameter,
+    ),
+
+    delta_class_parameter: $ => seq(
+      field("name", $.type_name),
+      field("condition", $.has_condition),
+    ),
+
+    has_condition: $ => choice(
+      $.has_field_condition,
+      $.has_method_condition,
+      $.has_interface_condition,
+    ),
+
+    has_field_condition: $ => seq(
+      "hasField",
+      field("field", $.field_declaration),
+    ),
+
+    has_method_condition: $ => seq(
+      "hasMethod",
+      field("method", $.method_signature),
+    ),
+
+    has_interface_condition: $ => seq(
+      "hasInterface",
+      field("interface", $._interface_name),
+    ),
+
+    delta_uses_module: $ => seq(
+      "uses",
+      field("module", $.module_name),
+      ";",
+    ),
+
+    module_modifier: $ => choice(
+      $.functional_modifier,
+      $.object_oriented_modifier,
+      $.namespace_modifier,
+    ),
+
+    functional_modifier: $ => choice(
+      $.add_function_modifier,
+      $.add_datatype_modifier,
+      $.add_type_synonym_modifier,
+      $.modify_type_synonym_modifier,
+      $.modify_datatype_modifier,
+    ),
+
+    add_function_modifier: $ => seq(
+      "adds",
+      field("declaration", $.function_declaration),
+    ),
+
+    add_datatype_modifier: $ => seq(
+      "adds",
+      field("declaration", $.datatype_declaration),
+    ),
+
+    add_type_synonym_modifier: $ => seq(
+      "adds",
+      field("declaration", $.type_synonym_declaration),
+    ),
+
+    modify_type_synonym_modifier: $ => seq(
+      "modifies",
+      field("declaration", $.type_synonym_declaration),
+    ),
+
+    modify_datatype_modifier: $ => seq(
+      "modifies",
+      field("declaration", $.datatype_declaration),
+    ),
+
+    object_oriented_modifier: $ => choice(
+      $.add_class_modifier,
+      $.remove_class_modifier,
+      $.modify_class_modifier,
+      $.add_interface_modifier,
+      $.remove_interface_modifier,
+      $.modify_interface_modifier,
+    ),
+
+    add_class_modifier: $ => seq(
+      "adds",
+      field("declaration", $.class_declaration),
+    ),
+
+    remove_class_modifier: $ => seq(
+      "removes",
+      "class",
+      field("name", $.type_name),
+      ";",
+    ),
+
+    modify_class_modifier: $ => seq(
+      "modifies",
+      "class",
+      field("name", $.type_name),
+      optional(field("added_interfaces", $.added_interface_list)),
+      optional(field("removed_interfaces", $.removed_interface_list)),
+      field("body", $.class_modifier_block),
+    ),
+
+    added_interface_list: $ => seq(
+      "adds",
+      commaSep1($._interface_name),
+    ),
+
+    removed_interface_list: $ => seq(
+      "removes",
+      commaSep1($._interface_name),
+    ),
+
+    class_modifier_block: $ => seq(
+      "{",
+      repeat(field("fragment", $.class_modifier_fragment)),
+      "}",
+    ),
+
+    class_modifier_fragment: $ => choice(
+      $.add_field_fragment,
+      $.remove_field_fragment,
+      $.trait_operation,
+    ),
+
+    add_field_fragment: $ => seq(
+      "adds",
+      field("field", $.field_declaration),
+    ),
+
+    remove_field_fragment: $ => seq(
+      "removes",
+      field("field", $.field_declaration),
+    ),
+
+    add_interface_modifier: $ => seq(
+      "adds",
+      field("declaration", $.interface_declaration),
+    ),
+
+    remove_interface_modifier: $ => seq(
+      "removes",
+      "interface",
+      field("name", $._interface_name),
+      ";",
+    ),
+
+    modify_interface_modifier: $ => seq(
+      "modifies",
+      "interface",
+      field("name", $._interface_name),
+      field("body", $.interface_modifier_block),
+    ),
+
+    interface_modifier_block: $ => seq(
+      "{",
+      repeat(field("fragment", $.interface_modifier_fragment)),
+      "}",
+    ),
+
+    interface_modifier_fragment: $ => choice(
+      $.add_method_signature_fragment,
+      $.remove_method_signature_fragment,
+    ),
+
+    add_method_signature_fragment: $ => seq(
+      "adds",
+      field("method", $.method_signature),
+    ),
+
+    remove_method_signature_fragment: $ => seq(
+      "removes",
+      field("method", $.method_signature),
+    ),
+
+    namespace_modifier: $ => choice(
+      $.add_import_modifier,
+      $.add_export_modifier,
+    ),
+
+    add_import_modifier: $ => seq(
+      "adds",
+      field("declaration", $.import_declaration),
+    ),
+
+    add_export_modifier: $ => seq(
+      "adds",
+      field("declaration", $.export_declaration),
     ),
 
     // Overrides

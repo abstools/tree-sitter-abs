@@ -14,6 +14,24 @@
     ]
   },
   {
+    "type": "class_modifier_fragment",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "add_field_fragment",
+        "named": true
+      },
+      {
+        "type": "remove_field_fragment",
+        "named": true
+      },
+      {
+        "type": "trait_operation",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "declaration",
     "named": true,
     "subtypes": [
@@ -47,6 +65,20 @@
       },
       {
         "type": "type_synonym_declaration",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "delta_parameter",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "delta_class_parameter",
+        "named": true
+      },
+      {
+        "type": "delta_field_parameter",
         "named": true
       }
     ]
@@ -92,6 +124,32 @@
     ]
   },
   {
+    "type": "functional_modifier",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "add_datatype_modifier",
+        "named": true
+      },
+      {
+        "type": "add_function_modifier",
+        "named": true
+      },
+      {
+        "type": "add_type_synonym_modifier",
+        "named": true
+      },
+      {
+        "type": "modify_datatype_modifier",
+        "named": true
+      },
+      {
+        "type": "modify_type_synonym_modifier",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "guard",
     "named": true,
     "subtypes": [
@@ -114,6 +172,56 @@
     ]
   },
   {
+    "type": "has_condition",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "has_field_condition",
+        "named": true
+      },
+      {
+        "type": "has_interface_condition",
+        "named": true
+      },
+      {
+        "type": "has_method_condition",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "interface_modifier_fragment",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "add_method_signature_fragment",
+        "named": true
+      },
+      {
+        "type": "remove_method_signature_fragment",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "module_modifier",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "functional_modifier",
+        "named": true
+      },
+      {
+        "type": "namespace_modifier",
+        "named": true
+      },
+      {
+        "type": "object_oriented_modifier",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "name",
     "named": true,
     "subtypes": [
@@ -123,6 +231,50 @@
       },
       {
         "type": "qualified_identifier",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "namespace_modifier",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "add_export_modifier",
+        "named": true
+      },
+      {
+        "type": "add_import_modifier",
+        "named": true
+      }
+    ]
+  },
+  {
+    "type": "object_oriented_modifier",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "add_class_modifier",
+        "named": true
+      },
+      {
+        "type": "add_interface_modifier",
+        "named": true
+      },
+      {
+        "type": "modify_class_modifier",
+        "named": true
+      },
+      {
+        "type": "modify_interface_modifier",
+        "named": true
+      },
+      {
+        "type": "remove_class_modifier",
+        "named": true
+      },
+      {
+        "type": "remove_interface_modifier",
         "named": true
       }
     ]
@@ -374,6 +526,165 @@
         "named": true
       }
     ]
+  },
+  {
+    "type": "add_class_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "class_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_datatype_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "datatype_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_export_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "export_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_field_fragment",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "field_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_function_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "function_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_import_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "import_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_interface_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "interface_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_method_signature_fragment",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "method_signature",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "add_type_synonym_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_synonym_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "added_interface_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "type_name",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "and_guard",
@@ -1044,6 +1355,22 @@
     }
   },
   {
+    "type": "class_modifier_block",
+    "named": true,
+    "fields": {
+      "fragment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "class_modifier_fragment",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "constructor_expression",
     "named": true,
     "fields": {
@@ -1217,6 +1544,149 @@
         "types": [
           {
             "type": "type_parameter_list",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delta_class_parameter",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "has_condition",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delta_declaration",
+    "named": true,
+    "fields": {
+      "modifier": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "module_modifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "delta_parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "uses": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "delta_uses_module",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delta_field_parameter",
+    "named": true,
+    "fields": {
+      "annotations": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "annotations",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "generic_type",
+            "named": true
+          },
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delta_parameter_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "delta_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "delta_uses_module",
+    "named": true,
+    "fields": {
+      "module": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "module_name",
             "named": true
           }
         ]
@@ -1767,6 +2237,54 @@
     }
   },
   {
+    "type": "has_field_condition",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "field_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "has_interface_condition",
+    "named": true,
+    "fields": {
+      "interface": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "has_method_condition",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "method_signature",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "if_statement",
     "named": true,
     "fields": {
@@ -1946,6 +2464,22 @@
         "types": [
           {
             "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "interface_modifier_block",
+    "named": true,
+    "fields": {
+      "fragment": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "interface_modifier_fragment",
             "named": true
           }
         ]
@@ -2142,6 +2676,110 @@
         "types": [
           {
             "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "modify_class_modifier",
+    "named": true,
+    "fields": {
+      "added_interfaces": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "added_interface_list",
+            "named": true
+          }
+        ]
+      },
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "class_modifier_block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      },
+      "removed_interfaces": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "removed_interface_list",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "modify_datatype_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "datatype_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "modify_interface_modifier",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "interface_modifier_block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "modify_type_synonym_modifier",
+    "named": true,
+    "fields": {
+      "declaration": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_synonym_declaration",
             "named": true
           }
         ]
@@ -2611,6 +3249,85 @@
     }
   },
   {
+    "type": "remove_class_modifier",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "remove_field_fragment",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "field_declaration",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "remove_interface_modifier",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "remove_method_signature_fragment",
+    "named": true,
+    "fields": {
+      "method": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "method_signature",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "removed_interface_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "type_name",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "return_statement",
     "named": true,
     "fields": {
@@ -2661,6 +3378,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "delta_declaration",
+          "named": true
+        },
         {
           "type": "module_declaration",
           "named": true
@@ -3537,6 +4258,10 @@
     "named": false
   },
   {
+    "type": "delta",
+    "named": false
+  },
+  {
     "type": "destiny_expression",
     "named": true
   },
@@ -3586,6 +4311,18 @@
   },
   {
     "type": "get",
+    "named": false
+  },
+  {
+    "type": "hasField",
+    "named": false
+  },
+  {
+    "type": "hasInterface",
+    "named": false
+  },
+  {
+    "type": "hasMethod",
     "named": false
   },
   {

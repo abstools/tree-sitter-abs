@@ -4,11 +4,23 @@
   "word": "identifier",
   "rules": {
     "source_file": {
-      "type": "REPEAT",
-      "content": {
-        "type": "SYMBOL",
-        "name": "module_declaration"
-      }
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "module_declaration"
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "delta_declaration"
+          }
+        }
+      ]
     },
     "main_block": {
       "type": "SEQ",
@@ -5001,6 +5013,827 @@
         }
       ]
     },
+    "delta_declaration": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "delta"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_identifier"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "parameters",
+              "content": {
+                "type": "SYMBOL",
+                "name": "delta_parameter_list"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "uses",
+              "content": {
+                "type": "SYMBOL",
+                "name": "delta_uses_module"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "modifier",
+            "content": {
+              "type": "SYMBOL",
+              "name": "module_modifier"
+            }
+          }
+        }
+      ]
+    },
+    "delta_parameter_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "delta_parameter"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "delta_parameter"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "delta_parameter": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "parameter"
+          },
+          "named": true,
+          "value": "delta_field_parameter"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "delta_class_parameter"
+        }
+      ]
+    },
+    "delta_class_parameter": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_name"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "has_condition"
+          }
+        }
+      ]
+    },
+    "has_condition": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "has_field_condition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "has_method_condition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "has_interface_condition"
+        }
+      ]
+    },
+    "has_field_condition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "hasField"
+        },
+        {
+          "type": "FIELD",
+          "name": "field",
+          "content": {
+            "type": "SYMBOL",
+            "name": "field_declaration"
+          }
+        }
+      ]
+    },
+    "has_method_condition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "hasMethod"
+        },
+        {
+          "type": "FIELD",
+          "name": "method",
+          "content": {
+            "type": "SYMBOL",
+            "name": "method_signature"
+          }
+        }
+      ]
+    },
+    "has_interface_condition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "hasInterface"
+        },
+        {
+          "type": "FIELD",
+          "name": "interface",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_interface_name"
+          }
+        }
+      ]
+    },
+    "delta_uses_module": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "uses"
+        },
+        {
+          "type": "FIELD",
+          "name": "module",
+          "content": {
+            "type": "SYMBOL",
+            "name": "module_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "module_modifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "functional_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "object_oriented_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "namespace_modifier"
+        }
+      ]
+    },
+    "functional_modifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "add_function_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "add_datatype_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "add_type_synonym_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "modify_type_synonym_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "modify_datatype_modifier"
+        }
+      ]
+    },
+    "add_function_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "function_declaration"
+          }
+        }
+      ]
+    },
+    "add_datatype_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "datatype_declaration"
+          }
+        }
+      ]
+    },
+    "add_type_synonym_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_synonym_declaration"
+          }
+        }
+      ]
+    },
+    "modify_type_synonym_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "modifies"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_synonym_declaration"
+          }
+        }
+      ]
+    },
+    "modify_datatype_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "modifies"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "datatype_declaration"
+          }
+        }
+      ]
+    },
+    "object_oriented_modifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "add_class_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "remove_class_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "modify_class_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "add_interface_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "remove_interface_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "modify_interface_modifier"
+        }
+      ]
+    },
+    "add_class_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "class_declaration"
+          }
+        }
+      ]
+    },
+    "remove_class_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "removes"
+        },
+        {
+          "type": "STRING",
+          "value": "class"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "modify_class_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "modifies"
+        },
+        {
+          "type": "STRING",
+          "value": "class"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type_name"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "added_interfaces",
+              "content": {
+                "type": "SYMBOL",
+                "name": "added_interface_list"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "removed_interfaces",
+              "content": {
+                "type": "SYMBOL",
+                "name": "removed_interface_list"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "class_modifier_block"
+          }
+        }
+      ]
+    },
+    "added_interface_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_interface_name"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_interface_name"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "removed_interface_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "removes"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_interface_name"
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "_interface_name"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "class_modifier_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "fragment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "class_modifier_fragment"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "class_modifier_fragment": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "add_field_fragment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "remove_field_fragment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "trait_operation"
+        }
+      ]
+    },
+    "add_field_fragment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "field",
+          "content": {
+            "type": "SYMBOL",
+            "name": "field_declaration"
+          }
+        }
+      ]
+    },
+    "remove_field_fragment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "removes"
+        },
+        {
+          "type": "FIELD",
+          "name": "field",
+          "content": {
+            "type": "SYMBOL",
+            "name": "field_declaration"
+          }
+        }
+      ]
+    },
+    "add_interface_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "interface_declaration"
+          }
+        }
+      ]
+    },
+    "remove_interface_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "removes"
+        },
+        {
+          "type": "STRING",
+          "value": "interface"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_interface_name"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
+    },
+    "modify_interface_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "modifies"
+        },
+        {
+          "type": "STRING",
+          "value": "interface"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_interface_name"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "interface_modifier_block"
+          }
+        }
+      ]
+    },
+    "interface_modifier_block": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "FIELD",
+            "name": "fragment",
+            "content": {
+              "type": "SYMBOL",
+              "name": "interface_modifier_fragment"
+            }
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "interface_modifier_fragment": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "add_method_signature_fragment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "remove_method_signature_fragment"
+        }
+      ]
+    },
+    "add_method_signature_fragment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "method",
+          "content": {
+            "type": "SYMBOL",
+            "name": "method_signature"
+          }
+        }
+      ]
+    },
+    "remove_method_signature_fragment": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "removes"
+        },
+        {
+          "type": "FIELD",
+          "name": "method",
+          "content": {
+            "type": "SYMBOL",
+            "name": "method_signature"
+          }
+        }
+      ]
+    },
+    "namespace_modifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "add_import_modifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "add_export_modifier"
+        }
+      ]
+    },
+    "add_import_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "import_declaration"
+          }
+        }
+      ]
+    },
+    "add_export_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "adds"
+        },
+        {
+          "type": "FIELD",
+          "name": "declaration",
+          "content": {
+            "type": "SYMBOL",
+            "name": "export_declaration"
+          }
+        }
+      ]
+    },
     "_function_name_decl": {
       "type": "SYMBOL",
       "name": "identifier"
@@ -5194,7 +6027,15 @@
     "name",
     "type_name",
     "any_name",
-    "type"
+    "type",
+    "delta_parameter",
+    "has_condition",
+    "module_modifier",
+    "functional_modifier",
+    "object_oriented_modifier",
+    "namespace_modifier",
+    "class_modifier_fragment",
+    "interface_modifier_fragment"
   ],
   "reserved": {}
 }
