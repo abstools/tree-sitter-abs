@@ -725,8 +725,8 @@ module.exports = grammar({
     // - pure expressions
     // - effectful expressions
     //
-    // Functions (under top-level function declaration) only allow pure expressions
-    // While expressions used in statements can be both pure and effectful
+    // Functions (under top-level function declaration, as opposed to class methods) only allow pure expressions
+    // Expressions used in statements can be both pure and effectful
 
     expression: $ => choice(
       $.effectful_expression,
