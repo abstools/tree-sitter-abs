@@ -1,0 +1,818 @@
+====================
+Productline with single feature
+====================
+
+productline P;
+features F;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))))
+
+====================
+Productline with multiple features
+====================
+
+productline P;
+features F, G, H;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))))
+
+====================
+Productline with intermediate feature name
+====================
+
+productline P;
+features F, G';
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))))
+
+====================
+Feature with attribute assignments
+====================
+
+productline P;
+features F { x = 1, b = True, s = "s" };
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier))
+      (attribute_assignment_block
+        (attribute_assignment
+          name: (identifier)
+          (integer_literal))
+        (attribute_assignment
+          name: (identifier)
+          (type_identifier))
+        (attribute_assignment
+          name: (identifier)
+          (string_literal
+            (string_content)))))))
+
+====================
+Delta clause without conditions
+====================
+
+productline P;
+features F;
+delta D;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier)))))
+
+====================
+Multiple delta clauses
+====================
+
+productline P;
+features F, G;
+delta D1;
+delta D2;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier)))))
+
+====================
+Delta clause with parameters
+====================
+
+productline P;
+features F { x = 1 };
+delta D(F, 1, F.x);
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier))
+      (attribute_assignment_block
+        (attribute_assignment
+          name: (identifier)
+          (integer_literal))))
+    (delta_clause
+      (delta_specification
+        (type_identifier)
+        parameters: (delta_specification_parameter_list
+          (delta_specification_parameter
+            (type_identifier))
+          (delta_specification_parameter
+            (integer_literal))
+          (delta_specification_parameter
+            (feature_attribute
+              feature: (type_identifier)
+              attribute: (identifier))))))))
+
+====================
+Delta clause with after condition
+====================
+
+productline P;
+features F;
+delta D after D1, D2;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (after_condition
+        (delta_identifier)
+        (delta_identifier)))))
+
+====================
+Delta clause with from condition
+====================
+
+productline P;
+features F, G;
+delta D from F;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (from_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))))))))
+
+====================
+Delta clause with when condition
+====================
+
+productline P;
+features F;
+delta D when F;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))))))))
+
+====================
+Delta clause with to condition
+====================
+
+productline P;
+features F;
+delta D to F;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))))))))
+
+====================
+Delta clause with all conditions
+====================
+
+productline P;
+features F, G;
+delta D(F) after D1 from F when G;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier)
+        parameters: (delta_specification_parameter_list
+          (delta_specification_parameter
+            (type_identifier))))
+      (after_condition
+        (delta_identifier))
+      (from_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier)))))
+      (when_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))))))))
+
+====================
+Application condition with feature attribute block
+====================
+
+productline P;
+features F;
+delta D when F { x = 1 };
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))
+            (attribute_assignment_block
+              (attribute_assignment
+                name: (identifier)
+                (integer_literal)))))))))
+
+====================
+Application condition: not
+====================
+
+productline P;
+features F;
+delta D when !A;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (not_application_condition
+            (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition: double not
+====================
+
+productline P;
+features F;
+delta D when !!A;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (not_application_condition
+            (application_condition
+              (not_application_condition
+                (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))))))))
+
+====================
+Application condition: parenthesized
+====================
+
+productline P;
+features F;
+delta D when (A);
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (parenthesized_application_condition
+            (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition precedence: and is left associative
+====================
+
+productline P;
+features F;
+delta D when A && B && C;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (and_application_condition
+            left: (application_condition
+              (and_application_condition
+                left: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))
+                right: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition precedence: or is left associative
+====================
+
+productline P;
+features F;
+delta D when A || B || C;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (or_application_condition
+                left: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))
+                right: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition precedence: and binds tighter than or (right)
+====================
+
+productline P;
+features F;
+delta D when A || B && C;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))
+            right: (application_condition
+              (and_application_condition
+                left: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))
+                right: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))))))))
+
+====================
+Application condition precedence: and binds tighter than or (left)
+====================
+
+productline P;
+features F;
+delta D when A && B || C;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (and_application_condition
+                left: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))
+                right: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition precedence: not binds tighter than and
+====================
+
+productline P;
+features F;
+delta D when !A && B;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (and_application_condition
+            left: (application_condition
+              (not_application_condition
+                (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Application condition precedence: not binds tighter than or
+====================
+
+productline P;
+features F;
+delta D when A || !B;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))
+            right: (application_condition
+              (not_application_condition
+                (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))))))))
+
+====================
+Application condition precedence: not, and, or combined
+====================
+
+productline P;
+features F;
+delta D when !A || !B && C;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (not_application_condition
+                (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))
+            right: (application_condition
+              (and_application_condition
+                left: (application_condition
+                  (not_application_condition
+                    (application_condition
+                      (feature
+                        name: (feature_name
+                          (type_identifier))))))
+                right: (application_condition
+                  (feature
+                    name: (feature_name
+                      (type_identifier))))))))))))
+
+====================
+Application condition precedence: parentheses override and
+====================
+
+productline P;
+features F;
+delta D when A && (B || C);
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (and_application_condition
+            left: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))
+            right: (application_condition
+              (parenthesized_application_condition
+                (application_condition
+                  (or_application_condition
+                    left: (application_condition
+                      (feature
+                        name: (feature_name
+                          (type_identifier))))
+                    right: (application_condition
+                      (feature
+                        name: (feature_name
+                          (type_identifier))))))))))))))
+
+====================
+Application condition precedence: parentheses override not
+====================
+
+productline P;
+features F;
+delta D when !(A || B);
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (not_application_condition
+            (application_condition
+              (parenthesized_application_condition
+                (application_condition
+                  (or_application_condition
+                    left: (application_condition
+                      (feature
+                        name: (feature_name
+                          (type_identifier))))
+                    right: (application_condition
+                      (feature
+                        name: (feature_name
+                          (type_identifier))))))))))))))
+
+====================
+Application condition precedence: from and when conditions are independent
+====================
+
+productline P;
+features F;
+delta D from A || B when C && D;
+
+---
+
+(source_file
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (from_condition
+        (application_condition
+          (or_application_condition
+            left: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier)))))))
+      (when_condition
+        (application_condition
+          (and_application_condition
+            left: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))
+            right: (application_condition
+              (feature
+                name: (feature_name
+                  (type_identifier))))))))))
+
+====================
+Productline after modules and deltas
+====================
+
+module M;
+
+delta D;
+
+productline P;
+features F;
+delta D when F;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier))
+  (delta_declaration
+    name: (type_identifier))
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (feature_name
+        (type_identifier)))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (application_condition
+          (feature
+            name: (feature_name
+              (type_identifier))))))))

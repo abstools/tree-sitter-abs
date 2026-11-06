@@ -687,6 +687,47 @@
     }
   },
   {
+    "type": "after_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "delta_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "and_application_condition",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application_condition",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application_condition",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "and_guard",
     "named": true,
     "fields": {
@@ -771,6 +812,37 @@
       "types": [
         {
           "type": "annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "application_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "and_application_condition",
+          "named": true
+        },
+        {
+          "type": "feature",
+          "named": true
+        },
+        {
+          "type": "not_application_condition",
+          "named": true
+        },
+        {
+          "type": "or_application_condition",
+          "named": true
+        },
+        {
+          "type": "parenthesized_application_condition",
           "named": true
         }
       ]
@@ -927,6 +999,55 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "attribute_assignment",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "integer_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "attribute_assignment_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "attribute_assignment",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1577,6 +1698,33 @@
     }
   },
   {
+    "type": "delta_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "after_condition",
+          "named": true
+        },
+        {
+          "type": "delta_specification",
+          "named": true
+        },
+        {
+          "type": "from_condition",
+          "named": true
+        },
+        {
+          "type": "when_condition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "delta_declaration",
     "named": true,
     "fields": {
@@ -1672,6 +1820,70 @@
       "types": [
         {
           "type": "delta_parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "delta_specification",
+    "named": true,
+    "fields": {
+      "parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "delta_specification_parameter_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "delta_specification_parameter",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "feature_attribute",
+          "named": true
+        },
+        {
+          "type": "integer_literal",
+          "named": true
+        },
+        {
+          "type": "type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "delta_specification_parameter_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "delta_specification_parameter",
           "named": true
         }
       ]
@@ -1925,6 +2137,73 @@
     }
   },
   {
+    "type": "feature",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "feature_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "attribute_assignment_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "feature_attribute",
+    "named": true,
+    "fields": {
+      "attribute": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "feature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "field_access",
     "named": true,
     "fields": {
@@ -2055,6 +2334,21 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "from_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application_condition",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -2908,6 +3202,21 @@
     }
   },
   {
+    "type": "not_application_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application_condition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "old_case_statement",
     "named": true,
     "fields": {
@@ -2980,6 +3289,32 @@
     }
   },
   {
+    "type": "or_application_condition",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application_condition",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "application_condition",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "original_call_expression",
     "named": true,
     "fields": {
@@ -3045,6 +3380,21 @@
       "types": [
         {
           "type": "parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parenthesized_application_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application_condition",
           "named": true
         }
       ]
@@ -3177,6 +3527,36 @@
       "types": [
         {
           "type": "pattern",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "productline_declaration",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "delta_clause",
+          "named": true
+        },
+        {
+          "type": "feature",
           "named": true
         }
       ]
@@ -3384,6 +3764,10 @@
         },
         {
           "type": "module_declaration",
+          "named": true
+        },
+        {
+          "type": "productline_declaration",
           "named": true
         }
       ]
@@ -3998,6 +4382,21 @@
     }
   },
   {
+    "type": "when_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "application_condition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "when_expression",
     "named": true,
     "fields": {
@@ -4129,6 +4528,10 @@
     "named": false
   },
   {
+    "type": "'",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -4217,6 +4620,10 @@
     "named": false
   },
   {
+    "type": "after",
+    "named": false
+  },
+  {
     "type": "as",
     "named": false
   },
@@ -4262,6 +4669,10 @@
     "named": false
   },
   {
+    "type": "delta_identifier",
+    "named": true
+  },
+  {
     "type": "destiny_expression",
     "named": true
   },
@@ -4291,6 +4702,10 @@
   },
   {
     "type": "extends",
+    "named": false
+  },
+  {
+    "type": "features",
     "named": false
   },
   {
@@ -4390,6 +4805,10 @@
     "named": false
   },
   {
+    "type": "productline",
+    "named": false
+  },
+  {
     "type": "recover",
     "named": false
   },
@@ -4435,6 +4854,10 @@
   },
   {
     "type": "throw",
+    "named": false
+  },
+  {
+    "type": "to",
     "named": false
   },
   {

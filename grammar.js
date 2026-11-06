@@ -29,6 +29,14 @@ const PREC = {
   CALL: 10,
 };
 
+const PRODUCT_PREC = {
+  STANDARD: 0,
+  PAREN: 1,
+  OR: 2,
+  AND: 3,
+  NOT: 4,
+}
+
 module.exports = grammar({
   name: "abs",
 
@@ -81,6 +89,7 @@ module.exports = grammar({
     source_file: $ => seq(
       repeat($.module_declaration),
       repeat($.delta_declaration),
+      optional($.productline_declaration),
     ),
 
     main_block: $ => seq(
@@ -1319,9 +1328,136 @@ module.exports = grammar({
       field("declaration", $.export_declaration),
     ),
 
+    // Product lines
+
+    productline_declaration: $ => seq(
+      "productline",
+      field("name", $.type_identifier),
+      ";",
+      "features",
+      commaSep1($.feature),
+      ";",
+      repeat($.delta_clause),
+    ),
+
+    // FIXME: Allow "feature'" naming for intermediate feature?
+    // Ask how to handle it, and the semantics of a prime name
+    // (i.e. can be separated by extras or must be immediate, etc.)
+    feature: $ => seq(
+      field("name", $.feature_name),
+      optional($.attribute_assignment_block),
+    ),
+
+    feature_name: $ => (seq(
+      $.type_identifier,
+      optional(token.immediate("'")),
+    )),
+
+    attribute_assignment_block: $ => seq(
+      "{",
+      commaSep1($.attribute_assignment),
+      "}",
+    ),
+
+    // FIXME: Comment in ANTLR grammar says only
+    // integers, true and false are allowed here
+    // type identifier -> True / False
+    // string literal not allowed by comment, but comment probably? outdated
+    attribute_assignment: $ => seq(
+      field("name", $.identifier),
+      "=",
+      choice(
+        $.integer_literal,
+        $.type_identifier,
+        $.string_literal,
+      ),
+    ),
+
+    delta_clause: $ => seq(
+      "delta",
+      $.delta_specification,
+      optional($.after_condition),
+      optional($.from_condition),
+      optional($.when_condition),
+      ";",
+    ),
+
+    delta_specification: $ => seq(
+      $.type_identifier,
+      optional(field("parameters", $.delta_specification_parameter_list)),
+    ),
+
+    delta_specification_parameter_list: $ => seq(
+      "(",
+      commaSep1($.delta_specification_parameter),
+      ")",
+    ),
+
+    delta_specification_parameter: $ => choice(
+      $.type_identifier,
+      $.integer_literal,
+      $.feature_attribute,
+    ),
+
+    feature_attribute: $ => seq(
+      field("feature", $.type_identifier),
+      ".",
+      field("attribute", $.identifier),
+    ),
+
+    after_condition: $ => seq(
+      "after",
+      commaSep1($._delta_identifier),
+    ),
+
+    from_condition: $ => seq(
+      "from",
+      $.application_condition,
+    ),
+
+    when_condition: $ => seq(
+      choice(
+        "when",
+        "to",
+      ),
+      $.application_condition,
+    ),
+
+    application_condition: $ => choice(
+      $.not_application_condition,
+      $.and_application_condition,
+      $.or_application_condition,
+      $.parenthesized_application_condition,
+      $.feature,
+    ),
+
+    not_application_condition: $ => prec(PRODUCT_PREC.NOT, seq(
+      "!",
+      $.application_condition,
+    )),
+
+    and_application_condition: $ => prec.left(PRODUCT_PREC.AND, seq(
+      field("left", $.application_condition),
+      "&&",
+      field("right", $.application_condition),
+    )),
+
+    or_application_condition: $ => prec.left(PRODUCT_PREC.OR, seq(
+      field("left", $.application_condition),
+      "||",
+      field("right", $.application_condition),
+    )),
+
+    parenthesized_application_condition: $ => prec(PRODUCT_PREC.PAREN, seq(
+      "(",
+      $.application_condition,
+      ")",
+    )),
+
     // Overrides
     _function_name_decl: $ => $.identifier,
     _interface_name: $ => $.type_name,
+    _delta_identifier: $ => alias($.type_identifier, $.delta_identifier),
 
     annotations: $ => repeat1(seq(
       "[",
