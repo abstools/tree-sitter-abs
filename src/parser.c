@@ -17,7 +17,7 @@
 #define MAX_ALIAS_SEQUENCE_LENGTH 10
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 149
-#define SUPERTYPE_COUNT 10
+#define SUPERTYPE_COUNT 11
 
 enum ts_symbol_identifiers {
   sym_identifier = 1,
@@ -1501,8 +1501,9 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .supertype = true,
   },
   [sym_effectful_expression] = {
-    .visible = true,
+    .visible = false,
     .named = true,
+    .supertype = true,
   },
   [sym_get_expression] = {
     .visible = true,
@@ -3587,6 +3588,7 @@ static const TSStateId ts_primary_state_ids[STATE_COUNT] = {
 static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
   sym_any_name,
   sym_declaration,
+  sym_effectful_expression,
   sym_expression,
   sym_guard,
   sym_name,
@@ -3600,14 +3602,15 @@ static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
 static const TSMapSlice ts_supertype_map_slices[] = {
   [sym_any_name] = {.index = 0, .length = 2},
   [sym_declaration] = {.index = 2, .length = 8},
-  [sym_expression] = {.index = 10, .length = 2},
-  [sym_guard] = {.index = 12, .length = 4},
-  [sym_name] = {.index = 16, .length = 2},
-  [sym_pattern] = {.index = 18, .length = 5},
-  [sym_pure_expression] = {.index = 23, .length = 20},
-  [sym_statement] = {.index = 43, .length = 19},
-  [sym_trait_operation] = {.index = 62, .length = 3},
-  [sym_type_name] = {.index = 65, .length = 2},
+  [sym_effectful_expression] = {.index = 10, .length = 5},
+  [sym_expression] = {.index = 15, .length = 2},
+  [sym_guard] = {.index = 17, .length = 4},
+  [sym_name] = {.index = 21, .length = 2},
+  [sym_pattern] = {.index = 23, .length = 5},
+  [sym_pure_expression] = {.index = 28, .length = 20},
+  [sym_statement] = {.index = 48, .length = 19},
+  [sym_trait_operation] = {.index = 67, .length = 3},
+  [sym_type_name] = {.index = 70, .length = 2},
 };
 
 static const TSSymbol ts_supertype_map_entries[] = {
@@ -3624,23 +3627,29 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_trait_declaration,
     sym_type_synonym_declaration,
   [10] =
+    sym_async_call_expression,
+    sym_get_expression,
+    sym_new_expression,
+    sym_original_call_expression,
+    sym_sync_call_expression,
+  [15] =
     sym_effectful_expression,
     sym_pure_expression,
-  [12] =
+  [17] =
     sym_and_guard,
     sym_claim_guard,
     sym_duration_guard,
     sym_expression_guard,
-  [16] =
+  [21] =
     sym_identifier,
     sym_qualified_identifier,
-  [18] =
+  [23] =
     sym_constructor_pattern,
     sym_identifier,
     sym_integer_literal,
     sym_string_literal,
     sym_underscore_pattern,
-  [23] =
+  [28] =
     sym_as_expression,
     sym_binary_expression,
     sym_case_expression,
@@ -3661,7 +3670,7 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_unary_expression,
     sym_variadic_function_call_expression,
     sym_when_expression,
-  [43] =
+  [48] =
     sym_assert_statement,
     sym_assignment_statement,
     sym_await_statement,
@@ -3681,11 +3690,11 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_try_statement,
     sym_variable_declaration_statement,
     sym_while_statement,
-  [62] =
+  [67] =
     sym_trait_member_addition,
     sym_trait_member_modification,
     sym_trait_member_removal,
-  [65] =
+  [70] =
     sym_qualified_type_identifier,
     sym_type_identifier,
 };
