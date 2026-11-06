@@ -42,6 +42,7 @@ module.exports = grammar({
     $.statement,
     $.expression,
     $.pure_expression,
+    $.effectful_expression,
     $.trait_operation,
     $.pattern,
     $.guard,

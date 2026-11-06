@@ -364,19 +364,17 @@ module ABS;
     name: (type_identifier)
     main: (main_block
       statement: (expression_statement
-        (effectful_expression
-          (get_expression
-            future: (implements_expression
-              expression: (identifier)
-              interface: (type_identifier)))))
+        (get_expression
+          future: (implements_expression
+            expression: (identifier)
+            interface: (type_identifier))))
       statement: (expression_statement
-        (effectful_expression
-          (get_expression
-            future: (implements_expression
-              expression: (identifier)
-              interface: (qualified_type_identifier
-                (type_identifier)
-                (type_identifier)))))))))
+        (get_expression
+          future: (implements_expression
+            expression: (identifier)
+            interface: (qualified_type_identifier
+              (type_identifier)
+              (type_identifier))))))))
 
 ==============================
 Case expression branch separators
@@ -740,7 +738,6 @@ module ABS;
           arguments: (argument_list
             (identifier))))
       statement: (expression_statement
-        (effectful_expression
-          (get_expression
-            future: (constructor_expression
-              name: (type_identifier))))))))
+        (get_expression
+          future: (constructor_expression
+            name: (type_identifier)))))))
