@@ -3483,6 +3483,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "constructor_expression"
+        },
+        {
+          "type": "SYMBOL",
           "name": "unary_expression"
         },
         {
@@ -5044,6 +5048,11 @@
       "type_name"
     ],
     [
+      "qualified_identifier",
+      "qualified_type_identifier",
+      "type_name"
+    ],
+    [
       "pure_expression",
       "field_access"
     ],
@@ -5061,6 +5070,10 @@
     [
       "expression",
       "case_branch"
+    ],
+    [
+      "type_expression",
+      "constructor_expression"
     ]
   ],
   "precedences": [],
