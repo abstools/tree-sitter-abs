@@ -223,3 +223,46 @@ trait T3 = { Unit y() { skip; } } adds T1
         operation: (trait_member_addition
           addition: (basic_trait_expression
             trait: (type_identifier)))))))
+
+==============================
+Builtin function declaration
+==============================
+
+module ABS; 
+
+def A getA() = builtin;
+def A getA() = builtin(5);
+def A getA() = builtin(5, "hello");
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (type_use
+        name: (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (builtin_expression))
+    (function_declaration
+      return_type: (type_use
+        name: (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (builtin_expression
+        arguments: (argument_list
+          (integer_literal))))
+    (function_declaration
+      return_type: (type_use
+        name: (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (builtin_expression
+        arguments: (argument_list
+          (integer_literal)
+          (string_literal
+            (string_content)))))))
+
+
+

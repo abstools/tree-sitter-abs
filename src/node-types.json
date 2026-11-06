@@ -735,16 +735,17 @@
   {
     "type": "builtin_expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "pure_expression",
-          "named": true
-        }
-      ]
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

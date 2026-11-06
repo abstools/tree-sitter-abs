@@ -1031,9 +1031,7 @@ module.exports = grammar({
 
     builtin_expression: $ => seq(
       "builtin",
-      "(",
-      commaSep($.pure_expression),
-      ")",
+      optional(field("arguments", $.argument_list)),
     ),
 
     // Overrides
