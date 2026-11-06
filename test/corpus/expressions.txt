@@ -634,3 +634,113 @@ module ABS;
           alternative: (binary_expression
             left: (integer_literal)
             right: (integer_literal)))))))
+
+==============================
+Constructor expressions
+==============================
+
+module ABS;
+
+{
+  Nil;
+  M.Nil;
+  Cons(1, Nil);
+  M.Cons(1, M.Nil);
+  Pair(Just(x), Left("a"));
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (constructor_expression
+          name: (type_identifier)))
+      statement: (expression_statement
+        (constructor_expression
+          name: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier))))
+      statement: (expression_statement
+        (constructor_expression
+          name: (type_identifier)
+          arguments: (argument_list
+            (integer_literal)
+            (constructor_expression
+              name: (type_identifier)))))
+      statement: (expression_statement
+        (constructor_expression
+          name: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier))
+          arguments: (argument_list
+            (integer_literal)
+            (constructor_expression
+              name: (qualified_type_identifier
+                (type_identifier)
+                (type_identifier))))))
+      statement: (expression_statement
+        (constructor_expression
+          name: (type_identifier)
+          arguments: (argument_list
+            (constructor_expression
+              name: (type_identifier)
+              arguments: (argument_list
+                (identifier)))
+            (constructor_expression
+              name: (type_identifier)
+              arguments: (argument_list
+                (string_literal
+                  (string_content))))))))))
+
+==============================
+Constructor expressions versus types and qualified names
+==============================
+
+module ABS;
+
+{
+  List<Int> l = Cons(1, Nil);
+  Foo < x;
+  M.f(x);
+  Foo.get;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (variable_declaration_statement
+        type: (type_expression
+          name: (type_identifier)
+          parameters: (type_use_parameters
+            (type_use
+              name: (type_identifier))))
+        name: (identifier)
+        value: (constructor_expression
+          name: (type_identifier)
+          arguments: (argument_list
+            (integer_literal)
+            (constructor_expression
+              name: (type_identifier)))))
+      statement: (expression_statement
+        (binary_expression
+          left: (constructor_expression
+            name: (type_identifier))
+          right: (identifier)))
+      statement: (expression_statement
+        (function_call_expression
+          name: (qualified_identifier
+            (type_identifier)
+            (identifier))
+          arguments: (argument_list
+            (identifier))))
+      statement: (expression_statement
+        (effectful_expression
+          (get_expression
+            future: (constructor_expression
+              name: (type_identifier))))))))

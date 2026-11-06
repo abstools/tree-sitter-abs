@@ -144,6 +144,10 @@
         "named": true
       },
       {
+        "type": "constructor_expression",
+        "named": true
+      },
+      {
         "type": "destiny_expression",
         "named": true
       },
@@ -954,6 +958,32 @@
         "types": [
           {
             "type": "parameters",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "constructor_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
             "named": true
           }
         ]

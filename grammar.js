@@ -52,11 +52,13 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.qualified_type_identifier, $.type_name],
+    [$.qualified_identifier, $.qualified_type_identifier, $.type_name],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
     [$.if_statement, $.pure_expression],
     [$.expression, $.case_branch],
+    [$.type_expression, $.constructor_expression],
   ],
 
   word: $ => $.identifier,
@@ -788,6 +790,7 @@ module.exports = grammar({
       $._variable_or_field_reference,
       $.function_call_expression,
       $.variadic_function_call_expression,
+      $.constructor_expression,
       $.unary_expression,
       $.binary_expression,
       $.as_expression,
