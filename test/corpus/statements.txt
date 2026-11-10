@@ -16,15 +16,13 @@ module ABS;
     name: (type_identifier)
     main: (main_block 
       statement: (variable_declaration_statement
-        type: (type_expression
-          name: (type_identifier))
+        type: (type_identifier)
         name: (identifier)
         value: (integer_literal))
       statement: (variable_declaration_statement
-        type: (type_expression
-          name: (qualified_type_identifier
-            (type_identifier)
-            (type_identifier)))
+        type: (qualified_type_identifier
+          (type_identifier)
+          (type_identifier))
         name: (identifier)))))
       
 ==============================

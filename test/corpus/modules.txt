@@ -119,8 +119,7 @@ def Unit sayHello() = println("hello");
     (export_declaration
       symbol: (type_identifier))
     (function_declaration
-      return_type: (type_use
-        name: (type_identifier))
+      return_type: (type_identifier)
       name: (identifier)
       parameters: (parameters)
       expression: (function_call_expression

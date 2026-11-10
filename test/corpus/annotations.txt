@@ -1,0 +1,393 @@
+====================
+Annotated function return type
+====================
+
+module Annotations;
+
+def [Final] Int one() = 1;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (integer_literal))))
+
+
+====================
+Annotated generic return type
+====================
+
+module Annotations;
+
+def [Far] List<Int> empty() = Nil;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (generic_type
+          name: (type_identifier)
+          arguments: (type_argument_list
+            (type_identifier))))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (constructor_expression
+        name: (type_identifier)))))
+
+
+====================
+Annotated qualified type
+====================
+
+module Annotations;
+
+def [Near] M.Server server() = null;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (qualified_type_identifier
+          (type_identifier)
+          (type_identifier)))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (null_expression))))
+
+
+====================
+Annotated type argument
+====================
+
+module Annotations;
+
+def List<[Near] Int> empty() = Nil;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (generic_type
+        name: (type_identifier)
+        arguments: (type_argument_list
+          (annotated_type
+            annotations: (annotations
+              (annotation
+                (constructor_expression
+                  name: (type_identifier))))
+            (type_identifier))))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (constructor_expression
+        name: (type_identifier)))))
+
+
+====================
+Nested annotated type arguments
+====================
+
+module Annotations;
+
+type Pair = [Far] Map<[Near] Int, List<[Final] Bool>>;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (type_synonym_declaration
+      name: (type_identifier)
+      type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (generic_type
+          name: (type_identifier)
+          arguments: (type_argument_list
+            (annotated_type
+              annotations: (annotations
+                (annotation
+                  (constructor_expression
+                    name: (type_identifier))))
+              (type_identifier))
+            (generic_type
+              name: (type_identifier)
+              arguments: (type_argument_list
+                (annotated_type
+                  annotations: (annotations
+                    (annotation
+                      (constructor_expression
+                        name: (type_identifier))))
+                  (type_identifier))))))))))
+
+
+====================
+Annotated type synonym
+====================
+
+module Annotations;
+
+type Remote = [Far] Server;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (type_synonym_declaration
+      name: (type_identifier)
+      type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (type_identifier)))))
+
+
+====================
+Annotated data constructor parameter type
+====================
+
+module Annotations;
+
+data Box = Box([Near] Server server, [Far] Server);
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (datatype_declaration
+      name: (type_identifier)
+      constructors: (data_constructor_clause
+        (data_constructor
+          name: (type_identifier)
+          parameters: (data_constructor_parameters
+            (data_constructor_parameter
+              type: (annotated_type
+                annotations: (annotations
+                  (annotation
+                    (constructor_expression
+                      name: (type_identifier))))
+                (type_identifier))
+              name: (identifier))
+            (data_constructor_parameter
+              type: (annotated_type
+                annotations: (annotations
+                  (annotation
+                    (constructor_expression
+                      name: (type_identifier))))
+                (type_identifier)))))))))
+
+
+====================
+Annotated method signature return type
+====================
+
+module Annotations;
+
+interface I {
+  [Far] Server get();
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (interface_declaration
+      name: (type_identifier)
+      body: (interface_body
+        (method_signature
+          return_type: (annotated_type
+            annotations: (annotations
+              (annotation
+                (constructor_expression
+                  name: (type_identifier))))
+            (type_identifier))
+          name: (identifier)
+          parameters: (parameters))))))
+
+
+====================
+Annotated field and method return types
+====================
+
+module Annotations;
+
+class C {
+  [Far] Server server = null;
+
+  [Final] Int get() {
+    return 1;
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (class_declaration
+      name: (type_identifier)
+      body: (class_body
+        field: (field_declaration
+          type: (annotated_type
+            annotations: (annotations
+              (annotation
+                (constructor_expression
+                  name: (type_identifier))))
+            (type_identifier))
+          name: (identifier)
+          value: (null_expression))
+        method: (method_declaration
+          return_type: (annotated_type
+            annotations: (annotations
+              (annotation
+                (constructor_expression
+                  name: (type_identifier))))
+            (type_identifier))
+          name: (identifier)
+          parameters: (parameters)
+          body: (method_body
+            statement: (return_statement
+              value: (integer_literal))))))))
+
+
+====================
+Multiple annotations on type
+====================
+
+module Annotations;
+
+def [A] [B: 1, C] Int multi() = 1;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (function_declaration
+      return_type: (annotated_type
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier)))
+          (annotation
+            (type_identifier)
+            (integer_literal))
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        (type_identifier))
+      name: (identifier)
+      parameters: (parameters)
+      expression: (integer_literal))))
+
+
+====================
+Annotated parameters are not annotated types
+====================
+
+module Annotations;
+
+class C([Near] Server s) {
+  Unit m([Far] Server t) {
+  }
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (class_declaration
+      name: (type_identifier)
+      parameters: (parameters
+        (parameter
+          annotations: (annotations
+            (annotation
+              (constructor_expression
+                name: (type_identifier))))
+          type: (type_identifier)
+          name: (identifier)))
+      body: (class_body
+        method: (method_declaration
+          return_type: (type_identifier)
+          name: (identifier)
+          parameters: (parameters
+            (parameter
+              annotations: (annotations
+                (annotation
+                  (constructor_expression
+                    name: (type_identifier))))
+              type: (type_identifier)
+              name: (identifier)))
+          body: (method_body))))))
+
+
+====================
+Annotated variable declarations are not annotated types
+====================
+
+module Annotations;
+
+{
+  [Final] Int x = 1;
+  List<[Near] Int> xs = Nil;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (variable_declaration_statement
+        annotations: (annotations
+          (annotation
+            (constructor_expression
+              name: (type_identifier))))
+        type: (type_identifier)
+        name: (identifier)
+        value: (integer_literal))
+      statement: (variable_declaration_statement
+        type: (generic_type
+          name: (type_identifier)
+          arguments: (type_argument_list
+            (annotated_type
+              annotations: (annotations
+                (annotation
+                  (constructor_expression
+                    name: (type_identifier))))
+              (type_identifier))))
+        name: (identifier)
+        value: (constructor_expression
+          name: (type_identifier))))))

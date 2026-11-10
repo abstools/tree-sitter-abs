@@ -31,15 +31,13 @@ data NotInstantiable;
           name: (type_identifier)
           parameters: (data_constructor_parameters
             (data_constructor_parameter
-              type: (type_use
-                name: (type_identifier))
+              type: (type_identifier)
               name: (identifier))
             (data_constructor_parameter
-              type: (type_use
+              type: (generic_type
                 name: (type_identifier)
-                parameters: (type_use_parameters
-                  (type_use
-                    name: (type_identifier))))
+                arguments: (type_argument_list
+                  (type_identifier)))
               name: (identifier))))))
     (datatype_declaration
       name: (type_identifier))))
@@ -72,33 +70,27 @@ interface Peer extends Client, Server {
       name: (type_identifier)
       body: (interface_body
         (method_signature
-          return_type: (type_use 
-            name: (type_identifier))
+          return_type: (type_identifier)
           name: (identifier)
           parameters: (parameters
             (parameter
-              type: (type_expression
-                name: (type_identifier))
+              type: (type_identifier)
               name: (identifier))
             (parameter
-              type: (type_expression
-                name: (type_identifier))
+              type: (type_identifier)
               name: (identifier))))))
     (interface_declaration 
       name: (type_identifier)
       body: (interface_body
         (method_signature
-          return_type: (type_use 
-            name: (type_identifier))
+          return_type: (type_identifier)
           name: (identifier)
           parameters: (parameters
             (parameter
-              type: (type_expression
-                name: (type_identifier))
+              type: (type_identifier)
               name: (identifier))
             (parameter
-              type: (type_expression
-                name: (type_identifier))
+              type: (type_identifier)
               name: (identifier))))))
     (interface_declaration
       name: (type_identifier)
@@ -140,42 +132,35 @@ type Catalog = List<Pair<Servername,Filenames>>;
     name: (type_identifier)
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
-        name: (type_identifier)))
+      type: (type_identifier))
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
+      type: (generic_type
         name: (type_identifier)
-        parameters: (type_use_parameters
-          (type_use
-            name: (type_identifier)))))
+        arguments: (type_argument_list
+          (type_identifier))))
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
-        name: (type_identifier)))
+      type: (type_identifier))
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
-        name: (type_identifier)))
+      type: (type_identifier))
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
+      type: (generic_type
         name: (type_identifier)
-        parameters: (type_use_parameters
-          (type_use
-            name: (type_identifier)))))
+        arguments: (type_argument_list
+          (type_identifier))))
     (type_synonym_declaration
       name: (type_identifier)
-      type: (type_use
+      type: (generic_type
         name: (type_identifier)
-        parameters: (type_use_parameters
-          (type_use
+        arguments: (type_argument_list
+          (generic_type
             name: (type_identifier)
-            parameters: (type_use_parameters
-              (type_use 
-                name: (type_identifier))
-              (type_use 
-                name: (type_identifier)))))))))
+            arguments: (type_argument_list
+              (type_identifier) 
+              (type_identifier))))))))
 
 ====================
 Traits
@@ -197,8 +182,7 @@ trait T3 = { Unit y() { skip; } } adds T1
       value: (trait_expression
         content: (basic_trait_expression
           method: (method_declaration
-            return_type: (type_use 
-              name: (type_identifier))
+            return_type: (type_identifier)
             name: (identifier)
             parameters: (parameters)
             body: (method_body
@@ -214,8 +198,7 @@ trait T3 = { Unit y() { skip; } } adds T1
         content: (basic_trait_expression
           methods: (method_declaration_block
             method: (method_declaration
-              return_type: (type_use 
-                name: (type_identifier))
+              return_type: (type_identifier)
               name: (identifier)
               parameters: (parameters)
               body: (method_body
@@ -240,22 +223,19 @@ def A getA() = builtin(5, "hello");
   (module_declaration
     name: (type_identifier)
     (function_declaration
-      return_type: (type_use
-        name: (type_identifier))
+      return_type: (type_identifier)
       name: (identifier)
       parameters: (parameters)
       expression: (builtin_expression))
     (function_declaration
-      return_type: (type_use
-        name: (type_identifier))
+      return_type: (type_identifier)
       name: (identifier)
       parameters: (parameters)
       expression: (builtin_expression
         arguments: (argument_list
           (integer_literal))))
     (function_declaration
-      return_type: (type_use
-        name: (type_identifier))
+      return_type: (type_identifier)
       name: (identifier)
       parameters: (parameters)
       expression: (builtin_expression
@@ -263,6 +243,4 @@ def A getA() = builtin(5, "hello");
           (integer_literal)
           (string_literal
             (string_content)))))))
-
-
 
