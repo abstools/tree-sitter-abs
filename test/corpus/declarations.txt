@@ -22,14 +22,14 @@ data NotInstantiable;
           name: (type_identifier))))
     (datatype_declaration
       name: (type_identifier)
-      parameters: (type_parameters
+      parameters: (type_parameter_list
         (type_identifier))
       constructors: (data_constructor_clause
         (data_constructor
           name: (type_identifier))
         (data_constructor
           name: (type_identifier)
-          parameters: (data_constructor_parameters
+          parameters: (data_constructor_parameter_list
             (data_constructor_parameter
               type: (type_identifier)
               name: (identifier))
@@ -72,7 +72,7 @@ interface Peer extends Client, Server {
         (method_signature
           return_type: (type_identifier)
           name: (identifier)
-          parameters: (parameters
+          parameters: (parameter_list
             (parameter
               type: (type_identifier)
               name: (identifier))
@@ -85,7 +85,7 @@ interface Peer extends Client, Server {
         (method_signature
           return_type: (type_identifier)
           name: (identifier)
-          parameters: (parameters
+          parameters: (parameter_list
             (parameter
               type: (type_identifier)
               name: (identifier))
@@ -184,7 +184,7 @@ trait T3 = { Unit y() { skip; } } adds T1
           method: (method_declaration
             return_type: (type_identifier)
             name: (identifier)
-            parameters: (parameters)
+            parameters: (parameter_list)
             body: (method_body
               statement: (skip_statement))))))
     (trait_declaration
@@ -200,7 +200,7 @@ trait T3 = { Unit y() { skip; } } adds T1
             method: (method_declaration
               return_type: (type_identifier)
               name: (identifier)
-              parameters: (parameters)
+              parameters: (parameter_list)
               body: (method_body
                 statement: (skip_statement)))))
         operation: (trait_member_addition
@@ -225,19 +225,19 @@ def A getA() = builtin(5, "hello");
     (function_declaration
       return_type: (type_identifier)
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (builtin_expression))
     (function_declaration
       return_type: (type_identifier)
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (builtin_expression
         arguments: (argument_list
           (integer_literal))))
     (function_declaration
       return_type: (type_identifier)
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (builtin_expression
         arguments: (argument_list
           (integer_literal)

@@ -19,7 +19,7 @@ def [Final] Int one() = 1;
               name: (type_identifier))))
         (type_identifier))
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (integer_literal))))
 
 
@@ -47,7 +47,7 @@ def [Far] List<Int> empty() = Nil;
           arguments: (type_argument_list
             (type_identifier))))
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (constructor_expression
         name: (type_identifier)))))
 
@@ -75,7 +75,7 @@ def [Near] M.Server server() = null;
           (type_identifier)
           (type_identifier)))
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (null_expression))))
 
 
@@ -103,7 +103,7 @@ def List<[Near] Int> empty() = Nil;
                   name: (type_identifier))))
             (type_identifier))))
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (constructor_expression
         name: (type_identifier)))))
 
@@ -189,7 +189,7 @@ data Box = Box([Near] Server server, [Far] Server);
       constructors: (data_constructor_clause
         (data_constructor
           name: (type_identifier)
-          parameters: (data_constructor_parameters
+          parameters: (data_constructor_parameter_list
             (data_constructor_parameter
               type: (annotated_type
                 annotations: (annotations
@@ -233,7 +233,7 @@ interface I {
                   name: (type_identifier))))
             (type_identifier))
           name: (identifier)
-          parameters: (parameters))))))
+          parameters: (parameter_list))))))
 
 
 ====================
@@ -275,7 +275,7 @@ class C {
                   name: (type_identifier))))
             (type_identifier))
           name: (identifier)
-          parameters: (parameters)
+          parameters: (parameter_list)
           body: (method_body
             statement: (return_statement
               value: (integer_literal))))))))
@@ -308,7 +308,7 @@ def [A] [B: 1, C] Int multi() = 1;
               name: (type_identifier))))
         (type_identifier))
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (integer_literal))))
 
 
@@ -330,7 +330,7 @@ class C([Near] Server s) {
     name: (type_identifier)
     (class_declaration
       name: (type_identifier)
-      parameters: (parameters
+      parameters: (parameter_list
         (parameter
           annotations: (annotations
             (annotation
@@ -342,7 +342,7 @@ class C([Near] Server s) {
         method: (method_declaration
           return_type: (type_identifier)
           name: (identifier)
-          parameters: (parameters
+          parameters: (parameter_list
             (parameter
               annotations: (annotations
                 (annotation
