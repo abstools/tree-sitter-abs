@@ -713,11 +713,10 @@ module ABS;
     name: (type_identifier)
     main: (main_block
       statement: (variable_declaration_statement
-        type: (type_expression
+        type: (generic_type
           name: (type_identifier)
-          parameters: (type_use_parameters
-            (type_use
-              name: (type_identifier))))
+          arguments: (type_argument_list
+            (type_identifier)))
         name: (identifier)
         value: (constructor_expression
           name: (type_identifier)

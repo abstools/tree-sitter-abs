@@ -49,6 +49,7 @@ module.exports = grammar({
     $.name,
     $.type_name,
     $.any_name,
+    $.type,
   ],
 
   conflicts: $ => [
@@ -59,7 +60,8 @@ module.exports = grammar({
     [$.qualified_type_identifier],
     [$.if_statement, $.pure_expression],
     [$.expression, $.case_branch],
-    [$.type_expression, $.constructor_expression],
+    [$._unannotated_type, $.constructor_expression],
+    [$.generic_type, $.constructor_expression],
   ],
 
   word: $ => $.identifier,
@@ -117,14 +119,14 @@ module.exports = grammar({
     ),
 
     data_constructor_parameter: $ => seq(
-      field("type", $.type_use),
+      field("type", $.type),
       optional(field("name", $.identifier)),
     ),
 
     function_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "def",
-      field("return_type", $.type_use),
+      field("return_type", $.type),
       field("name", $.name),
       optional(field("type_parameters", $.type_parameters)),
       field("parameters", $.parameters),
@@ -139,7 +141,7 @@ module.exports = grammar({
     partial_function_declaration: $ => seq(
       optional(field("annotations", $.annotations)),
       "def",
-      field("return_type", $.type_use),
+      field("return_type", $.type),
       field("name", $.name),
       optional(field("type_parameters", $.type_parameters)),
       field("functions", $.function_name_list),
@@ -154,7 +156,7 @@ module.exports = grammar({
       "type",
       field("name", $.type_name),
       "=",
-      field("type", $.type_use),
+      field("type", $.type),
       ";",
     ),
 
@@ -263,7 +265,7 @@ module.exports = grammar({
     ),
 
     field_declaration: $ => seq(
-      field("type", $.type_use),
+      field("type", $.type),
       field("name", $.identifier),
       optional(seq(
         "=",
@@ -284,7 +286,7 @@ module.exports = grammar({
     ),
 
     method_declaration: $ => seq(
-      field("return_type", $.type_use),
+      field("return_type", $.type),
       field("name", $.identifier),
       field("parameters", $.parameters),
       field("body", $.method_body),
@@ -309,7 +311,7 @@ module.exports = grammar({
     ),
 
     method_signature: $ => seq(
-      field("return_type", $.type_use),
+      field("return_type", $.type),
       field("name", $.identifier),
       field("parameters", $.parameters),
       ";"
@@ -323,7 +325,7 @@ module.exports = grammar({
 
     parameter: $ => seq(
       optional(field("annotations", $.annotations)),
-      field("type", $.type_expression),
+      field("type", $._unannotated_type),
       field("name", $.identifier),
     ),
 
@@ -426,22 +428,47 @@ module.exports = grammar({
       $.type_name,
     ),
 
-    // Name inherited from ANTLR grammar
-    // type_use is a type_expression with possible annotations
-    type_use: $ => seq(
-      optional($.annotations),
-      field("name", $.type_name),
-      optional(field("parameters", $.type_use_parameters)),
+    // Types
+    //
+    // Types in ABS have (syntactically) two forms
+    // Type identifiers and generic types
+    // In addition, types can sometimes be annotated
+    //
+    // In the ANTLR grammar, type allows annotations,
+    // while type_exp does not
+    //
+    // As we want an intuitive tree structure, 
+    // we want to reorganize this
+  
+    // Represents type in ANTLR grammar
+    // Typically used to declare the static types of variables, methods and fields
+    type: $ => choice(
+      $.annotated_type,
+      $._unannotated_type,
     ),
 
-    type_expression: $ => seq(
-      field("name", $.type_name),
-      optional(field("parameters", $.type_use_parameters)),
+    // Type with annotation
+    annotated_type: $ => seq(
+      field("annotations", $.annotations),
+      $._unannotated_type,
     ),
 
-    type_use_parameters: $ => seq(
+    // Represents type_exp in ANTLR grammar
+    // Types without annotations on the base type
+    // (Generic) Type arguments can have annotations
+    _unannotated_type: $ => choice(
+      $.type_name,
+      $.generic_type,
+    ),
+
+    generic_type: $ => seq(
+      field("name", $.type_name), 
+      field("arguments", $.type_argument_list),
+    ),
+
+    type_argument_list: $ => seq(
       "<",
-      commaSep1($.type_use),
+      commaSep1($.type),
       ">",
     ),
 
@@ -486,7 +513,7 @@ module.exports = grammar({
 
     variable_declaration_statement: $ => seq(
       optional(field("annotations", $.annotations)),
-      field("type", $.type_expression),
+      field("type", $._unannotated_type),
       field("name", $.identifier),
       optional(seq(
         "=",
