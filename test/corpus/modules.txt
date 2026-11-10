@@ -121,7 +121,7 @@ def Unit sayHello() = println("hello");
     (function_declaration
       return_type: (type_identifier)
       name: (identifier)
-      parameters: (parameters)
+      parameters: (parameter_list)
       expression: (function_call_expression
         name: (identifier)
         arguments: (argument_list

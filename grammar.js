@@ -91,12 +91,12 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "data",
       field("name", $.type_name),
-      optional(field("parameters", $.type_parameters)),
+      optional(field("parameters", $.type_parameter_list)),
       optional(field("constructors", $.data_constructor_clause)),
       ";",
     ),
 
-    type_parameters: $ => seq(
+    type_parameter_list: $ => seq(
       "<",
       commaSep1($.type_identifier),
       ">"
@@ -109,10 +109,10 @@ module.exports = grammar({
 
     data_constructor: $ => seq(
       field("name", $.type_identifier),
-      optional(field("parameters", $.data_constructor_parameters)),
+      optional(field("parameters", $.data_constructor_parameter_list)),
     ),
 
-    data_constructor_parameters: $ => seq(
+    data_constructor_parameter_list: $ => seq(
       "(",
       commaSep1($.data_constructor_parameter),
       ")",
@@ -128,8 +128,8 @@ module.exports = grammar({
       "def",
       field("return_type", $.type),
       field("name", $.name),
-      optional(field("type_parameters", $.type_parameters)),
-      field("parameters", $.parameters),
+      optional(field("type_parameters", $.type_parameter_list)),
+      field("parameters", $.parameter_list),
       "=",
       field("expression", choice(
         $.builtin_expression,
@@ -143,9 +143,9 @@ module.exports = grammar({
       "def",
       field("return_type", $.type),
       field("name", $.name),
-      optional(field("type_parameters", $.type_parameters)),
+      optional(field("type_parameters", $.type_parameter_list)),
       field("functions", $.function_name_list),
-      field("parameters", $.parameters),
+      field("parameters", $.parameter_list),
       "=",
       field("expression", $.pure_expression),
       ";",
@@ -164,7 +164,7 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "exception",
       field("name", $.type_name),
-      optional(field("parameters", $.data_constructor_parameters)),
+      optional(field("parameters", $.data_constructor_parameter_list)),
       ";",
     ),
 
@@ -180,7 +180,7 @@ module.exports = grammar({
       optional(field("annotations", $.annotations)),
       "class",
       field("name", $.type_name),
-      optional(field("parameters", $.parameters)),
+      optional(field("parameters", $.parameter_list)),
       optional(field("implements", $.implements_clause)),
       field("body", $.class_body),
     ),
@@ -288,7 +288,7 @@ module.exports = grammar({
     method_declaration: $ => seq(
       field("return_type", $.type),
       field("name", $.identifier),
-      field("parameters", $.parameters),
+      field("parameters", $.parameter_list),
       field("body", $.method_body),
     ),
 
@@ -313,11 +313,11 @@ module.exports = grammar({
     method_signature: $ => seq(
       field("return_type", $.type),
       field("name", $.identifier),
-      field("parameters", $.parameters),
+      field("parameters", $.parameter_list),
       ";"
     ),
 
-    parameters: $ => seq(
+    parameter_list: $ => seq(
       "(",
       commaSep($.parameter),
       ")",
@@ -867,7 +867,7 @@ module.exports = grammar({
     ),
 
     anonymous_function_declaration: $ => seq(
-      field("parameters", $.parameters),
+      field("parameters", $.parameter_list),
       "=>",
       field("body", $.pure_expression),
     ),
