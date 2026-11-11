@@ -73,13 +73,13 @@ features F { x = 1, b = True, s = "s" };
       (attribute_assignment_block
         (attribute_assignment
           name: (identifier)
-          (integer_literal))
+          value: (integer_literal))
         (attribute_assignment
           name: (identifier)
-          (type_identifier))
+          value: (type_identifier))
         (attribute_assignment
           name: (identifier)
-          (string_literal
+          value: (string_literal
             (string_content)))))))
 
 ====================
@@ -148,7 +148,7 @@ delta D(F, 1, F.x);
       (attribute_assignment_block
         (attribute_assignment
           name: (identifier)
-          (integer_literal))))
+          value: (integer_literal))))
     (delta_clause
       (delta_specification
         (type_identifier)
@@ -328,7 +328,7 @@ delta D when F { x = 1 };
             (attribute_assignment_block
               (attribute_assignment
                 name: (identifier)
-                (integer_literal)))))))))
+                value: (integer_literal)))))))))
 
 ====================
 Application condition: not

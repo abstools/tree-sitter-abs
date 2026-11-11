@@ -37,6 +37,12 @@ const PRODUCT_PREC = {
   NOT: 4,
 }
 
+const SET_PREC = {
+  DIFFERENCE: 1,
+  UNION: 2,
+  INTERSECTION: 3,
+}
+
 module.exports = grammar({
   name: "abs",
 
@@ -90,6 +96,7 @@ module.exports = grammar({
       repeat($.module_declaration),
       repeat($.delta_declaration),
       optional($.productline_declaration),
+      repeat($.product_declaration),
     ),
 
     main_block: $ => seq(
@@ -1366,11 +1373,11 @@ module.exports = grammar({
     attribute_assignment: $ => seq(
       field("name", $.identifier),
       "=",
-      choice(
+      field("value", choice(
         $.integer_literal,
         $.type_identifier,
         $.string_literal,
-      ),
+      )),
     ),
 
     delta_clause: $ => seq(
@@ -1453,6 +1460,68 @@ module.exports = grammar({
       $.application_condition,
       ")",
     )),
+
+    // Products
+
+    product_declaration: $ => seq(
+      "product",
+      field("name", $.type_identifier),
+      choice(
+        $.feature_list,
+        $.product_expression_clause,
+      ),
+      ";",
+    ),
+
+    feature_list: $ => seq(
+      "(",
+      commaSep($.feature),
+      ")",
+    ),
+
+    product_expression_clause: $ => seq(
+      "=",
+      $.product_expression,
+    ),
+
+    product_expression: $ => choice(
+      $.type_identifier,  
+      $.product_difference,
+      $.product_intersection,
+      $.product_union,
+      $.feature_set,
+      $.parenthesized_product_expression,
+    ),
+
+    product_difference: $ => prec.left(SET_PREC.DIFFERENCE, seq(
+      field("left", $.product_expression),
+      "-",
+      field("right", $.product_expression),
+    )),
+
+    product_union: $ => prec.left(SET_PREC.UNION, seq(
+      field("left", $.product_expression),
+      "||",
+      field("right", $.product_expression),
+    )),
+
+    product_intersection: $ => prec.left(SET_PREC.INTERSECTION, seq(
+      field("left", $.product_expression),
+      "&&",
+      field("right", $.product_expression),
+    )),
+
+    feature_set: $ => seq(
+      "{",
+      commaSep1($.feature),
+      "}",
+    ),
+
+    parenthesized_product_expression: $ => seq(
+      "(",
+      $.product_expression,
+      ")",
+    ),
 
     // Overrides
     _function_name_decl: $ => $.identifier,

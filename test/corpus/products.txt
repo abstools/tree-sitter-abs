@@ -1,0 +1,392 @@
+==============================
+Empty product
+==============================
+
+product Foo ();
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (feature_list)))
+
+==============================
+Product with feature list
+==============================
+
+product WordcountModel (Wordcount, NoCost, NoDeploymentScenario);
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (feature_list
+      (feature
+        name: (feature_name
+          (type_identifier)))
+      (feature
+        name: (feature_name
+          (type_identifier)))
+      (feature
+        name: (feature_name
+          (type_identifier))))))
+
+==============================
+Product feature list with attributes
+==============================
+
+product WordcountFull (Wordcount, Cost{cost=10}, UnlimitedMachines{capacity=20});
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (feature_list 
+      (feature
+        name: (feature_name
+          (type_identifier)))
+      (feature
+        name: (feature_name
+          (type_identifier))
+        (attribute_assignment_block
+          (attribute_assignment
+            name: (identifier)
+            value: (integer_literal))))
+      (feature
+        name: (feature_name
+          (type_identifier))
+        (attribute_assignment_block
+          (attribute_assignment
+            name: (identifier)
+            value: (integer_literal)))))))
+
+==============================
+Product expression: one feature
+==============================
+
+product Org1 = SekolahBermainMatahari;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (type_identifier)))))
+
+==============================
+Product expression: intersection is left-associative
+==============================
+
+product P = A && B && C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_intersection
+          left: (product_expression
+            (product_intersection
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: union is left-associative
+==============================
+
+product P = A || B || C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_union
+          left: (product_expression
+            (product_union
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: difference is left-associative
+==============================
+
+product P = A - B - C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (product_difference
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: intersection binds tighter than union (right)
+==============================
+
+product P = A || B && C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_union
+          left: (product_expression
+            (type_identifier))
+          right: (product_expression
+            (product_intersection
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier)))))))))
+
+==============================
+Product expression: intersection binds tighter than union (left)
+==============================
+
+product P = A && B || C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_union
+          left: (product_expression
+            (product_intersection
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: intersection binds tighter than difference (right)
+==============================
+
+product P = A - B && C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (type_identifier))
+          right: (product_expression
+            (product_intersection
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier)))))))))
+
+==============================
+Product expression: intersection binds tighter than difference (left)
+==============================
+
+product P = A && B - C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (product_intersection
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: union binds tighter than difference (right)
+==============================
+
+product P = A - B || C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (type_identifier))
+          right: (product_expression
+            (product_union
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier)))))))))
+
+==============================
+Product expression: union binds tighter than difference (left)
+==============================
+
+product P = A || B - C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (product_union
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (type_identifier))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: all three operators
+==============================
+
+product P = A - B || C && D;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (type_identifier))
+          right: (product_expression
+            (product_union
+              left: (product_expression
+                (type_identifier))
+              right: (product_expression
+                (product_intersection
+                  left: (product_expression
+                    (type_identifier))
+                  right: (product_expression
+                    (type_identifier)))))))))))
+
+==============================
+Product expression: parentheses override precedence
+==============================
+
+product P = (A || B) && C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_intersection
+          left: (product_expression
+            (parenthesized_product_expression
+              (product_expression
+                (product_union
+                  left: (product_expression
+                    (type_identifier))
+                  right: (product_expression
+                    (type_identifier))))))
+          right: (product_expression
+            (type_identifier)))))))
+
+==============================
+Product expression: parentheses override associativity
+==============================
+
+product P = A - (B - C);
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (type_identifier))
+          right: (product_expression
+            (parenthesized_product_expression
+              (product_expression
+                (product_difference
+                  left: (product_expression
+                    (type_identifier))
+                  right: (product_expression
+                    (type_identifier)))))))))))
+
+==============================
+Product expression: feature set operand
+==============================
+
+product P = {A, B{x=1}} - C;
+
+---
+
+(source_file
+  (product_declaration
+    name: (type_identifier)
+    (product_expression_clause
+      (product_expression
+        (product_difference
+          left: (product_expression
+            (feature_set
+              (feature
+                name: (feature_name
+                  (type_identifier)))
+              (feature
+                name: (feature_name
+                  (type_identifier))
+                (attribute_assignment_block
+                  (attribute_assignment
+                    name: (identifier)
+                    value: (integer_literal))))))
+          right: (product_expression
+            (type_identifier)))))))
