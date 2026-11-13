@@ -434,13 +434,13 @@ module.exports = grammar({
     // Type identifiers and generic types
     // In addition, types can sometimes be annotated
     //
-    // In the ANTLR grammar, type allows annotations,
+    // In the ANTLR grammar, type_use allows annotations,
     // while type_exp does not
     //
     // As we want an intuitive tree structure, 
     // we want to reorganize this
   
-    // Represents type in ANTLR grammar
+    // Represents type_use in ANTLR grammar
     // Typically used to declare the static types of variables, methods and fields
     type: $ => choice(
       $.annotated_type,
@@ -826,6 +826,7 @@ module.exports = grammar({
       $.old_if_expression,
       $.implements_expression,
       $.case_expression,
+      $.let_expression,
     ),
 
     parenthesized_expression: $ => seq(
@@ -968,6 +969,37 @@ module.exports = grammar({
       field("consequence", $.pure_expression),
       "else",
       field("alternative", $.pure_expression),
+    ),
+
+    // The ABS compiler has both parenthesis optional
+    // which means that uneven parenthesis such as "let (Int x"
+    // is accepted by the ABS compiler
+    let_expression: $ => seq(
+      "let",
+      commaSep1($.let_binding),
+      "in",
+      field("body", $.pure_expression),
+    ),
+
+    let_binding: $ => seq(
+      choice(
+        $.parenthesized_variable_declaration,
+        $.variable_declaration,
+      ),
+      "=",
+      field("value", $.pure_expression),
+    ),
+
+    parenthesized_variable_declaration: $ => seq(
+      "(",
+      field("type", $.type), 
+      field("name", $.identifier),
+      ")",
+    ),
+
+    variable_declaration: $ => seq(
+      field("type", $.type), 
+      field("name", $.identifier),
     ),
 
     _variable_or_field_reference: $ => choice(

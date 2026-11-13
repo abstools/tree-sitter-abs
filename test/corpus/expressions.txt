@@ -634,6 +634,74 @@ module ABS;
             right: (integer_literal)))))))
 
 ==============================
+Let expression
+==============================
+
+module ABS;
+
+{
+  let Int x = 2 + 2 in x;
+  let Int x = 2 + 2, Int y = x * 2 in y;
+  let (Int x) = 10 in x;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (let_expression
+          (let_binding
+            (variable_declaration
+              type: (type_identifier)
+              name: (identifier))
+            value: (binary_expression
+              left: (integer_literal)
+              right: (integer_literal)))
+          body: (identifier)))
+      statement: (expression_statement
+        (let_expression
+          (let_binding
+            (variable_declaration
+              type: (type_identifier)
+              name: (identifier))
+            value: (binary_expression
+              left: (integer_literal)
+              right: (integer_literal)))
+          (let_binding
+            (variable_declaration
+              type: (type_identifier)
+              name: (identifier))
+            value: (binary_expression
+              left: (identifier)
+              right: (integer_literal)))
+          body: (identifier)))
+      statement: (expression_statement
+        (let_expression
+          (let_binding
+            (parenthesized_variable_declaration
+              type: (type_identifier)
+              name: (identifier))
+            value: (integer_literal))
+          body: (identifier))))))
+
+==============================
+Mismatched let expression
+:error
+==============================
+
+module ABS;
+
+{
+  let (Int x = 10 in x;
+  let Int x ) = 10 in x;
+}
+
+---
+
+==============================
 Constructor expressions
 ==============================
 
