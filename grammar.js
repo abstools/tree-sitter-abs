@@ -434,13 +434,13 @@ module.exports = grammar({
     // Type identifiers and generic types
     // In addition, types can sometimes be annotated
     //
-    // In the ANTLR grammar, type allows annotations,
+    // In the ANTLR grammar, type_use allows annotations,
     // while type_exp does not
     //
     // As we want an intuitive tree structure, 
     // we want to reorganize this
   
-    // Represents type in ANTLR grammar
+    // Represents type_use in ANTLR grammar
     // Typically used to declare the static types of variables, methods and fields
     type: $ => choice(
       $.annotated_type,
