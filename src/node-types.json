@@ -1259,6 +1259,36 @@
     }
   },
   {
+    "type": "cardinality_range",
+    "named": true,
+    "fields": {
+      "max": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "unbounded",
+            "named": true
+          }
+        ]
+      },
+      "min": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_literal",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "case_block",
     "named": true,
     "fields": {},
@@ -1860,7 +1890,7 @@
       "required": true,
       "types": [
         {
-          "type": "feature_attribute",
+          "type": "feature_attribute_reference",
           "named": true
         },
         {
@@ -2170,6 +2200,46 @@
     "type": "feature_attribute",
     "named": true,
     "fields": {
+      "domain": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "range",
+            "named": true
+          },
+          {
+            "type": "value_set",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_attribute_reference",
+    "named": true,
+    "fields": {
       "attribute": {
         "multiple": false,
         "required": true,
@@ -2186,6 +2256,145 @@
         "types": [
           {
             "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "feature_attribute",
+          "named": true
+        },
+        {
+          "type": "feature_constraint",
+          "named": true
+        },
+        {
+          "type": "feature_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "feature_constraint",
+    "named": true,
+    "fields": {
+      "kind": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "exclude",
+            "named": true
+          },
+          {
+            "type": "require",
+            "named": true
+          }
+        ]
+      },
+      "target": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "feature_body",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_extension",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "feature_body",
+            "named": true
+          }
+        ]
+      },
+      "feature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "feature_group",
+    "named": true,
+    "fields": {
+      "cardinality": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "all_of",
+            "named": true
+          },
+          {
+            "type": "cardinality_range",
+            "named": true
+          },
+          {
+            "type": "one_of",
+            "named": true
+          }
+        ]
+      },
+      "members": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "group_member_list",
             "named": true
           }
         ]
@@ -2562,6 +2771,47 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "group_member",
+    "named": true,
+    "fields": {
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "feature_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_member_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "group_member",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -3820,6 +4070,40 @@
     }
   },
   {
+    "type": "range",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "unbounded",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "unbounded",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "recover_block",
     "named": true,
     "fields": {
@@ -3941,6 +4225,21 @@
     }
   },
   {
+    "type": "root_feature",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "feature_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "skip_statement",
     "named": true,
     "fields": {
@@ -3970,6 +4269,10 @@
           "named": true
         },
         {
+          "type": "feature_extension",
+          "named": true
+        },
+        {
           "type": "module_declaration",
           "named": true
         },
@@ -3979,6 +4282,10 @@
         },
         {
           "type": "productline_declaration",
+          "named": true
+        },
+        {
+          "type": "root_feature",
           "named": true
         }
       ]
@@ -4476,6 +4783,16 @@
     }
   },
   {
+    "type": "unbounded",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "value_set",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "variable_declaration",
     "named": true,
     "fields": {
@@ -4771,6 +5088,10 @@
     "named": false
   },
   {
+    "type": "..",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -4833,6 +5154,10 @@
   {
     "type": "after",
     "named": false
+  },
+  {
+    "type": "all_of",
+    "named": true
   },
   {
     "type": "as",
@@ -4908,11 +5233,19 @@
     "named": false
   },
   {
+    "type": "exclude",
+    "named": true
+  },
+  {
     "type": "export",
     "named": false
   },
   {
     "type": "extends",
+    "named": false
+  },
+  {
+    "type": "extension",
     "named": false
   },
   {
@@ -4937,6 +5270,10 @@
   },
   {
     "type": "get",
+    "named": false
+  },
+  {
+    "type": "group",
     "named": false
   },
   {
@@ -5012,6 +5349,14 @@
     "named": true
   },
   {
+    "type": "one_of",
+    "named": true
+  },
+  {
+    "type": "optional",
+    "named": true
+  },
+  {
     "type": "original",
     "named": false
   },
@@ -5032,7 +5377,15 @@
     "named": false
   },
   {
+    "type": "require",
+    "named": true
+  },
+  {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "root",
     "named": false
   },
   {

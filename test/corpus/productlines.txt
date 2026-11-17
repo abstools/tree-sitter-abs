@@ -148,7 +148,7 @@ delta D(F, 1, F.x);
           (delta_specification_parameter
             (integer_literal))
           (delta_specification_parameter
-            (feature_attribute
+            (feature_attribute_reference
               feature: (type_identifier)
               attribute: (identifier))))))))
 

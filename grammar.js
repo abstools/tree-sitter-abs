@@ -43,6 +43,16 @@ const SET_PREC = {
   INTERSECTION: 3,
 }
 
+const MODEL_PREC = {
+  LOGICAL_OR: 1,
+  LOGICAL_AND: 2,
+  IMPLICATION: 3,
+  EQUAL: 4,
+  RELATIONAL: 5,
+  ADD: 6,
+  MULTIPLY: 7,
+}
+
 module.exports = grammar({
   name: "abs",
 
@@ -75,6 +85,10 @@ module.exports = grammar({
     $.namespace_modifier,
     $.class_modifier_fragment,
     $.interface_modifier_fragment,
+
+    // Feature model
+    $.model_expression,
+    $.constraint,
   ],
 
   conflicts: $ => [
@@ -97,6 +111,10 @@ module.exports = grammar({
       repeat($.delta_declaration),
       optional($.productline_declaration),
       repeat($.product_declaration),
+      repeat(choice(
+        $.root_feature,
+        $.feature_extension,
+      )),
     ),
 
     main_block: $ => seq(
@@ -1401,10 +1419,10 @@ module.exports = grammar({
     delta_specification_parameter: $ => choice(
       $.type_identifier,
       $.integer_literal,
-      $.feature_attribute,
+      $.feature_attribute_reference,
     ),
 
-    feature_attribute: $ => seq(
+    feature_attribute_reference: $ => seq(
       field("feature", $.type_identifier),
       ".",
       field("attribute", $.identifier),
@@ -1521,6 +1539,188 @@ module.exports = grammar({
       ")",
     ),
 
+    root_feature: $ => seq(
+      "root",
+      $.feature_declaration,
+    ),
+
+    feature_extension: $ => seq(
+      "extension",
+      field("feature", $.type_identifier),
+      field("body", $.feature_body),
+    ),
+
+    feature_declaration: $ => seq(
+      field("name", $.type_identifier),
+      optional(field("body", $.feature_body)),
+    ),
+
+    feature_body: $ => seq(
+      "{",
+      optional($.feature_group),
+      repeat(choice(
+        $.feature_attribute,
+        $.feature_constraint,
+      )),
+      "}",
+    ),
+
+    feature_group: $ => seq(
+      "group",
+      field("cardinality", $._group_cardinality),
+      field("members", $.group_member_list),
+    ),
+
+    _group_cardinality: $ => choice(
+      alias("oneof", $.one_of),
+      alias("allof", $.all_of),
+      $.cardinality_range,
+    ),
+
+    cardinality_range: $ => seq(
+      "[",
+      field("min", $.integer_literal),
+      "..",
+      field("max", choice(
+        $.integer_literal,
+        $.unbounded,
+      )),
+      "]",
+    ),
+
+    group_member_list: $ => seq(
+      "{",
+      commaSep1($.group_member),
+      "}",
+    ),
+
+    group_member: $ => seq(
+      optional(field("modifier", alias("opt", $.optional))),
+      $.feature_declaration,
+    ),
+
+    feature_attribute: $ => seq(
+      field("type", $.type_identifier), 
+      choice(
+        seq(
+          field("domain", $.range),
+          field("name", $.identifier),
+        ),
+        seq(
+          field("name", $.identifier),
+          optional(seq(
+            "in",
+            field("domain", choice(
+              $.range,
+              $.value_set,
+            ))
+          ))
+        ),
+      ),
+      ";",
+    ),
+
+    constraint: $ => choice(
+      $.feature_constraint,
+      $.expression_constraint,
+    ),
+
+    feature_constraint: $ => seq(
+      field("kind", choice(
+        alias("exclude", $.exclude),
+        alias("require", $.require)
+      )),
+      ":",
+      field("target", $.type_identifier),
+      ";",
+    ),
+
+    expression_constraint: $ => seq(
+      optional(seq(
+        field("kind", choice(
+          alias("ifin", $.if_in),
+          alias("ifout", $.if_out),
+        )),
+        ":",
+      )),
+      field("condition", $.model_expression),
+      ";",
+    ),
+
+    range: $ => seq(
+      "[",
+      field("start", $._boundary_integer),
+      "..",
+      field("end", $._boundary_integer),
+      "]",
+    ),
+
+    value_set: $ => seq(
+      "{",
+      commaSep1($._signed_integer_literal),
+      "}",
+    ),
+
+    _boundary_integer: $ => choice(
+      $.unbounded, 
+      alias($._signed_integer_literal, $.integer_literal),
+    ),
+
+    _signed_integer_literal: _ => token(seq(
+      optional("-"),   
+      DECIMAL_INTEGER,
+    )),
+
+    model_expression: $ => choice(
+      $.feature_attribute_reference,
+      $.type_identifier,
+      $.identifier,
+      $.integer_literal,
+      $.model_unary_expression,
+      $.model_binary_expression,
+      $.model_parenthesized_expression,
+    ),
+
+    model_unary_expression: $ => seq(
+      field("operator", choice("!", "-")),
+      field("argument", $.model_expression),
+    ),
+
+    model_binary_expression: $ => {
+      const table = [
+        ["*", MODEL_PREC.MULTIPLY],
+        ["/", MODEL_PREC.MULTIPLY],
+        ["%", MODEL_PREC.MULTIPLY],
+        ["+", MODEL_PREC.ADD],
+        ["-", MODEL_PREC.ADD],
+        ["<", MODEL_PREC.RELATIONAL],
+        ["<=", MODEL_PREC.RELATIONAL],
+        [">", MODEL_PREC.RELATIONAL],
+        [">=", MODEL_PREC.RELATIONAL],
+        ["==", MODEL_PREC.EQUAL],
+        ["!=", MODEL_PREC.EQUAL],
+        ["->", MODEL_PREC.IMPLICATION, "right"],
+        ["<->", MODEL_PREC.IMPLICATION],
+        ["&&", MODEL_PREC.LOGICAL_AND],
+        ["||", MODEL_PREC.LOGICAL_OR],
+      ];
+
+      return choice(...table.map(([operator, precedence, assoc]) => 
+        (assoc == "right" ? prec.right : prec.left)(precedence, seq(
+          field("left", $.model_expression),
+          // @ts-ignore
+          field("operator", operator),
+          field("right", $.model_expression),
+        ))
+      ));
+    },
+
+    model_parenthesized_expression: $ => seq(
+      "(",
+      $.model_expression,
+      ")",
+    ),
+
     // Overrides
     _function_name_decl: $ => $.identifier,
     _interface_name: $ => $.type_name,
@@ -1546,6 +1746,7 @@ module.exports = grammar({
     local: _ => "local",
     await: _ => "await",
     wildcard: _ => "*",
+    unbounded: _ => "*",
 
 
     // Difference from ABS grammar (ANTLR)
