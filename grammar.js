@@ -1347,18 +1347,20 @@ module.exports = grammar({
       repeat($.delta_clause),
     ),
 
-    // FIXME: Allow "feature'" naming for intermediate feature?
-    // Ask how to handle it, and the semantics of a prime name
-    // (i.e. can be separated by extras or must be immediate, etc.)
     feature: $ => seq(
-      field("name", $.feature_name),
+      field("name", $._feature_name),
       optional($.attribute_assignment_block),
     ),
 
-    feature_name: $ => (seq(
+    _feature_name: $ => choice(
+      $.feature_prime,
       $.type_identifier,
-      optional(token.immediate("'")),
-    )),
+    ),
+
+    feature_prime: $ => seq(
+      $.type_identifier,
+      token.immediate("'"),
+    ),
 
     attribute_assignment_block: $ => seq(
       "{",
@@ -1366,10 +1368,6 @@ module.exports = grammar({
       "}",
     ),
 
-    // FIXME: Comment in ANTLR grammar says only
-    // integers, true and false are allowed here
-    // type identifier -> True / False
-    // string literal not allowed by comment, but comment probably? outdated
     attribute_assignment: $ => seq(
       field("name", $.identifier),
       "=",

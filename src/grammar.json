@@ -5922,7 +5922,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "feature_name"
+            "name": "_feature_name"
           }
         },
         {
@@ -5939,7 +5939,20 @@
         }
       ]
     },
-    "feature_name": {
+    "_feature_name": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "feature_prime"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_identifier"
+        }
+      ]
+    },
+    "feature_prime": {
       "type": "SEQ",
       "members": [
         {
@@ -5947,19 +5960,11 @@
           "name": "type_identifier"
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "IMMEDIATE_TOKEN",
-              "content": {
-                "type": "STRING",
-                "value": "'"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "IMMEDIATE_TOKEN",
+          "content": {
+            "type": "STRING",
+            "value": "'"
+          }
         }
       ]
     },

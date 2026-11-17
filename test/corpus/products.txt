@@ -24,14 +24,11 @@ product WordcountModel (Wordcount, NoCost, NoDeploymentScenario);
     name: (type_identifier)
     (feature_list
       (feature
-        name: (feature_name
-          (type_identifier)))
+        name: (type_identifier))
       (feature
-        name: (feature_name
-          (type_identifier)))
+        name: (type_identifier))
       (feature
-        name: (feature_name
-          (type_identifier))))))
+        name: (type_identifier)))))
 
 ==============================
 Product feature list with attributes
@@ -46,18 +43,15 @@ product WordcountFull (Wordcount, Cost{cost=10}, UnlimitedMachines{capacity=20})
     name: (type_identifier)
     (feature_list 
       (feature
-        name: (feature_name
-          (type_identifier)))
+        name: (type_identifier))
       (feature
-        name: (feature_name
-          (type_identifier))
+        name: (type_identifier)
         (attribute_assignment_block
           (attribute_assignment
             name: (identifier)
             value: (integer_literal))))
       (feature
-        name: (feature_name
-          (type_identifier))
+        name: (type_identifier)
         (attribute_assignment_block
           (attribute_assignment
             name: (identifier)
@@ -379,11 +373,9 @@ product P = {A, B{x=1}} - C;
           left: (product_expression
             (feature_set
               (feature
-                name: (feature_name
-                  (type_identifier)))
+                name: (type_identifier))
               (feature
-                name: (feature_name
-                  (type_identifier))
+                name: (type_identifier)
                 (attribute_assignment_block
                   (attribute_assignment
                     name: (identifier)

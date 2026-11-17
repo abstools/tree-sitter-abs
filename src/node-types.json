@@ -2145,7 +2145,11 @@
         "required": true,
         "types": [
           {
-            "type": "feature_name",
+            "type": "feature_prime",
+            "named": true
+          },
+          {
+            "type": "type_identifier",
             "named": true
           }
         ]
@@ -2204,7 +2208,7 @@
     }
   },
   {
-    "type": "feature_name",
+    "type": "feature_prime",
     "named": true,
     "fields": {},
     "children": {
