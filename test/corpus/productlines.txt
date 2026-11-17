@@ -195,9 +195,8 @@ delta D from F;
       (delta_specification
         (type_identifier))
       (from_condition
-        (application_condition
-          (feature
-            name: (type_identifier)))))))
+        (feature
+          name: (type_identifier))))))
 
 ====================
 Delta clause with when condition
@@ -218,9 +217,8 @@ delta D when F;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (feature
-            name: (type_identifier)))))))
+        (feature
+          name: (type_identifier))))))
 
 ====================
 Delta clause with to condition
@@ -241,9 +239,8 @@ delta D to F;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (feature
-            name: (type_identifier)))))))
+        (feature
+          name: (type_identifier))))))
 
 ====================
 Delta clause with all conditions
@@ -271,13 +268,11 @@ delta D(F) after D1 from F when G;
       (after_condition
         (delta_identifier))
       (from_condition
-        (application_condition
-          (feature
-            name: (type_identifier))))
+        (feature
+          name: (type_identifier)))
       (when_condition
-        (application_condition
-          (feature
-            name: (type_identifier)))))))
+        (feature
+          name: (type_identifier))))))
 
 ====================
 Application condition with feature attribute block
@@ -298,13 +293,12 @@ delta D when F { x = 1 };
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (feature
-            name: (type_identifier)
-            (attribute_assignment_block
-              (attribute_assignment
-                name: (identifier)
-                value: (integer_literal)))))))))
+        (feature
+          name: (type_identifier)
+          (attribute_assignment_block
+            (attribute_assignment
+              name: (identifier)
+              value: (integer_literal))))))))
 
 ====================
 Application condition: not
@@ -325,11 +319,9 @@ delta D when !A;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (not_application_condition
-            (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (not_application_condition
+          (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition: double not
@@ -350,13 +342,10 @@ delta D when !!A;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
+        (not_application_condition
           (not_application_condition
-            (application_condition
-              (not_application_condition
-                (application_condition
-                  (feature
-                    name: (type_identifier)))))))))))
+            (feature
+              name: (type_identifier))))))))
 
 ====================
 Application condition: parenthesized
@@ -377,11 +366,9 @@ delta D when (A);
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (parenthesized_application_condition
-            (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (parenthesized_application_condition
+          (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition precedence: and is left associative
@@ -402,19 +389,14 @@ delta D when A && B && C;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (and_application_condition
-            left: (application_condition
-              (and_application_condition
-                left: (application_condition
-                  (feature
-                    name: (type_identifier)))
-                right: (application_condition
-                  (feature
-                    name: (type_identifier)))))
-            right: (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (and_application_condition
+          left: (and_application_condition
+            left: (feature
+              name: (type_identifier))
+            right: (feature
+              name: (type_identifier)))
+          right: (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition precedence: or is left associative
@@ -435,19 +417,14 @@ delta D when A || B || C;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (or_application_condition
-                left: (application_condition
-                  (feature
-                    name: (type_identifier)))
-                right: (application_condition
-                  (feature
-                    name: (type_identifier)))))
-            right: (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (or_application_condition
+          left: (or_application_condition
+            left: (feature
+              name: (type_identifier))
+            right: (feature
+              name: (type_identifier)))
+          right: (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition precedence: and binds tighter than or (right)
@@ -468,19 +445,14 @@ delta D when A || B && C;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (feature
-                name: (type_identifier)))
-            right: (application_condition
-              (and_application_condition
-                left: (application_condition
-                  (feature
-                    name: (type_identifier)))
-                right: (application_condition
-                  (feature
-                    name: (type_identifier)))))))))))
+        (or_application_condition
+          left: (feature
+            name: (type_identifier))
+          right: (and_application_condition
+            left: (feature
+              name: (type_identifier))
+            right: (feature
+              name: (type_identifier))))))))
 
 ====================
 Application condition precedence: and binds tighter than or (left)
@@ -501,19 +473,14 @@ delta D when A && B || C;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (and_application_condition
-                left: (application_condition
-                  (feature
-                    name: (type_identifier)))
-                right: (application_condition
-                  (feature
-                    name: (type_identifier)))))
-            right: (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (or_application_condition
+          left: (and_application_condition
+            left: (feature
+              name: (type_identifier))
+            right: (feature
+              name: (type_identifier)))
+          right: (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition precedence: not binds tighter than and
@@ -534,16 +501,12 @@ delta D when !A && B;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (and_application_condition
-            left: (application_condition
-              (not_application_condition
-                (application_condition
-                  (feature
-                    name: (type_identifier)))))
-            right: (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (and_application_condition
+          left: (not_application_condition
+            (feature
+              name: (type_identifier)))
+          right: (feature
+            name: (type_identifier)))))))
 
 ====================
 Application condition precedence: not binds tighter than or
@@ -564,16 +527,12 @@ delta D when A || !B;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (feature
-                name: (type_identifier)))
-            right: (application_condition
-              (not_application_condition
-                (application_condition
-                  (feature
-                    name: (type_identifier)))))))))))
+        (or_application_condition
+          left: (feature
+            name: (type_identifier))
+          right: (not_application_condition
+            (feature
+              name: (type_identifier))))))))
 
 ====================
 Application condition precedence: not, and, or combined
@@ -594,23 +553,16 @@ delta D when !A || !B && C;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (not_application_condition
-                (application_condition
-                  (feature
-                    name: (type_identifier)))))
-            right: (application_condition
-              (and_application_condition
-                left: (application_condition
-                  (not_application_condition
-                    (application_condition
-                      (feature
-                        name: (type_identifier)))))
-                right: (application_condition
-                  (feature
-                    name: (type_identifier)))))))))))
+        (or_application_condition
+          left: (not_application_condition
+            (feature
+              name: (type_identifier)))
+          right: (and_application_condition
+            left: (not_application_condition
+              (feature
+                name: (type_identifier)))
+            right: (feature
+              name: (type_identifier))))))))
 
 ====================
 Application condition precedence: parentheses override and
@@ -631,21 +583,15 @@ delta D when A && (B || C);
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (and_application_condition
-            left: (application_condition
-              (feature
-                name: (type_identifier)))
-            right: (application_condition
-              (parenthesized_application_condition
-                (application_condition
-                  (or_application_condition
-                    left: (application_condition
-                      (feature
-                        name: (type_identifier)))
-                    right: (application_condition
-                      (feature
-                        name: (type_identifier)))))))))))))
+        (and_application_condition
+          left: (feature
+            name: (type_identifier))
+          right: (parenthesized_application_condition
+            (or_application_condition
+              left: (feature
+                name: (type_identifier))
+              right: (feature
+                name: (type_identifier)))))))))
 
 ====================
 Application condition precedence: parentheses override not
@@ -666,18 +612,13 @@ delta D when !(A || B);
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (not_application_condition
-            (application_condition
-              (parenthesized_application_condition
-                (application_condition
-                  (or_application_condition
-                    left: (application_condition
-                      (feature
-                        name: (type_identifier)))
-                    right: (application_condition
-                      (feature
-                        name: (type_identifier)))))))))))))
+        (not_application_condition
+          (parenthesized_application_condition
+            (or_application_condition
+              left: (feature
+                name: (type_identifier))
+              right: (feature
+                name: (type_identifier)))))))))
 
 ====================
 Application condition precedence: from and when conditions are independent
@@ -698,23 +639,17 @@ delta D from A || B when C && D;
       (delta_specification
         (type_identifier))
       (from_condition
-        (application_condition
-          (or_application_condition
-            left: (application_condition
-              (feature
-                name: (type_identifier)))
-            right: (application_condition
-              (feature
-                name: (type_identifier))))))
+        (or_application_condition
+          left: (feature
+            name: (type_identifier))
+          right: (feature
+            name: (type_identifier))))
       (when_condition
-        (application_condition
-          (and_application_condition
-            left: (application_condition
-              (feature
-                name: (type_identifier)))
-            right: (application_condition
-              (feature
-                name: (type_identifier)))))))))
+        (and_application_condition
+          left: (feature
+            name: (type_identifier))
+          right: (feature
+            name: (type_identifier)))))))
 
 ====================
 Productline after modules and deltas
@@ -743,6 +678,5 @@ delta D when F;
       (delta_specification
         (type_identifier))
       (when_condition
-        (application_condition
-          (feature
-            name: (type_identifier)))))))
+        (feature
+          name: (type_identifier))))))

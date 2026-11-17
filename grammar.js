@@ -85,6 +85,10 @@ module.exports = grammar({
     $.namespace_modifier,
     $.class_modifier_fragment,
     $.interface_modifier_fragment,
+    $.application_condition,
+
+    // Products
+    $.product_expression,
 
     // Feature model
     $.model_expression,

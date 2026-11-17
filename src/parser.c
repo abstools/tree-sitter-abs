@@ -17,7 +17,7 @@
 #define MAX_ALIAS_SEQUENCE_LENGTH 10
 #define MAX_RESERVED_WORD_SET_SIZE 0
 #define PRODUCTION_ID_COUNT 188
-#define SUPERTYPE_COUNT 20
+#define SUPERTYPE_COUNT 22
 
 enum ts_symbol_identifiers {
   sym_identifier = 1,
@@ -2307,8 +2307,9 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = true,
   },
   [sym_application_condition] = {
-    .visible = true,
+    .visible = false,
     .named = true,
+    .supertype = true,
   },
   [sym_not_application_condition] = {
     .visible = true,
@@ -2339,8 +2340,9 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .named = true,
   },
   [sym_product_expression] = {
-    .visible = true,
+    .visible = false,
     .named = true,
+    .supertype = true,
   },
   [sym_product_difference] = {
     .visible = true,
@@ -4982,6 +4984,7 @@ static const TSStateId ts_primary_state_ids[STATE_COUNT] = {
 
 static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
   sym_any_name,
+  sym_application_condition,
   sym_class_modifier_fragment,
   sym_declaration,
   sym_delta_parameter,
@@ -4996,6 +4999,7 @@ static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
   sym_namespace_modifier,
   sym_object_oriented_modifier,
   sym_pattern,
+  sym_product_expression,
   sym_pure_expression,
   sym_statement,
   sym_trait_operation,
@@ -5005,25 +5009,27 @@ static const TSSymbol ts_supertype_symbols[SUPERTYPE_COUNT] = {
 
 static const TSMapSlice ts_supertype_map_slices[] = {
   [sym_any_name] = {.index = 0, .length = 2},
-  [sym_class_modifier_fragment] = {.index = 2, .length = 3},
-  [sym_declaration] = {.index = 5, .length = 8},
-  [sym_delta_parameter] = {.index = 13, .length = 2},
-  [sym_effectful_expression] = {.index = 15, .length = 5},
-  [sym_expression] = {.index = 20, .length = 2},
-  [sym_functional_modifier] = {.index = 22, .length = 5},
-  [sym_guard] = {.index = 27, .length = 4},
-  [sym_has_condition] = {.index = 31, .length = 3},
-  [sym_interface_modifier_fragment] = {.index = 34, .length = 2},
-  [sym_module_modifier] = {.index = 36, .length = 3},
-  [sym_name] = {.index = 39, .length = 2},
-  [sym_namespace_modifier] = {.index = 41, .length = 2},
-  [sym_object_oriented_modifier] = {.index = 43, .length = 6},
-  [sym_pattern] = {.index = 49, .length = 5},
-  [sym_pure_expression] = {.index = 54, .length = 21},
-  [sym_statement] = {.index = 75, .length = 19},
-  [sym_trait_operation] = {.index = 94, .length = 3},
-  [sym_type] = {.index = 97, .length = 3},
-  [sym_type_name] = {.index = 100, .length = 2},
+  [sym_application_condition] = {.index = 2, .length = 5},
+  [sym_class_modifier_fragment] = {.index = 7, .length = 3},
+  [sym_declaration] = {.index = 10, .length = 8},
+  [sym_delta_parameter] = {.index = 18, .length = 2},
+  [sym_effectful_expression] = {.index = 20, .length = 5},
+  [sym_expression] = {.index = 25, .length = 2},
+  [sym_functional_modifier] = {.index = 27, .length = 5},
+  [sym_guard] = {.index = 32, .length = 4},
+  [sym_has_condition] = {.index = 36, .length = 3},
+  [sym_interface_modifier_fragment] = {.index = 39, .length = 2},
+  [sym_module_modifier] = {.index = 41, .length = 3},
+  [sym_name] = {.index = 44, .length = 2},
+  [sym_namespace_modifier] = {.index = 46, .length = 2},
+  [sym_object_oriented_modifier] = {.index = 48, .length = 6},
+  [sym_pattern] = {.index = 54, .length = 5},
+  [sym_product_expression] = {.index = 59, .length = 6},
+  [sym_pure_expression] = {.index = 65, .length = 21},
+  [sym_statement] = {.index = 86, .length = 19},
+  [sym_trait_operation] = {.index = 105, .length = 3},
+  [sym_type] = {.index = 108, .length = 3},
+  [sym_type_name] = {.index = 111, .length = 2},
 };
 
 static const TSSymbol ts_supertype_map_entries[] = {
@@ -5031,10 +5037,16 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_name,
     sym_type_name,
   [2] =
+    sym_and_application_condition,
+    sym_feature,
+    sym_not_application_condition,
+    sym_or_application_condition,
+    sym_parenthesized_application_condition,
+  [7] =
     sym_add_field_fragment,
     sym_remove_field_fragment,
     sym_trait_operation,
-  [5] =
+  [10] =
     sym_class_declaration,
     sym_datatype_declaration,
     sym_exception_declaration,
@@ -5043,60 +5055,67 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_partial_function_declaration,
     sym_trait_declaration,
     sym_type_synonym_declaration,
-  [13] =
+  [18] =
     alias_sym_delta_field_parameter,
     sym_delta_class_parameter,
-  [15] =
+  [20] =
     sym_async_call_expression,
     sym_get_expression,
     sym_new_expression,
     sym_original_call_expression,
     sym_sync_call_expression,
-  [20] =
+  [25] =
     sym_effectful_expression,
     sym_pure_expression,
-  [22] =
+  [27] =
     sym_add_datatype_modifier,
     sym_add_function_modifier,
     sym_add_type_synonym_modifier,
     sym_modify_datatype_modifier,
     sym_modify_type_synonym_modifier,
-  [27] =
+  [32] =
     sym_and_guard,
     sym_claim_guard,
     sym_duration_guard,
     sym_expression_guard,
-  [31] =
+  [36] =
     sym_has_field_condition,
     sym_has_interface_condition,
     sym_has_method_condition,
-  [34] =
+  [39] =
     sym_add_method_signature_fragment,
     sym_remove_method_signature_fragment,
-  [36] =
+  [41] =
     sym_functional_modifier,
     sym_namespace_modifier,
     sym_object_oriented_modifier,
-  [39] =
+  [44] =
     sym_identifier,
     sym_qualified_identifier,
-  [41] =
+  [46] =
     sym_add_export_modifier,
     sym_add_import_modifier,
-  [43] =
+  [48] =
     sym_add_class_modifier,
     sym_add_interface_modifier,
     sym_modify_class_modifier,
     sym_modify_interface_modifier,
     sym_remove_class_modifier,
     sym_remove_interface_modifier,
-  [49] =
+  [54] =
     sym_constructor_pattern,
     sym_identifier,
     sym_integer_literal,
     sym_string_literal,
     sym_underscore_pattern,
-  [54] =
+  [59] =
+    sym_feature_set,
+    sym_parenthesized_product_expression,
+    sym_product_difference,
+    sym_product_intersection,
+    sym_product_union,
+    sym_type_identifier,
+  [65] =
     sym_as_expression,
     sym_binary_expression,
     sym_case_expression,
@@ -5118,7 +5137,7 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_unary_expression,
     sym_variadic_function_call_expression,
     sym_when_expression,
-  [75] =
+  [86] =
     sym_assert_statement,
     sym_assignment_statement,
     sym_await_statement,
@@ -5138,15 +5157,15 @@ static const TSSymbol ts_supertype_map_entries[] = {
     sym_try_statement,
     sym_variable_declaration_statement,
     sym_while_statement,
-  [94] =
+  [105] =
     sym_trait_member_addition,
     sym_trait_member_modification,
     sym_trait_member_removal,
-  [97] =
+  [108] =
     sym_annotated_type,
     sym_generic_type,
     sym_type_name,
-  [100] =
+  [111] =
     sym_qualified_type_identifier,
     sym_type_identifier,
 };

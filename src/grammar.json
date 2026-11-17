@@ -8083,6 +8083,8 @@
     "namespace_modifier",
     "class_modifier_fragment",
     "interface_modifier_fragment",
+    "application_condition",
+    "product_expression",
     "model_expression",
     "constraint"
   ],
