@@ -6526,7 +6526,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "parenthesized_product_expression"
+          "name": "product_parenthesized_expression"
         }
       ]
     },
@@ -6655,7 +6655,7 @@
         }
       ]
     },
-    "parenthesized_product_expression": {
+    "product_parenthesized_expression": {
       "type": "SEQ",
       "members": [
         {

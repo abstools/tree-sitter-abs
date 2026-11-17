@@ -1510,7 +1510,7 @@ module.exports = grammar({
       $.product_intersection,
       $.product_union,
       $.feature_set,
-      $.parenthesized_product_expression,
+      $.product_parenthesized_expression,
     ),
 
     product_difference: $ => prec.left(SET_PREC.DIFFERENCE, seq(
@@ -1537,7 +1537,7 @@ module.exports = grammar({
       "}",
     ),
 
-    parenthesized_product_expression: $ => seq(
+    product_parenthesized_expression: $ => seq(
       "(",
       $.product_expression,
       ")",

@@ -266,7 +266,7 @@ product P = (A || B) && C;
     name: (type_identifier)
     (product_expression_clause
       (product_intersection
-        left: (parenthesized_product_expression
+        left: (product_parenthesized_expression
             (product_union
               left: (type_identifier)
               right: (type_identifier)))
@@ -286,7 +286,7 @@ product P = A - (B - C);
     (product_expression_clause
       (product_difference
         left: (type_identifier)
-        right: (parenthesized_product_expression
+        right: (product_parenthesized_expression
             (product_difference
               left: (type_identifier)
               right: (type_identifier)))))))
