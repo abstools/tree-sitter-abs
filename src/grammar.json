@@ -8150,5 +8150,284 @@
     "model_expression",
     "constraint"
   ],
-  "reserved": {}
+  "reserved": {
+    "global": [
+      {
+        "type": "STRING",
+        "value": "adds"
+      },
+      {
+        "type": "STRING",
+        "value": "after"
+      },
+      {
+        "type": "STRING",
+        "value": "allof"
+      },
+      {
+        "type": "STRING",
+        "value": "as"
+      },
+      {
+        "type": "STRING",
+        "value": "assert"
+      },
+      {
+        "type": "STRING",
+        "value": "await"
+      },
+      {
+        "type": "STRING",
+        "value": "builtin"
+      },
+      {
+        "type": "STRING",
+        "value": "case"
+      },
+      {
+        "type": "STRING",
+        "value": "catch"
+      },
+      {
+        "type": "STRING",
+        "value": "class"
+      },
+      {
+        "type": "STRING",
+        "value": "core"
+      },
+      {
+        "type": "STRING",
+        "value": "data"
+      },
+      {
+        "type": "STRING",
+        "value": "def"
+      },
+      {
+        "type": "STRING",
+        "value": "delta"
+      },
+      {
+        "type": "STRING",
+        "value": "destiny"
+      },
+      {
+        "type": "STRING",
+        "value": "die"
+      },
+      {
+        "type": "STRING",
+        "value": "duration"
+      },
+      {
+        "type": "STRING",
+        "value": "else"
+      },
+      {
+        "type": "STRING",
+        "value": "exception"
+      },
+      {
+        "type": "STRING",
+        "value": "exclude"
+      },
+      {
+        "type": "STRING",
+        "value": "export"
+      },
+      {
+        "type": "STRING",
+        "value": "extends"
+      },
+      {
+        "type": "STRING",
+        "value": "extension"
+      },
+      {
+        "type": "STRING",
+        "value": "features"
+      },
+      {
+        "type": "STRING",
+        "value": "finally"
+      },
+      {
+        "type": "STRING",
+        "value": "foreach"
+      },
+      {
+        "type": "STRING",
+        "value": "from"
+      },
+      {
+        "type": "STRING",
+        "value": "get"
+      },
+      {
+        "type": "STRING",
+        "value": "group"
+      },
+      {
+        "type": "STRING",
+        "value": "hasField"
+      },
+      {
+        "type": "STRING",
+        "value": "hasInterface"
+      },
+      {
+        "type": "STRING",
+        "value": "hasMethod"
+      },
+      {
+        "type": "STRING",
+        "value": "if"
+      },
+      {
+        "type": "STRING",
+        "value": "ifin"
+      },
+      {
+        "type": "STRING",
+        "value": "ifout"
+      },
+      {
+        "type": "STRING",
+        "value": "implements"
+      },
+      {
+        "type": "STRING",
+        "value": "import"
+      },
+      {
+        "type": "STRING",
+        "value": "in"
+      },
+      {
+        "type": "STRING",
+        "value": "interface"
+      },
+      {
+        "type": "STRING",
+        "value": "let"
+      },
+      {
+        "type": "STRING",
+        "value": "local"
+      },
+      {
+        "type": "STRING",
+        "value": "modifies"
+      },
+      {
+        "type": "STRING",
+        "value": "module"
+      },
+      {
+        "type": "STRING",
+        "value": "movecogto"
+      },
+      {
+        "type": "STRING",
+        "value": "new"
+      },
+      {
+        "type": "STRING",
+        "value": "null"
+      },
+      {
+        "type": "STRING",
+        "value": "oneof"
+      },
+      {
+        "type": "STRING",
+        "value": "opt"
+      },
+      {
+        "type": "STRING",
+        "value": "original"
+      },
+      {
+        "type": "STRING",
+        "value": "product"
+      },
+      {
+        "type": "STRING",
+        "value": "productline"
+      },
+      {
+        "type": "STRING",
+        "value": "recover"
+      },
+      {
+        "type": "STRING",
+        "value": "removes"
+      },
+      {
+        "type": "STRING",
+        "value": "require"
+      },
+      {
+        "type": "STRING",
+        "value": "return"
+      },
+      {
+        "type": "STRING",
+        "value": "root"
+      },
+      {
+        "type": "STRING",
+        "value": "skip"
+      },
+      {
+        "type": "STRING",
+        "value": "suspend"
+      },
+      {
+        "type": "STRING",
+        "value": "switch"
+      },
+      {
+        "type": "STRING",
+        "value": "then"
+      },
+      {
+        "type": "STRING",
+        "value": "this"
+      },
+      {
+        "type": "STRING",
+        "value": "throw"
+      },
+      {
+        "type": "STRING",
+        "value": "to"
+      },
+      {
+        "type": "STRING",
+        "value": "trait"
+      },
+      {
+        "type": "STRING",
+        "value": "try"
+      },
+      {
+        "type": "STRING",
+        "value": "type"
+      },
+      {
+        "type": "STRING",
+        "value": "uses"
+      },
+      {
+        "type": "STRING",
+        "value": "when"
+      },
+      {
+        "type": "STRING",
+        "value": "while"
+      }
+    ]
+  }
 }

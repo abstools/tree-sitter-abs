@@ -1,0 +1,71 @@
+==============================
+Keyword "get" as variable name
+:error
+==============================
+
+module ABS;
+
+{
+  Int get = 1;
+}
+
+---
+
+==============================
+Keyword "from" as function name
+:error
+==============================
+
+module ABS;
+
+def Int from(Int x) = x;
+
+---
+
+==============================
+Keyword "new" as parameter name
+:error
+==============================
+
+module ABS;
+
+def Int f(Int new) = new;
+
+---
+
+==============================
+Keyword "await" as method name
+:error
+==============================
+
+module ABS;
+
+interface I {
+  Unit await();
+}
+
+---
+
+==============================
+Keyword "suspend" as field name
+:error
+==============================
+
+module ABS;
+
+class C {
+  Int suspend = 0;
+}
+
+---
+
+==============================
+Keyword "case" as class parameter name
+:error
+==============================
+
+module ABS;
+
+class C(Int case) { }
+
+---

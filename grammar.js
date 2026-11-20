@@ -115,6 +115,21 @@ module.exports = grammar({
     $._delta_identifier,
   ],
 
+  reserved: {
+    global: _ => [
+      "adds", "after", "allof", "as", "assert", "await", "builtin", "case",
+      "catch", "class", "core", "data", "def", "delta", "destiny", "die",
+      "duration", "else", "exception", "exclude", "export", "extends",
+      "extension", "features", "finally", "foreach", "from", "get", "group",
+      "hasField", "hasInterface", "hasMethod", "if", "ifin", "ifout",
+      "implements", "import", "in", "interface", "let", "local", "modifies",
+      "module", "movecogto", "new", "null", "oneof", "opt", "original",
+      "product", "productline", "recover", "removes", "require", "return",
+      "root", "skip", "suspend", "switch", "then", "this", "throw", "to",
+      "trait", "try", "type", "uses", "when", "while",
+    ]
+  },
+
   word: $ => $.identifier,
 
   rules: {
