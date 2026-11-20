@@ -1078,7 +1078,7 @@
         "types": [
           {
             "type": "await",
-            "named": true
+            "named": false
           }
         ]
       },
@@ -1152,11 +1152,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "await",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "await_statement",
@@ -2232,12 +2227,12 @@
         "required": false,
         "types": [
           {
-            "type": "if_in",
-            "named": true
+            "type": "ifin",
+            "named": false
           },
           {
-            "type": "if_out",
-            "named": true
+            "type": "ifout",
+            "named": false
           }
         ]
       }
@@ -2428,11 +2423,11 @@
         "types": [
           {
             "type": "exclude",
-            "named": true
+            "named": false
           },
           {
             "type": "require",
-            "named": true
+            "named": false
           }
         ]
       },
@@ -2509,16 +2504,16 @@
         "required": true,
         "types": [
           {
-            "type": "all_of",
-            "named": true
+            "type": "allof",
+            "named": false
           },
           {
             "type": "cardinality_range",
             "named": true
           },
           {
-            "type": "one_of",
-            "named": true
+            "type": "oneof",
+            "named": false
           }
         ]
       },
@@ -2934,8 +2929,8 @@
         "required": false,
         "types": [
           {
-            "type": "optional",
-            "named": true
+            "type": "opt",
+            "named": false
           }
         ]
       }
@@ -3768,7 +3763,7 @@
         "types": [
           {
             "type": "local",
-            "named": true
+            "named": false
           }
         ]
       }
@@ -3907,7 +3902,7 @@
         "types": [
           {
             "type": "core",
-            "named": true
+            "named": false
           },
           {
             "type": "delta_identifier",
@@ -5478,8 +5473,8 @@
     "named": false
   },
   {
-    "type": "all_of",
-    "named": true
+    "type": "allof",
+    "named": false
   },
   {
     "type": "as",
@@ -5516,7 +5511,7 @@
   },
   {
     "type": "core",
-    "named": true
+    "named": false
   },
   {
     "type": "data",
@@ -5560,7 +5555,7 @@
   },
   {
     "type": "exclude",
-    "named": true
+    "named": false
   },
   {
     "type": "export",
@@ -5623,12 +5618,12 @@
     "named": false
   },
   {
-    "type": "if_in",
-    "named": true
+    "type": "ifin",
+    "named": false
   },
   {
-    "type": "if_out",
-    "named": true
+    "type": "ifout",
+    "named": false
   },
   {
     "type": "implements",
@@ -5656,7 +5651,7 @@
   },
   {
     "type": "local",
-    "named": true
+    "named": false
   },
   {
     "type": "modifies",
@@ -5683,12 +5678,12 @@
     "named": true
   },
   {
-    "type": "one_of",
-    "named": true
+    "type": "oneof",
+    "named": false
   },
   {
-    "type": "optional",
-    "named": true
+    "type": "opt",
+    "named": false
   },
   {
     "type": "original",
@@ -5712,7 +5707,7 @@
   },
   {
     "type": "require",
-    "named": true
+    "named": false
   },
   {
     "type": "return",

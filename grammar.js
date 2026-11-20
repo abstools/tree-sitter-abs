@@ -101,7 +101,6 @@ module.exports = grammar({
     [$.qualified_identifier, $.qualified_type_identifier, $.type_name],
     [$.qualified_identifier, $.qualified_type_identifier, $.type_name, $.original_call_expression],
     [$.pure_expression, $.field_access],
-    [$.await, $.await_statement],
     [$.qualified_type_identifier],
     [$.if_statement, $.pure_expression],
     [$.expression, $.case_branch],
@@ -855,13 +854,13 @@ module.exports = grammar({
 
     new_expression: $ => seq(
       "new",
-      optional(field("local", $.local)),
+      optional(field("local", "local")),
       field("constructor", $.type_name),
       field("arguments", $.argument_list),
     ),
 
     async_call_expression: $ => seq(
-      optional(field("await", $.await)),
+      optional(field("await", "await")),
       field("object", $.pure_expression),
       "!",
       field("method", $.identifier),
@@ -876,10 +875,9 @@ module.exports = grammar({
     ),
 
     original_call_expression: $ => seq(
-      // TODO: Add delta-id or core. reference ABS antlr grammar
       optional(seq(
         field("target", choice(
-          $.core,
+          "core",
           $._delta_identifier,
         )),
         ".",
@@ -1608,8 +1606,8 @@ module.exports = grammar({
     ),
 
     _group_cardinality: $ => choice(
-      alias("oneof", $.one_of),
-      alias("allof", $.all_of),
+      "oneof",
+      "allof",
       $.cardinality_range,
     ),
 
@@ -1631,7 +1629,7 @@ module.exports = grammar({
     ),
 
     group_member: $ => seq(
-      optional(field("modifier", alias("opt", $.optional))),
+      optional(field("modifier", "opt")),
       $.feature_declaration,
     ),
 
@@ -1663,8 +1661,8 @@ module.exports = grammar({
 
     feature_constraint: $ => seq(
       field("kind", choice(
-        alias("exclude", $.exclude),
-        alias("require", $.require)
+        "exclude",
+        "require",
       )),
       ":",
       field("target", $.type_identifier),
@@ -1674,8 +1672,8 @@ module.exports = grammar({
     expression_constraint: $ => seq(
       optional(seq(
         field("kind", choice(
-          alias("ifin", $.if_in),
-          alias("ifout", $.if_out),
+          "ifin",
+          "ifout",
         )),
         ":",
       )),
@@ -1779,11 +1777,8 @@ module.exports = grammar({
 
     // Certain keywords
 
-    local: _ => "local",
-    await: _ => "await",
     wildcard: _ => "*",
     unbounded: _ => "*",
-    core: _ => "core",
 
 
     // Difference from ABS grammar (ANTLR)

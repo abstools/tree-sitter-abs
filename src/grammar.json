@@ -3349,8 +3349,8 @@
               "type": "FIELD",
               "name": "local",
               "content": {
-                "type": "SYMBOL",
-                "name": "local"
+                "type": "STRING",
+                "value": "local"
               }
             },
             {
@@ -3386,8 +3386,8 @@
               "type": "FIELD",
               "name": "await",
               "content": {
-                "type": "SYMBOL",
-                "name": "await"
+                "type": "STRING",
+                "value": "await"
               }
             },
             {
@@ -3474,8 +3474,8 @@
                     "type": "CHOICE",
                     "members": [
                       {
-                        "type": "SYMBOL",
-                        "name": "core"
+                        "type": "STRING",
+                        "value": "core"
                       },
                       {
                         "type": "SYMBOL",
@@ -6847,22 +6847,12 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "STRING",
-            "value": "oneof"
-          },
-          "named": true,
-          "value": "one_of"
+          "type": "STRING",
+          "value": "oneof"
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "STRING",
-            "value": "allof"
-          },
-          "named": true,
-          "value": "all_of"
+          "type": "STRING",
+          "value": "allof"
         },
         {
           "type": "SYMBOL",
@@ -6960,13 +6950,8 @@
               "type": "FIELD",
               "name": "modifier",
               "content": {
-                "type": "ALIAS",
-                "content": {
-                  "type": "STRING",
-                  "value": "opt"
-                },
-                "named": true,
-                "value": "optional"
+                "type": "STRING",
+                "value": "opt"
               }
             },
             {
@@ -7093,21 +7078,11 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "STRING",
-                  "value": "exclude"
-                },
-                "named": true,
+                "type": "STRING",
                 "value": "exclude"
               },
               {
-                "type": "ALIAS",
-                "content": {
-                  "type": "STRING",
-                  "value": "require"
-                },
-                "named": true,
+                "type": "STRING",
                 "value": "require"
               }
             ]
@@ -7147,22 +7122,12 @@
                     "type": "CHOICE",
                     "members": [
                       {
-                        "type": "ALIAS",
-                        "content": {
-                          "type": "STRING",
-                          "value": "ifin"
-                        },
-                        "named": true,
-                        "value": "if_in"
+                        "type": "STRING",
+                        "value": "ifin"
                       },
                       {
-                        "type": "ALIAS",
-                        "content": {
-                          "type": "STRING",
-                          "value": "ifout"
-                        },
-                        "named": true,
-                        "value": "if_out"
+                        "type": "STRING",
+                        "value": "ifout"
                       }
                     ]
                   }
@@ -8008,14 +7973,6 @@
         }
       ]
     },
-    "local": {
-      "type": "STRING",
-      "value": "local"
-    },
-    "await": {
-      "type": "STRING",
-      "value": "await"
-    },
     "wildcard": {
       "type": "STRING",
       "value": "*"
@@ -8023,10 +7980,6 @@
     "unbounded": {
       "type": "STRING",
       "value": "*"
-    },
-    "core": {
-      "type": "STRING",
-      "value": "core"
     },
     "comment": {
       "type": "TOKEN",
@@ -8096,10 +8049,6 @@
     [
       "pure_expression",
       "field_access"
-    ],
-    [
-      "await",
-      "await_statement"
     ],
     [
       "qualified_type_identifier"
