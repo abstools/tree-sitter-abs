@@ -3055,7 +3055,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "underscore_pattern"
+          "name": "wildcard_pattern"
         },
         {
           "type": "SYMBOL",
@@ -3075,7 +3075,7 @@
         }
       ]
     },
-    "underscore_pattern": {
+    "wildcard_pattern": {
       "type": "STRING",
       "value": "_"
     },

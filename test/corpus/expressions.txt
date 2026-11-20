@@ -491,7 +491,7 @@ module ABS;
           condition: (identifier)
           body: (case_block
             (case_branch
-              pattern: (underscore_pattern)
+              pattern: (wildcard_pattern)
               body: (integer_literal))
             (case_branch
               pattern: (integer_literal)
@@ -512,7 +512,7 @@ module ABS;
                 name: (type_identifier)
                 parameters: (pattern_list
                   (identifier)
-                  (underscore_pattern)))
+                  (wildcard_pattern)))
               body: (identifier))
             (case_branch
               pattern: (constructor_pattern
@@ -566,12 +566,12 @@ module ABS;
             right: (integer_literal))
           body: (case_block
             (case_branch
-              pattern: (underscore_pattern)
+              pattern: (wildcard_pattern)
               body: (case_expression
                 condition: (identifier)
                 body: (case_block
                   (case_branch
-                    pattern: (underscore_pattern)
+                    pattern: (wildcard_pattern)
                     body: (integer_literal))))))))
       statement: (expression_statement
         (case_expression
@@ -583,7 +583,7 @@ module ABS;
                 condition: (identifier)
                 body: (case_block
                   (case_branch
-                    pattern: (underscore_pattern)
+                    pattern: (wildcard_pattern)
                     body: (integer_literal)))))
             (case_branch
               pattern: (integer_literal)
@@ -595,7 +595,7 @@ module ABS;
             condition: (identifier)
             body: (case_block
               (case_branch
-                pattern: (underscore_pattern)
+                pattern: (wildcard_pattern)
                 body: (integer_literal))))
           alternative: (integer_literal))))))
 
