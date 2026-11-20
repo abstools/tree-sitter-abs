@@ -107,6 +107,7 @@ module.exports = grammar({
     [$.expression, $.case_branch],
     [$._unannotated_type, $.constructor_expression],
     [$.generic_type, $.constructor_expression],
+    [$._function_parameter, $._variable_or_field_reference],
   ],
 
   inline: $ => [
@@ -899,6 +900,7 @@ module.exports = grammar({
       $.null_expression,
       $._variable_or_field_reference,
       $.function_call_expression,
+      $.partial_function_call_expression,
       $.variadic_function_call_expression,
       $.constructor_expression,
       $.unary_expression,
@@ -940,11 +942,11 @@ module.exports = grammar({
 
     function_list: $ => seq(
       "(",
-      commaSep1($.function_parameter),
+      commaSep1($._function_parameter),
       ")",
     ),
 
-    function_parameter: $ => choice(
+    _function_parameter: $ => choice(
       $.identifier,
       $.anonymous_function_declaration,
     ),
