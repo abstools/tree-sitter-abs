@@ -3462,6 +3462,40 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "target",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "core"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "_delta_identifier"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": "."
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "STRING",
           "value": "original"
         },
@@ -7986,6 +8020,10 @@
       "type": "STRING",
       "value": "*"
     },
+    "core": {
+      "type": "STRING",
+      "value": "core"
+    },
     "comment": {
       "type": "TOKEN",
       "content": {
@@ -8046,6 +8084,12 @@
       "type_name"
     ],
     [
+      "qualified_identifier",
+      "qualified_type_identifier",
+      "type_name",
+      "original_call_expression"
+    ],
+    [
       "pure_expression",
       "field_access"
     ],
@@ -8075,7 +8119,11 @@
   ],
   "precedences": [],
   "externals": [],
-  "inline": [],
+  "inline": [
+    "_function_name_decl",
+    "_interface_name",
+    "_delta_identifier"
+  ],
   "supertypes": [
     "declaration",
     "statement",

@@ -3851,6 +3851,20 @@
             "named": true
           }
         ]
+      },
+      "target": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "core",
+            "named": true
+          },
+          {
+            "type": "delta_identifier",
+            "named": true
+          }
+        ]
       }
     }
   },
@@ -5414,6 +5428,10 @@
     "type": "comment",
     "named": true,
     "extra": true
+  },
+  {
+    "type": "core",
+    "named": true
   },
   {
     "type": "data",

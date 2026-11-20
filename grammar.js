@@ -99,6 +99,7 @@ module.exports = grammar({
   conflicts: $ => [
     [$.qualified_type_identifier, $.type_name],
     [$.qualified_identifier, $.qualified_type_identifier, $.type_name],
+    [$.qualified_identifier, $.qualified_type_identifier, $.type_name, $.original_call_expression],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
@@ -106,6 +107,12 @@ module.exports = grammar({
     [$.expression, $.case_branch],
     [$._unannotated_type, $.constructor_expression],
     [$.generic_type, $.constructor_expression],
+  ],
+
+  inline: $ => [
+    $._function_name_decl,
+    $._interface_name,
+    $._delta_identifier,
   ],
 
   word: $ => $.identifier,
@@ -854,6 +861,13 @@ module.exports = grammar({
 
     original_call_expression: $ => seq(
       // TODO: Add delta-id or core. reference ABS antlr grammar
+      optional(seq(
+        field("target", choice(
+          $.core,
+          $._delta_identifier,
+        )),
+        ".",
+      )),
       "original",
       field("arguments", $.argument_list),
     ),
@@ -1752,6 +1766,7 @@ module.exports = grammar({
     await: _ => "await",
     wildcard: _ => "*",
     unbounded: _ => "*",
+    core: _ => "core",
 
 
     // Difference from ABS grammar (ANTLR)
