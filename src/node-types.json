@@ -474,6 +474,10 @@
         "named": true
       },
       {
+        "type": "partial_function_call_expression",
+        "named": true
+      },
+      {
         "type": "string_literal",
         "named": true
       },
@@ -919,6 +923,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "anonymous_function_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "pure_expression",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2820,6 +2850,25 @@
     }
   },
   {
+    "type": "function_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "anonymous_function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "function_name_list",
     "named": true,
     "fields": {},
@@ -3973,6 +4022,42 @@
         "types": [
           {
             "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "partial_function_call_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      },
+      "functions": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "function_list",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "name",
             "named": true
           }
         ]

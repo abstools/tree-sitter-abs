@@ -924,3 +924,51 @@ module ABS;
 def Int f() = core.original();
 
 ---
+
+==============================
+Partial defined function calls
+==============================
+
+module ABS;
+
+{
+  map(toString)(list[1, 2]);
+  filter((Int i) => i > 0)(list[0, 1, 2]);
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (partial_function_call_expression
+          name: (identifier)
+          functions: (function_list
+            (identifier))
+          arguments: (argument_list
+            (variadic_function_call_expression
+              function: (identifier)
+              arguments: (variadic_argument_list
+                (integer_literal)
+                (integer_literal))))))
+      statement: (expression_statement
+        (partial_function_call_expression
+          name: (identifier)
+          functions: (function_list
+            (anonymous_function_declaration
+              parameters: (parameter_list
+                (parameter
+                  type: (type_identifier)
+                  name: (identifier)))
+              body: (binary_expression
+                left: (identifier)
+                right: (integer_literal))))
+          arguments: (argument_list
+            (variadic_function_call_expression
+              function: (identifier)
+              arguments: (variadic_argument_list
+                (integer_literal)
+                (integer_literal)
+                (integer_literal)))))))))
