@@ -374,7 +374,7 @@
         "named": true
       },
       {
-        "type": "underscore_pattern",
+        "type": "wildcard_pattern",
         "named": true
       }
     ]
@@ -5779,10 +5779,6 @@
     "named": true
   },
   {
-    "type": "underscore_pattern",
-    "named": true
-  },
-  {
     "type": "uses",
     "named": false
   },
@@ -5793,6 +5789,10 @@
   {
     "type": "while",
     "named": false
+  },
+  {
+    "type": "wildcard_pattern",
+    "named": true
   },
   {
     "type": "{",

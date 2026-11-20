@@ -770,14 +770,14 @@ module.exports = grammar({
     // Patterns
 
     pattern: $ => choice(
-      $.underscore_pattern,
+      $.wildcard_pattern,
       $.integer_literal,
       $.string_literal,
       $.identifier,
       $.constructor_pattern,
     ),
 
-    underscore_pattern: _ => "_",
+    wildcard_pattern: _ => "_",
 
     constructor_pattern: $ => seq(
       field("name", $.type_name),

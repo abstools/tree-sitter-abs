@@ -223,7 +223,7 @@ module ABS;
             body: (return_statement
               value: (integer_literal)))
           (statement_branch
-            pattern: (underscore_pattern)
+            pattern: (wildcard_pattern)
             body: (return_statement
               value: (integer_literal)))
           (statement_branch
@@ -334,7 +334,7 @@ module ABS;
         condition: (identifier)
         body: (branch_block
           (statement_branch
-            pattern: (underscore_pattern)
+            pattern: (wildcard_pattern)
             body: (expression_statement
               (integer_literal)))
           (statement_branch
@@ -360,7 +360,7 @@ module ABS;
               name: (type_identifier)
               parameters: (pattern_list
                 (identifier)
-                (underscore_pattern)))
+                (wildcard_pattern)))
             body: (expression_statement
               (identifier)))
           (statement_branch
@@ -416,7 +416,7 @@ module ABS;
             (integer_literal)))
         handler: (catch_clause 
           (statement_branch
-            pattern: (underscore_pattern)
+            pattern: (wildcard_pattern)
             body: (expression_statement
               (integer_literal))))
         finalizer: (finally_clause 
@@ -428,7 +428,7 @@ module ABS;
         handler: (catch_clause
           (branch_block 
             (statement_branch
-              pattern: (underscore_pattern)
+              pattern: (wildcard_pattern)
               body: (expression_statement
                 (integer_literal)))))
         finalizer: (finally_clause
@@ -442,7 +442,7 @@ module ABS;
         handler: (catch_clause
           (branch_block
             (statement_branch
-              pattern: (underscore_pattern)
+              pattern: (wildcard_pattern)
               body: (expression_statement
                 (integer_literal)))))))))
 
