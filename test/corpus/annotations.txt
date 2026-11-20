@@ -214,7 +214,7 @@ Annotated method signature return type
 module Annotations;
 
 interface I {
-  [Far] Server get();
+  [Far] Server getServer();
 }
 
 ---
@@ -245,7 +245,7 @@ module Annotations;
 class C {
   [Far] Server server = null;
 
-  [Final] Int get() {
+  [Final] Int getInt() {
     return 1;
   }
 }
