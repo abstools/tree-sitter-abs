@@ -1,0 +1,693 @@
+====================
+Empty delta
+====================
+
+delta D;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)))
+
+====================
+Delta with field parameters
+====================
+
+delta D(Int x, String y);
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    parameters: (delta_parameter_list
+      (delta_field_parameter
+        type: (type_identifier)
+        name: (identifier))
+      (delta_field_parameter
+        type: (type_identifier)
+        name: (identifier)))))
+
+====================
+Delta with class parameters
+====================
+
+delta D(C hasField Int f;, M.C hasMethod Unit m(Int x);, C hasInterface M.I);
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    parameters: (delta_parameter_list
+      (delta_class_parameter
+        name: (type_identifier)
+        condition: (has_field_condition
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier))))
+      (delta_class_parameter
+        name: (qualified_type_identifier
+          (type_identifier)
+          (type_identifier))
+        condition: (has_method_condition
+          method: (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list
+              (parameter
+                type: (type_identifier)
+                name: (identifier))))))
+      (delta_class_parameter
+        name: (type_identifier)
+        condition: (has_interface_condition
+          interface: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier)))))))
+
+====================
+Delta with mixed parameters
+====================
+
+delta D(Int x, C hasInterface I, Bool b);
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    parameters: (delta_parameter_list
+      (delta_field_parameter
+        type: (type_identifier)
+        name: (identifier))
+      (delta_class_parameter
+        name: (type_identifier)
+        condition: (has_interface_condition
+          interface: (type_identifier)))
+      (delta_field_parameter
+        type: (type_identifier)
+        name: (identifier)))))
+
+====================
+Delta uses module
+====================
+
+delta D;
+uses M.N;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    uses: (delta_uses_module
+      module: (module_name
+        (module_identifier)
+        (module_identifier)))))
+
+====================
+Modules followed by deltas
+====================
+
+module M;
+
+module N;
+
+delta D1;
+
+delta D2;
+uses M;
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier))
+  (module_declaration
+    name: (type_identifier))
+  (delta_declaration
+    name: (type_identifier))
+  (delta_declaration
+    name: (type_identifier)
+    uses: (delta_uses_module
+      module: (module_name
+        (module_identifier)))))
+
+====================
+Add functional modifiers
+====================
+
+delta D;
+adds def Int inc(Int x) = x + 1;
+adds data Color = Red | Green;
+adds type Name = String;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (add_function_modifier
+      declaration: (function_declaration
+        return_type: (type_identifier)
+        name: (identifier)
+        parameters: (parameter_list
+          (parameter
+            type: (type_identifier)
+            name: (identifier)))
+        expression: (binary_expression
+          left: (identifier)
+          right: (integer_literal))))
+    modifier: (add_datatype_modifier
+      declaration: (datatype_declaration
+        name: (type_identifier)
+        constructors: (data_constructor_clause
+          (data_constructor
+            name: (type_identifier))
+          (data_constructor
+            name: (type_identifier)))))
+    modifier: (add_type_synonym_modifier
+      declaration: (type_synonym_declaration
+        name: (type_identifier)
+        type: (type_identifier)))))
+
+====================
+Modify functional modifiers
+====================
+
+delta D;
+modifies data Color = Red | Green | Blue;
+modifies type Name = Int;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_datatype_modifier
+      declaration: (datatype_declaration
+        name: (type_identifier)
+        constructors: (data_constructor_clause
+          (data_constructor
+            name: (type_identifier))
+          (data_constructor
+            name: (type_identifier))
+          (data_constructor
+            name: (type_identifier)))))
+    modifier: (modify_type_synonym_modifier
+      declaration: (type_synonym_declaration
+        name: (type_identifier)
+        type: (type_identifier)))))
+
+====================
+Add and remove class
+====================
+
+delta D;
+adds class C(Int x) implements I { }
+removes class C;
+removes class M.C;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (add_class_modifier
+      declaration: (class_declaration
+        name: (type_identifier)
+        parameters: (parameter_list
+          (parameter
+            type: (type_identifier)
+            name: (identifier)))
+        implements: (implements_clause
+          (type_identifier))
+        body: (class_body)))
+    modifier: (remove_class_modifier
+      name: (type_identifier))
+    modifier: (remove_class_modifier
+      name: (qualified_type_identifier
+        (type_identifier)
+        (type_identifier)))))
+
+====================
+Modify class with empty block
+====================
+
+delta D;
+modifies class C { }
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      body: (class_modifier_block))))
+
+====================
+Modify class interfaces
+====================
+
+delta D;
+modifies class C adds I1, M.I2 removes I3 { }
+modifies class C adds I { }
+modifies class C removes I { }
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      added_interfaces: (added_interface_list
+        (type_identifier)
+        (qualified_type_identifier
+          (type_identifier)
+          (type_identifier)))
+      removed_interfaces: (removed_interface_list
+        (type_identifier))
+      body: (class_modifier_block))
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      added_interfaces: (added_interface_list
+        (type_identifier))
+      body: (class_modifier_block))
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      removed_interfaces: (removed_interface_list
+        (type_identifier))
+      body: (class_modifier_block))))
+
+====================
+Modify class field fragments
+====================
+
+delta D;
+modifies class C {
+  adds Int x = 0;
+  adds List<Int> xs;
+  removes Int y;
+}
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      body: (class_modifier_block
+        fragment: (add_field_fragment
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier)
+            value: (integer_literal)))
+        fragment: (add_field_fragment
+          field: (field_declaration
+            type: (generic_type
+              name: (type_identifier)
+              arguments: (type_argument_list
+                (type_identifier)))
+            name: (identifier)))
+        fragment: (remove_field_fragment
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier)))))))
+
+====================
+Modify class trait fragments
+====================
+
+delta D;
+modifies class C {
+  adds Unit m() { skip; }
+  adds { Unit n() { skip; } Int k() { return 1; } }
+  adds T
+  modifies Unit m() { skip; }
+  removes Unit m();
+  removes { Unit n(); Int k(); }
+}
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      body: (class_modifier_block
+        fragment: (trait_member_addition
+          addition: (basic_trait_expression
+            method: (method_declaration
+              return_type: (type_identifier)
+              name: (identifier)
+              parameters: (parameter_list)
+              body: (method_body
+                statement: (skip_statement)))))
+        fragment: (trait_member_addition
+          addition: (basic_trait_expression
+            methods: (method_declaration_block
+              method: (method_declaration
+                return_type: (type_identifier)
+                name: (identifier)
+                parameters: (parameter_list)
+                body: (method_body
+                  statement: (skip_statement)))
+              method: (method_declaration
+                return_type: (type_identifier)
+                name: (identifier)
+                parameters: (parameter_list)
+                body: (method_body
+                  statement: (return_statement
+                    value: (integer_literal)))))))
+        fragment: (trait_member_addition
+          addition: (basic_trait_expression
+            trait: (type_identifier)))
+        fragment: (trait_member_modification
+          change: (basic_trait_expression
+            method: (method_declaration
+              return_type: (type_identifier)
+              name: (identifier)
+              parameters: (parameter_list)
+              body: (method_body
+                statement: (skip_statement)))))
+        fragment: (trait_member_removal
+          method: (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list)))
+        fragment: (trait_member_removal
+          methods: (trait_member_removal_block
+            method: (method_signature
+              return_type: (type_identifier)
+              name: (identifier)
+              parameters: (parameter_list))
+            method: (method_signature
+              return_type: (type_identifier)
+              name: (identifier)
+              parameters: (parameter_list))))))))
+
+====================
+Add and remove interface
+====================
+
+delta D;
+adds interface I extends J { Unit m(); }
+removes interface I;
+removes interface M.I;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (add_interface_modifier
+      declaration: (interface_declaration
+        name: (type_identifier)
+        extends: (extends_clause
+          (type_identifier))
+        body: (interface_body
+          (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list)))))
+    modifier: (remove_interface_modifier
+      name: (type_identifier))
+    modifier: (remove_interface_modifier
+      name: (qualified_type_identifier
+        (type_identifier)
+        (type_identifier)))))
+
+====================
+Modify interface
+====================
+
+delta D;
+modifies interface I { }
+modifies interface M.I {
+  adds Unit m(Int x);
+  removes Int n();
+}
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (modify_interface_modifier
+      name: (type_identifier)
+      body: (interface_modifier_block))
+    modifier: (modify_interface_modifier
+      name: (qualified_type_identifier
+        (type_identifier)
+        (type_identifier))
+      body: (interface_modifier_block
+        fragment: (add_method_signature_fragment
+          method: (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list
+              (parameter
+                type: (type_identifier)
+                name: (identifier)))))
+        fragment: (remove_method_signature_fragment
+          method: (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list)))))))
+
+====================
+Namespace modifiers
+====================
+
+delta D;
+adds import * from M;
+adds import A, b from M.N;
+adds import M.A;
+adds export *;
+adds export f, T from M;
+
+---
+
+(source_file
+  (delta_declaration
+    name: (type_identifier)
+    modifier: (add_import_modifier
+      declaration: (import_declaration
+        (wildcard_import
+          (wildcard)
+          module: (module_name
+            (module_identifier)))))
+    modifier: (add_import_modifier
+      declaration: (import_declaration
+        (from_import
+          symbol: (type_identifier)
+          symbol: (identifier)
+          module: (module_name
+            (module_identifier)
+            (module_identifier)))))
+    modifier: (add_import_modifier
+      declaration: (import_declaration
+        (qualified_import
+          symbol: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier)))))
+    modifier: (add_export_modifier
+      declaration: (export_declaration
+        (wildcard)))
+    modifier: (add_export_modifier
+      declaration: (export_declaration
+        symbol: (identifier)
+        symbol: (type_identifier)
+        module: (module_name
+          (module_identifier))))))
+
+====================
+Full delta
+====================
+
+module Account;
+
+interface IAccount {
+  Unit deposit(Int x);
+}
+
+class Account(Int aid) implements IAccount {
+  Int balance = 0;
+  Unit deposit(Int x) { balance = balance + x; }
+}
+
+delta DFee(Int fee);
+uses Account;
+adds def Int applyFee(Int x, Int fee) = x - fee;
+adds data FeeKind = Flat | Percent;
+modifies class Account adds IFee {
+  adds Int fees = 0;
+  modifies Unit deposit(Int x) {
+    if (x >= fee) { original(x - fee); }
+  }
+}
+adds interface IFee { Int getFees(); }
+modifies interface IAccount { adds Int getBalance(); }
+adds import * from Fees;
+adds export IFee;
+
+delta DCheck(Account hasField Int balance;);
+uses Account;
+modifies class Account {
+  removes Int fees = 0;
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    (interface_declaration
+      name: (type_identifier)
+      body: (interface_body
+        (method_signature
+          return_type: (type_identifier)
+          name: (identifier)
+          parameters: (parameter_list
+            (parameter
+              type: (type_identifier)
+              name: (identifier))))))
+    (class_declaration
+      name: (type_identifier)
+      parameters: (parameter_list
+        (parameter
+          type: (type_identifier)
+          name: (identifier)))
+      implements: (implements_clause
+        (type_identifier))
+      body: (class_body
+        field: (field_declaration
+          type: (type_identifier)
+          name: (identifier)
+          value: (integer_literal))
+        method: (method_declaration
+          return_type: (type_identifier)
+          name: (identifier)
+          parameters: (parameter_list
+            (parameter
+              type: (type_identifier)
+              name: (identifier)))
+          body: (method_body
+            statement: (assignment_statement
+              target: (identifier)
+              value: (binary_expression
+                left: (identifier)
+                right: (identifier))))))))
+  (delta_declaration
+    name: (type_identifier)
+    parameters: (delta_parameter_list
+      (delta_field_parameter
+        type: (type_identifier)
+        name: (identifier)))
+    uses: (delta_uses_module
+      module: (module_name
+        (module_identifier)))
+    modifier: (add_function_modifier
+      declaration: (function_declaration
+        return_type: (type_identifier)
+        name: (identifier)
+        parameters: (parameter_list
+          (parameter
+            type: (type_identifier)
+            name: (identifier))
+          (parameter
+            type: (type_identifier)
+            name: (identifier)))
+        expression: (binary_expression
+          left: (identifier)
+          right: (identifier))))
+    modifier: (add_datatype_modifier
+      declaration: (datatype_declaration
+        name: (type_identifier)
+        constructors: (data_constructor_clause
+          (data_constructor
+            name: (type_identifier))
+          (data_constructor
+            name: (type_identifier)))))
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      added_interfaces: (added_interface_list
+        (type_identifier))
+      body: (class_modifier_block
+        fragment: (add_field_fragment
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier)
+            value: (integer_literal)))
+        fragment: (trait_member_modification
+          change: (basic_trait_expression
+            method: (method_declaration
+              return_type: (type_identifier)
+              name: (identifier)
+              parameters: (parameter_list
+                (parameter
+                  type: (type_identifier)
+                  name: (identifier)))
+              body: (method_body
+                statement: (if_statement
+                  condition: (parenthesized_expression
+                    (binary_expression
+                      left: (identifier)
+                      right: (identifier)))
+                  consequence: (block_statement
+                    statement: (expression_statement
+                      (original_call_expression
+                        arguments: (argument_list
+                          (binary_expression
+                            left: (identifier)
+                            right: (identifier)))))))))))))
+    modifier: (add_interface_modifier
+      declaration: (interface_declaration
+        name: (type_identifier)
+        body: (interface_body
+          (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list)))))
+    modifier: (modify_interface_modifier
+      name: (type_identifier)
+      body: (interface_modifier_block
+        fragment: (add_method_signature_fragment
+          method: (method_signature
+            return_type: (type_identifier)
+            name: (identifier)
+            parameters: (parameter_list)))))
+    modifier: (add_import_modifier
+      declaration: (import_declaration
+        (wildcard_import
+          (wildcard)
+          module: (module_name
+            (module_identifier)))))
+    modifier: (add_export_modifier
+      declaration: (export_declaration
+        symbol: (type_identifier))))
+  (delta_declaration
+    name: (type_identifier)
+    parameters: (delta_parameter_list
+      (delta_class_parameter
+        name: (type_identifier)
+        condition: (has_field_condition
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier)))))
+    uses: (delta_uses_module
+      module: (module_name
+        (module_identifier)))
+    modifier: (modify_class_modifier
+      name: (type_identifier)
+      body: (class_modifier_block
+        fragment: (remove_field_fragment
+          field: (field_declaration
+            type: (type_identifier)
+            name: (identifier)
+            value: (integer_literal)))))))

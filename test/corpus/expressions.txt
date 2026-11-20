@@ -808,3 +808,119 @@ module ABS;
         (get_expression
           future: (constructor_expression
             name: (type_identifier)))))))
+
+==============================
+Original call expressions
+==============================
+
+module ABS;
+
+{
+  original();
+  original(1, x);
+  core.original(x);
+  D.original();
+  D . original ( );
+  Int y = D.original(x);
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (original_call_expression
+          arguments: (argument_list)))
+      statement: (expression_statement
+        (original_call_expression
+          arguments: (argument_list
+            (integer_literal)
+            (identifier))))
+      statement: (expression_statement
+        (original_call_expression
+          target: (core)
+          arguments: (argument_list
+            (identifier))))
+      statement: (expression_statement
+        (original_call_expression
+          target: (delta_identifier)
+          arguments: (argument_list)))
+      statement: (expression_statement
+        (original_call_expression
+          target: (delta_identifier)
+          arguments: (argument_list)))
+      statement: (variable_declaration_statement
+        type: (type_identifier)
+        name: (identifier)
+        value: (original_call_expression
+          target: (delta_identifier)
+          arguments: (argument_list
+            (identifier)))))))
+
+==============================
+Original call versus qualified names
+==============================
+
+module ABS;
+
+{
+  M.f(x);
+  M.C(x);
+  D.get;
+  D.original();
+}
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier)
+    main: (main_block
+      statement: (expression_statement
+        (function_call_expression
+          name: (qualified_identifier
+            (type_identifier)
+            (identifier))
+          arguments: (argument_list
+            (identifier))))
+      statement: (expression_statement
+        (constructor_expression
+          name: (qualified_type_identifier
+            (type_identifier)
+            (type_identifier))
+          arguments: (argument_list
+            (identifier))))
+      statement: (expression_statement
+        (get_expression
+          future: (constructor_expression
+            name: (type_identifier))))
+      statement: (expression_statement
+        (original_call_expression
+          target: (delta_identifier)
+          arguments: (argument_list))))))
+
+==============================
+Original call without arguments
+:error
+==============================
+
+module ABS;
+
+{
+  D.original;
+}
+
+---
+
+==============================
+Original call in pure context
+:error
+==============================
+
+module ABS;
+
+def Int f() = core.original();
+
+---

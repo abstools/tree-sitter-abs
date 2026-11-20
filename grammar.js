@@ -29,6 +29,31 @@ const PREC = {
   CALL: 10,
 };
 
+const PRODUCT_PREC = {
+  STANDARD: 0,
+  PAREN: 1,
+  OR: 2,
+  AND: 3,
+  NOT: 4,
+}
+
+const SET_PREC = {
+  DIFFERENCE: 1,
+  UNION: 2,
+  INTERSECTION: 3,
+}
+
+const MODEL_PREC = {
+  LOGICAL_OR: 1,
+  LOGICAL_AND: 2,
+  IMPLICATION: 3,
+  EQUAL: 4,
+  RELATIONAL: 5,
+  ADD: 6,
+  MULTIPLY: 7,
+  UNARY: 8,
+}
+
 module.exports = grammar({
   name: "abs",
 
@@ -38,6 +63,7 @@ module.exports = grammar({
   ],
 
   supertypes: ($) => [
+    // Core ABS
     $.declaration,
     $.statement,
     $.expression,
@@ -50,11 +76,30 @@ module.exports = grammar({
     $.type_name,
     $.any_name,
     $.type,
+
+    // Delta modules
+    $.delta_parameter,
+    $.has_condition,
+    $.module_modifier,
+    $.functional_modifier,
+    $.object_oriented_modifier,
+    $.namespace_modifier,
+    $.class_modifier_fragment,
+    $.interface_modifier_fragment,
+    $.application_condition,
+
+    // Products
+    $.product_expression,
+
+    // Feature model
+    $.model_expression,
+    $.constraint,
   ],
 
   conflicts: $ => [
     [$.qualified_type_identifier, $.type_name],
     [$.qualified_identifier, $.qualified_type_identifier, $.type_name],
+    [$.qualified_identifier, $.qualified_type_identifier, $.type_name, $.original_call_expression],
     [$.pure_expression, $.field_access],
     [$.await, $.await_statement],
     [$.qualified_type_identifier],
@@ -64,10 +109,25 @@ module.exports = grammar({
     [$.generic_type, $.constructor_expression],
   ],
 
+  inline: $ => [
+    $._function_name_decl,
+    $._interface_name,
+    $._delta_identifier,
+  ],
+
   word: $ => $.identifier,
 
   rules: {
-    source_file: $ => repeat($.module_declaration),
+    source_file: $ => seq(
+      repeat($.module_declaration),
+      repeat($.delta_declaration),
+      optional($.productline_declaration),
+      repeat($.product_declaration),
+      repeat(choice(
+        $.root_feature,
+        $.feature_extension,
+      )),
+    ),
 
     main_block: $ => seq(
       optional(field("annotations", $.annotations)),
@@ -801,6 +861,13 @@ module.exports = grammar({
 
     original_call_expression: $ => seq(
       // TODO: Add delta-id or core. reference ABS antlr grammar
+      optional(seq(
+        field("target", choice(
+          $.core,
+          $._delta_identifier,
+        )),
+        ".",
+      )),
       "original",
       field("arguments", $.argument_list),
     ),
@@ -1094,9 +1161,589 @@ module.exports = grammar({
       optional(field("arguments", $.argument_list)),
     ),
 
+    // Delta modules
+    // https://abs-models.org/manual/feature-modeling.html
+
+    delta_declaration: $ => seq(
+      "delta",
+      field("name", $.type_identifier),
+      optional(field("parameters", $.delta_parameter_list)),
+      ";",
+      optional(field("uses", $.delta_uses_module)),
+      repeat(field("modifier", $.module_modifier)),
+    ),
+
+    delta_parameter_list: $ => seq(
+      "(",
+      commaSep1($.delta_parameter),
+      ")",
+    ),
+
+    delta_parameter: $ => choice(
+      alias($.parameter, $.delta_field_parameter),
+      $.delta_class_parameter,
+    ),
+
+    delta_class_parameter: $ => seq(
+      field("name", $.type_name),
+      field("condition", $.has_condition),
+    ),
+
+    has_condition: $ => choice(
+      $.has_field_condition,
+      $.has_method_condition,
+      $.has_interface_condition,
+    ),
+
+    has_field_condition: $ => seq(
+      "hasField",
+      field("field", $.field_declaration),
+    ),
+
+    has_method_condition: $ => seq(
+      "hasMethod",
+      field("method", $.method_signature),
+    ),
+
+    has_interface_condition: $ => seq(
+      "hasInterface",
+      field("interface", $._interface_name),
+    ),
+
+    delta_uses_module: $ => seq(
+      "uses",
+      field("module", $.module_name),
+      ";",
+    ),
+
+    module_modifier: $ => choice(
+      $.functional_modifier,
+      $.object_oriented_modifier,
+      $.namespace_modifier,
+    ),
+
+    functional_modifier: $ => choice(
+      $.add_function_modifier,
+      $.add_datatype_modifier,
+      $.add_type_synonym_modifier,
+      $.modify_type_synonym_modifier,
+      $.modify_datatype_modifier,
+    ),
+
+    add_function_modifier: $ => seq(
+      "adds",
+      field("declaration", $.function_declaration),
+    ),
+
+    add_datatype_modifier: $ => seq(
+      "adds",
+      field("declaration", $.datatype_declaration),
+    ),
+
+    add_type_synonym_modifier: $ => seq(
+      "adds",
+      field("declaration", $.type_synonym_declaration),
+    ),
+
+    modify_type_synonym_modifier: $ => seq(
+      "modifies",
+      field("declaration", $.type_synonym_declaration),
+    ),
+
+    modify_datatype_modifier: $ => seq(
+      "modifies",
+      field("declaration", $.datatype_declaration),
+    ),
+
+    object_oriented_modifier: $ => choice(
+      $.add_class_modifier,
+      $.remove_class_modifier,
+      $.modify_class_modifier,
+      $.add_interface_modifier,
+      $.remove_interface_modifier,
+      $.modify_interface_modifier,
+    ),
+
+    add_class_modifier: $ => seq(
+      "adds",
+      field("declaration", $.class_declaration),
+    ),
+
+    remove_class_modifier: $ => seq(
+      "removes",
+      "class",
+      field("name", $.type_name),
+      ";",
+    ),
+
+    modify_class_modifier: $ => seq(
+      "modifies",
+      "class",
+      field("name", $.type_name),
+      optional(field("added_interfaces", $.added_interface_list)),
+      optional(field("removed_interfaces", $.removed_interface_list)),
+      field("body", $.class_modifier_block),
+    ),
+
+    added_interface_list: $ => seq(
+      "adds",
+      commaSep1($._interface_name),
+    ),
+
+    removed_interface_list: $ => seq(
+      "removes",
+      commaSep1($._interface_name),
+    ),
+
+    class_modifier_block: $ => seq(
+      "{",
+      repeat(field("fragment", $.class_modifier_fragment)),
+      "}",
+    ),
+
+    class_modifier_fragment: $ => choice(
+      $.add_field_fragment,
+      $.remove_field_fragment,
+      $.trait_operation,
+    ),
+
+    add_field_fragment: $ => seq(
+      "adds",
+      field("field", $.field_declaration),
+    ),
+
+    remove_field_fragment: $ => seq(
+      "removes",
+      field("field", $.field_declaration),
+    ),
+
+    add_interface_modifier: $ => seq(
+      "adds",
+      field("declaration", $.interface_declaration),
+    ),
+
+    remove_interface_modifier: $ => seq(
+      "removes",
+      "interface",
+      field("name", $._interface_name),
+      ";",
+    ),
+
+    modify_interface_modifier: $ => seq(
+      "modifies",
+      "interface",
+      field("name", $._interface_name),
+      field("body", $.interface_modifier_block),
+    ),
+
+    interface_modifier_block: $ => seq(
+      "{",
+      repeat(field("fragment", $.interface_modifier_fragment)),
+      "}",
+    ),
+
+    interface_modifier_fragment: $ => choice(
+      $.add_method_signature_fragment,
+      $.remove_method_signature_fragment,
+    ),
+
+    add_method_signature_fragment: $ => seq(
+      "adds",
+      field("method", $.method_signature),
+    ),
+
+    remove_method_signature_fragment: $ => seq(
+      "removes",
+      field("method", $.method_signature),
+    ),
+
+    namespace_modifier: $ => choice(
+      $.add_import_modifier,
+      $.add_export_modifier,
+    ),
+
+    add_import_modifier: $ => seq(
+      "adds",
+      field("declaration", $.import_declaration),
+    ),
+
+    add_export_modifier: $ => seq(
+      "adds",
+      field("declaration", $.export_declaration),
+    ),
+
+    // Product lines
+
+    productline_declaration: $ => seq(
+      "productline",
+      field("name", $.type_identifier),
+      ";",
+      "features",
+      commaSep1($.feature),
+      ";",
+      repeat($.delta_clause),
+    ),
+
+    feature: $ => seq(
+      field("name", $._feature_name),
+      optional($.attribute_assignment_block),
+    ),
+
+    _feature_name: $ => choice(
+      $.feature_prime,
+      $.type_identifier,
+    ),
+
+    feature_prime: $ => seq(
+      $.type_identifier,
+      token.immediate("'"),
+    ),
+
+    attribute_assignment_block: $ => seq(
+      "{",
+      commaSep1($.attribute_assignment),
+      "}",
+    ),
+
+    attribute_assignment: $ => seq(
+      field("name", $.identifier),
+      "=",
+      field("value", choice(
+        $.integer_literal,
+        $.type_identifier,
+        $.string_literal,
+      )),
+    ),
+
+    delta_clause: $ => seq(
+      "delta",
+      $.delta_specification,
+      optional($.after_condition),
+      optional($.from_condition),
+      optional($.when_condition),
+      ";",
+    ),
+
+    delta_specification: $ => seq(
+      $.type_identifier,
+      optional(field("parameters", $.delta_specification_parameter_list)),
+    ),
+
+    delta_specification_parameter_list: $ => seq(
+      "(",
+      commaSep1($.delta_specification_parameter),
+      ")",
+    ),
+
+    delta_specification_parameter: $ => choice(
+      $.type_identifier,
+      $.integer_literal,
+      $.feature_attribute_reference,
+    ),
+
+    feature_attribute_reference: $ => seq(
+      field("feature", $.type_identifier),
+      ".",
+      field("attribute", $.identifier),
+    ),
+
+    after_condition: $ => seq(
+      "after",
+      commaSep1($._delta_identifier),
+    ),
+
+    from_condition: $ => seq(
+      "from",
+      $.application_condition,
+    ),
+
+    when_condition: $ => seq(
+      choice(
+        "when",
+        "to",
+      ),
+      $.application_condition,
+    ),
+
+    application_condition: $ => choice(
+      $.not_application_condition,
+      $.and_application_condition,
+      $.or_application_condition,
+      $.parenthesized_application_condition,
+      $.feature,
+    ),
+
+    not_application_condition: $ => prec(PRODUCT_PREC.NOT, seq(
+      "!",
+      $.application_condition,
+    )),
+
+    and_application_condition: $ => prec.left(PRODUCT_PREC.AND, seq(
+      field("left", $.application_condition),
+      "&&",
+      field("right", $.application_condition),
+    )),
+
+    or_application_condition: $ => prec.left(PRODUCT_PREC.OR, seq(
+      field("left", $.application_condition),
+      "||",
+      field("right", $.application_condition),
+    )),
+
+    parenthesized_application_condition: $ => prec(PRODUCT_PREC.PAREN, seq(
+      "(",
+      $.application_condition,
+      ")",
+    )),
+
+    // Products
+
+    product_declaration: $ => seq(
+      "product",
+      field("name", $.type_identifier),
+      choice(
+        $.feature_list,
+        $.product_expression_clause,
+      ),
+      ";",
+    ),
+
+    feature_list: $ => seq(
+      "(",
+      commaSep($.feature),
+      ")",
+    ),
+
+    product_expression_clause: $ => seq(
+      "=",
+      $.product_expression,
+    ),
+
+    product_expression: $ => choice(
+      $.type_identifier,  
+      $.product_difference,
+      $.product_intersection,
+      $.product_union,
+      $.feature_set,
+      $.product_parenthesized_expression,
+    ),
+
+    product_difference: $ => prec.left(SET_PREC.DIFFERENCE, seq(
+      field("left", $.product_expression),
+      "-",
+      field("right", $.product_expression),
+    )),
+
+    product_union: $ => prec.left(SET_PREC.UNION, seq(
+      field("left", $.product_expression),
+      "||",
+      field("right", $.product_expression),
+    )),
+
+    product_intersection: $ => prec.left(SET_PREC.INTERSECTION, seq(
+      field("left", $.product_expression),
+      "&&",
+      field("right", $.product_expression),
+    )),
+
+    feature_set: $ => seq(
+      "{",
+      commaSep1($.feature),
+      "}",
+    ),
+
+    product_parenthesized_expression: $ => seq(
+      "(",
+      $.product_expression,
+      ")",
+    ),
+
+    root_feature: $ => seq(
+      "root",
+      $.feature_declaration,
+    ),
+
+    feature_extension: $ => seq(
+      "extension",
+      field("feature", $.type_identifier),
+      field("body", $.feature_body),
+    ),
+
+    feature_declaration: $ => seq(
+      field("name", $.type_identifier),
+      optional(field("body", $.feature_body)),
+    ),
+
+    feature_body: $ => seq(
+      "{",
+      optional($.feature_group),
+      repeat(choice(
+        $.feature_attribute,
+        $.constraint,
+      )),
+      "}",
+    ),
+
+    feature_group: $ => seq(
+      "group",
+      field("cardinality", $._group_cardinality),
+      field("members", $.group_member_list),
+    ),
+
+    _group_cardinality: $ => choice(
+      alias("oneof", $.one_of),
+      alias("allof", $.all_of),
+      $.cardinality_range,
+    ),
+
+    cardinality_range: $ => seq(
+      "[",
+      field("min", $.integer_literal),
+      "..",
+      field("max", choice(
+        $.integer_literal,
+        $.unbounded,
+      )),
+      "]",
+    ),
+
+    group_member_list: $ => seq(
+      "{",
+      commaSep1($.group_member),
+      "}",
+    ),
+
+    group_member: $ => seq(
+      optional(field("modifier", alias("opt", $.optional))),
+      $.feature_declaration,
+    ),
+
+    feature_attribute: $ => seq(
+      field("type", $.type_identifier), 
+      choice(
+        seq(
+          field("domain", $.range),
+          field("name", $.identifier),
+        ),
+        seq(
+          field("name", $.identifier),
+          optional(seq(
+            "in",
+            field("domain", choice(
+              $.range,
+              $.value_set,
+            ))
+          ))
+        ),
+      ),
+      ";",
+    ),
+
+    constraint: $ => choice(
+      $.feature_constraint,
+      $.expression_constraint,
+    ),
+
+    feature_constraint: $ => seq(
+      field("kind", choice(
+        alias("exclude", $.exclude),
+        alias("require", $.require)
+      )),
+      ":",
+      field("target", $.type_identifier),
+      ";",
+    ),
+
+    expression_constraint: $ => seq(
+      optional(seq(
+        field("kind", choice(
+          alias("ifin", $.if_in),
+          alias("ifout", $.if_out),
+        )),
+        ":",
+      )),
+      field("condition", $.model_expression),
+      ";",
+    ),
+
+    range: $ => seq(
+      "[",
+      field("start", $._boundary_integer),
+      "..",
+      field("end", $._boundary_integer),
+      "]",
+    ),
+
+    value_set: $ => seq(
+      "{",
+      commaSep1(alias($._signed_integer_literal, $.integer_literal)),
+      "}",
+    ),
+
+    _boundary_integer: $ => choice(
+      $.unbounded, 
+      alias($._signed_integer_literal, $.integer_literal),
+    ),
+
+    _signed_integer_literal: _ => token(seq(
+      optional("-"),   
+      DECIMAL_INTEGER,
+    )),
+
+    model_expression: $ => choice(
+      $.feature_attribute_reference,
+      $.type_identifier,
+      $.identifier,
+      $.integer_literal,
+      $.model_unary_expression,
+      $.model_binary_expression,
+      $.model_parenthesized_expression,
+    ),
+
+    model_unary_expression: $ => prec(MODEL_PREC.UNARY, seq(
+      field("operator", choice("!", "-")),
+      field("argument", $.model_expression),
+    )),
+
+    model_binary_expression: $ => {
+      const table = [
+        ["*", MODEL_PREC.MULTIPLY],
+        ["/", MODEL_PREC.MULTIPLY],
+        ["%", MODEL_PREC.MULTIPLY],
+        ["+", MODEL_PREC.ADD],
+        ["-", MODEL_PREC.ADD],
+        ["<", MODEL_PREC.RELATIONAL],
+        ["<=", MODEL_PREC.RELATIONAL],
+        [">", MODEL_PREC.RELATIONAL],
+        [">=", MODEL_PREC.RELATIONAL],
+        ["==", MODEL_PREC.EQUAL],
+        ["!=", MODEL_PREC.EQUAL],
+        ["->", MODEL_PREC.IMPLICATION, "right"],
+        ["<->", MODEL_PREC.IMPLICATION],
+        ["&&", MODEL_PREC.LOGICAL_AND],
+        ["||", MODEL_PREC.LOGICAL_OR],
+      ];
+
+      return choice(...table.map(([operator, precedence, assoc]) => 
+        (assoc == "right" ? prec.right : prec.left)(precedence, seq(
+          field("left", $.model_expression),
+          // @ts-ignore
+          field("operator", operator),
+          field("right", $.model_expression),
+        ))
+      ));
+    },
+
+    model_parenthesized_expression: $ => seq(
+      "(",
+      $.model_expression,
+      ")",
+    ),
+
     // Overrides
     _function_name_decl: $ => $.identifier,
     _interface_name: $ => $.type_name,
+    _delta_identifier: $ => alias($.type_identifier, $.delta_identifier),
 
     annotations: $ => repeat1(seq(
       "[",
@@ -1118,6 +1765,8 @@ module.exports = grammar({
     local: _ => "local",
     await: _ => "await",
     wildcard: _ => "*",
+    unbounded: _ => "*",
+    core: _ => "core",
 
 
     // Difference from ABS grammar (ANTLR)
