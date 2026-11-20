@@ -1,0 +1,630 @@
+====================
+Root feature without body
+====================
+
+root FM
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier))))
+
+====================
+Root feature with empty body
+====================
+
+root FM {}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body))))
+
+====================
+Feature group: oneof
+====================
+
+root FM {
+  group oneof { A, B }
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (one_of)
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))))))))
+
+====================
+Feature group: allof with optional member
+====================
+
+root FM {
+  group allof { A, opt B }
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (all_of)
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              modifier: (optional)
+              (feature_declaration
+                name: (type_identifier)))))))))
+
+====================
+Feature group: cardinality range with unbounded max
+====================
+
+root FM {
+  group [1..*] { A, B, C }
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (cardinality_range
+            min: (integer_literal)
+            max: (unbounded))
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))))))))
+
+====================
+Feature group: cardinality range with bounded max
+====================
+
+root FM {
+  group [0..2] { A, B, C }
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (cardinality_range
+            min: (integer_literal)
+            max: (integer_literal))
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))))))))
+
+====================
+Feature group: nested groups
+====================
+
+root FM {
+  group allof {
+    A {
+      group oneof { B, C }
+    },
+    opt D
+  }
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (all_of)
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)
+                body: (feature_body
+                  (feature_group
+                    cardinality: (one_of)
+                    members: (group_member_list
+                      (group_member
+                        (feature_declaration
+                          name: (type_identifier)))
+                      (group_member
+                        (feature_declaration
+                          name: (type_identifier))))))))
+            (group_member
+              modifier: (optional)
+              (feature_declaration
+                name: (type_identifier)))))))))
+
+====================
+Feature attributes
+====================
+
+root FM {
+  Int x;
+  Int y in [0..10];
+  Int z in [-5..*];
+  Int w in {1, -2, 3};
+  Int [*..100] v;
+  Bool b;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_attribute
+          type: (type_identifier)
+          name: (identifier))
+        (feature_attribute
+          type: (type_identifier)
+          name: (identifier)
+          domain: (range
+            start: (integer_literal)
+            end: (integer_literal)))
+        (feature_attribute
+          type: (type_identifier)
+          name: (identifier)
+          domain: (range
+            start: (integer_literal)
+            end: (unbounded)))
+        (feature_attribute
+          type: (type_identifier)
+          name: (identifier)
+          domain: (value_set
+            (integer_literal)
+            (integer_literal)
+            (integer_literal)))
+        (feature_attribute
+          type: (type_identifier)
+          domain: (range
+            start: (unbounded)
+            end: (integer_literal))
+          name: (identifier))
+        (feature_attribute
+          type: (type_identifier)
+          name: (identifier))))))
+
+====================
+Feature constraints: require and exclude
+====================
+
+root FM {
+  group oneof { A, B }
+  require: C;
+  exclude: D;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (one_of)
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))
+            (group_member
+              (feature_declaration
+                name: (type_identifier)))))
+        (feature_constraint
+          kind: (require)
+          target: (type_identifier))
+        (feature_constraint
+          kind: (exclude)
+          target: (type_identifier))))))
+
+====================
+Expression constraints: ifin, ifout and plain
+====================
+
+root FM {
+  ifin: A;
+  ifout: !B;
+  C.x > 5;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          kind: (if_in)
+          condition: (type_identifier))
+        (expression_constraint
+          kind: (if_out)
+          condition: (model_unary_expression
+            argument: (type_identifier)))
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (feature_attribute_reference
+              feature: (type_identifier)
+              attribute: (identifier))
+            right: (integer_literal)))))))
+
+====================
+Feature extension with attribute and constraint
+====================
+
+extension FM {
+  Int x in [1..5];
+  require: A;
+}
+
+---
+
+(source_file
+  (feature_extension
+    feature: (type_identifier)
+    body: (feature_body
+      (feature_attribute
+        type: (type_identifier)
+        name: (identifier)
+        domain: (range
+          start: (integer_literal)
+          end: (integer_literal)))
+      (feature_constraint
+        kind: (require)
+        target: (type_identifier)))))
+
+====================
+Feature extension with group
+====================
+
+extension FM {
+  group oneof { A, B }
+}
+
+---
+
+(source_file
+  (feature_extension
+    feature: (type_identifier)
+    body: (feature_body
+      (feature_group
+        cardinality: (one_of)
+        members: (group_member_list
+          (group_member
+            (feature_declaration
+              name: (type_identifier)))
+          (group_member
+            (feature_declaration
+              name: (type_identifier))))))))
+
+====================
+Model expression precedence: and binds tighter than or
+====================
+
+root FM {
+  a || b && c;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (identifier)
+            right: (model_binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+====================
+Model expression precedence: implication is right-associative
+====================
+
+root FM {
+  a -> b -> c;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (identifier)
+            right: (model_binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+====================
+Model expression precedence: equivalence is left-associative
+====================
+
+root FM {
+  a <-> b <-> c;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (identifier)
+              right: (identifier))
+            right: (identifier)))))))
+
+====================
+Model expression precedence: arithmetic and equality
+====================
+
+root FM {
+  a + b * c == d - e / f % g;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (identifier)
+              right: (model_binary_expression
+                left: (identifier)
+                right: (identifier)))
+            right: (model_binary_expression
+              left: (identifier)
+              right: (model_binary_expression
+                left: (model_binary_expression
+                  left: (identifier)
+                  right: (identifier))
+                right: (identifier)))))))))
+
+====================
+Model expression precedence: relational binds tighter than equality
+====================
+
+root FM {
+  a <= b != c > d;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (identifier)
+              right: (identifier))
+            right: (model_binary_expression
+              left: (identifier)
+              right: (identifier))))))))
+
+====================
+Model expression precedence: implication binds tighter than and
+====================
+
+root FM {
+  a -> b && c || d;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (model_binary_expression
+                left: (identifier)
+                right: (identifier))
+              right: (identifier))
+            right: (identifier)))))))
+
+====================
+Model expression precedence: unary binds tighter than binary
+====================
+
+root FM {
+  -a < b && !(c >= d);
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (model_unary_expression
+                argument: (identifier))
+              right: (identifier))
+            right: (model_unary_expression
+              argument: (model_parenthesized_expression
+                (model_binary_expression
+                  left: (identifier)
+                  right: (identifier))))))))))
+
+====================
+Model expression: nested unary
+====================
+
+root FM {
+  !!a;
+  - -1 > 0;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_unary_expression
+            argument: (model_unary_expression
+              argument: (identifier))))
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_unary_expression
+              argument: (model_unary_expression
+                argument: (integer_literal)))
+            right: (integer_literal)))))))
+
+====================
+Model expression: parentheses override precedence
+====================
+
+root FM {
+  (a || b) && c;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_parenthesized_expression
+              (model_binary_expression
+                left: (identifier)
+                right: (identifier)))
+            right: (identifier)))))))
+
+====================
+Feature models after productline and products
+====================
+
+module M;
+
+delta D;
+
+productline P;
+features A;
+delta D when A;
+
+product Prod (A);
+
+root FM {
+  group oneof { A }
+}
+
+extension A {
+  Int x;
+}
+
+root Other
+
+---
+
+(source_file
+  (module_declaration
+    name: (type_identifier))
+  (delta_declaration
+    name: (type_identifier))
+  (productline_declaration
+    name: (type_identifier)
+    (feature
+      name: (type_identifier))
+    (delta_clause
+      (delta_specification
+        (type_identifier))
+      (when_condition
+        (feature
+          name: (type_identifier)))))
+  (product_declaration
+    name: (type_identifier)
+    (feature_list
+      (feature
+        name: (type_identifier))))
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (feature_group
+          cardinality: (one_of)
+          members: (group_member_list
+            (group_member
+              (feature_declaration
+                name: (type_identifier))))))))
+  (feature_extension
+    feature: (type_identifier)
+    body: (feature_body
+      (feature_attribute
+        type: (type_identifier)
+        name: (identifier))))
+  (root_feature
+    (feature_declaration
+      name: (type_identifier))))

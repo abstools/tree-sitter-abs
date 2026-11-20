@@ -51,6 +51,7 @@ const MODEL_PREC = {
   RELATIONAL: 5,
   ADD: 6,
   MULTIPLY: 7,
+  UNARY: 8,
 }
 
 module.exports = grammar({
@@ -1564,7 +1565,7 @@ module.exports = grammar({
       optional($.feature_group),
       repeat(choice(
         $.feature_attribute,
-        $.feature_constraint,
+        $.constraint,
       )),
       "}",
     ),
@@ -1661,7 +1662,7 @@ module.exports = grammar({
 
     value_set: $ => seq(
       "{",
-      commaSep1($._signed_integer_literal),
+      commaSep1(alias($._signed_integer_literal, $.integer_literal)),
       "}",
     ),
 
@@ -1685,10 +1686,10 @@ module.exports = grammar({
       $.model_parenthesized_expression,
     ),
 
-    model_unary_expression: $ => seq(
+    model_unary_expression: $ => prec(MODEL_PREC.UNARY, seq(
       field("operator", choice("!", "-")),
       field("argument", $.model_expression),
-    ),
+    )),
 
     model_binary_expression: $ => {
       const table = [
