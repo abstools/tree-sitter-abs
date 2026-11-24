@@ -1768,12 +1768,13 @@ module.exports = grammar({
       "]",
     )),
 
-    // FIXME: Add fields
-    annotation: $ => seq(
-      optional(seq(
-        $.type_identifier,
-        ":")),
-      $.pure_expression,
+    annotation: $ => choice(
+      field("value", $.pure_expression),
+      seq(
+        field("tag", $.type_identifier),
+        ":",
+        field("value", $.pure_expression),
+      ),
     ),
 
 

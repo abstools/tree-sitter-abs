@@ -15,7 +15,7 @@ def [Final] Int one() = 1;
       return_type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (type_identifier))
       name: (identifier)
@@ -40,7 +40,7 @@ def [Far] List<Int> empty() = Nil;
       return_type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (generic_type
           name: (type_identifier)
@@ -69,7 +69,7 @@ def [Near] M.Server server() = null;
       return_type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (qualified_type_identifier
           (type_identifier)
@@ -99,7 +99,7 @@ def List<[Near] Int> empty() = Nil;
           (annotated_type
             annotations: (annotations
               (annotation
-                (constructor_expression
+                value: (constructor_expression
                   name: (type_identifier))))
             (type_identifier))))
       name: (identifier)
@@ -126,7 +126,7 @@ type Pair = [Far] Map<[Near] Int, List<[Final] Bool>>;
       type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (generic_type
           name: (type_identifier)
@@ -134,7 +134,7 @@ type Pair = [Far] Map<[Near] Int, List<[Final] Bool>>;
             (annotated_type
               annotations: (annotations
                 (annotation
-                  (constructor_expression
+                  value: (constructor_expression
                     name: (type_identifier))))
               (type_identifier))
             (generic_type
@@ -143,7 +143,7 @@ type Pair = [Far] Map<[Near] Int, List<[Final] Bool>>;
                 (annotated_type
                   annotations: (annotations
                     (annotation
-                      (constructor_expression
+                      value: (constructor_expression
                         name: (type_identifier))))
                   (type_identifier))))))))))
 
@@ -166,7 +166,7 @@ type Remote = [Far] Server;
       type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (type_identifier)))))
 
@@ -194,7 +194,7 @@ data Box = Box([Near] Server server, [Far] Server);
               type: (annotated_type
                 annotations: (annotations
                   (annotation
-                    (constructor_expression
+                    value: (constructor_expression
                       name: (type_identifier))))
                 (type_identifier))
               name: (identifier))
@@ -202,7 +202,7 @@ data Box = Box([Near] Server server, [Far] Server);
               type: (annotated_type
                 annotations: (annotations
                   (annotation
-                    (constructor_expression
+                    value: (constructor_expression
                       name: (type_identifier))))
                 (type_identifier)))))))))
 
@@ -229,7 +229,7 @@ interface I {
           return_type: (annotated_type
             annotations: (annotations
               (annotation
-                (constructor_expression
+                value: (constructor_expression
                   name: (type_identifier))))
             (type_identifier))
           name: (identifier)
@@ -262,7 +262,7 @@ class C {
           type: (annotated_type
             annotations: (annotations
               (annotation
-                (constructor_expression
+                value: (constructor_expression
                   name: (type_identifier))))
             (type_identifier))
           name: (identifier)
@@ -271,7 +271,7 @@ class C {
           return_type: (annotated_type
             annotations: (annotations
               (annotation
-                (constructor_expression
+                value: (constructor_expression
                   name: (type_identifier))))
             (type_identifier))
           name: (identifier)
@@ -298,13 +298,13 @@ def [A] [B: 1, C] Int multi() = 1;
       return_type: (annotated_type
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier)))
           (annotation
-            (type_identifier)
-            (integer_literal))
+            tag: (type_identifier)
+            value: (integer_literal))
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         (type_identifier))
       name: (identifier)
@@ -334,7 +334,7 @@ class C([Near] Server s) {
         (parameter
           annotations: (annotations
             (annotation
-              (constructor_expression
+              value: (constructor_expression
                 name: (type_identifier))))
           type: (type_identifier)
           name: (identifier)))
@@ -346,7 +346,7 @@ class C([Near] Server s) {
             (parameter
               annotations: (annotations
                 (annotation
-                  (constructor_expression
+                  value: (constructor_expression
                     name: (type_identifier))))
               type: (type_identifier)
               name: (identifier)))
@@ -373,7 +373,7 @@ module Annotations;
       statement: (variable_declaration_statement
         annotations: (annotations
           (annotation
-            (constructor_expression
+            value: (constructor_expression
               name: (type_identifier))))
         type: (type_identifier)
         name: (identifier)
@@ -385,7 +385,7 @@ module Annotations;
             (annotated_type
               annotations: (annotations
                 (annotation
-                  (constructor_expression
+                  value: (constructor_expression
                     name: (type_identifier))))
               (type_identifier))))
         name: (identifier)
