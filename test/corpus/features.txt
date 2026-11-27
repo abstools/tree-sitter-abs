@@ -463,7 +463,7 @@ root FM {
               right: (identifier))))))))
 
 ====================
-Model expression precedence: implication binds tighter than and
+Model expression precedence: logical operators bind tighter than implication
 ====================
 
 root FM {
@@ -479,12 +479,36 @@ root FM {
       body: (feature_body
         (expression_constraint
           condition: (model_binary_expression
-            left: (model_binary_expression
+            left: (identifier)
+            right: (model_binary_expression
               left: (model_binary_expression
                 left: (identifier)
                 right: (identifier))
+              right: (identifier))))))))
+
+====================
+Model expression precedence: equivalence binds tighter than implication
+====================
+
+root FM {
+  a <-> b -> c <-> d;
+}
+
+---
+
+(source_file
+  (root_feature
+    (feature_declaration
+      name: (type_identifier)
+      body: (feature_body
+        (expression_constraint
+          condition: (model_binary_expression
+            left: (model_binary_expression
+              left: (identifier)
               right: (identifier))
-            right: (identifier)))))))
+            right: (model_binary_expression
+              left: (identifier)
+              right: (identifier))))))))
 
 ====================
 Model expression precedence: unary binds tighter than binary

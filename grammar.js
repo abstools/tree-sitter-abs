@@ -44,14 +44,15 @@ const SET_PREC = {
 }
 
 const MODEL_PREC = {
-  LOGICAL_OR: 1,
-  LOGICAL_AND: 2,
-  IMPLICATION: 3,
-  EQUAL: 4,
-  RELATIONAL: 5,
-  ADD: 6,
-  MULTIPLY: 7,
-  UNARY: 8,
+  IMPLICATION: 1,
+  EQUIV: 2,
+  LOGICAL_OR: 3,
+  LOGICAL_AND: 4,
+  EQUAL: 5,
+  RELATIONAL: 6,
+  ADD: 7,
+  MULTIPLY: 8,
+  UNARY: 9,
 }
 
 module.exports = grammar({
@@ -1736,7 +1737,7 @@ module.exports = grammar({
         ["==", MODEL_PREC.EQUAL],
         ["!=", MODEL_PREC.EQUAL],
         ["->", MODEL_PREC.IMPLICATION, "right"],
-        ["<->", MODEL_PREC.IMPLICATION],
+        ["<->", MODEL_PREC.EQUIV],
         ["&&", MODEL_PREC.LOGICAL_AND],
         ["||", MODEL_PREC.LOGICAL_OR],
       ];
